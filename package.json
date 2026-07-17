@@ -8,7 +8,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build && node scripts/inline-dist.mjs",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node scripts/verify-content.mjs && node scripts/verify-curriculum.mjs"
+    "test": "node scripts/verify-content.mjs && node scripts/verify-curriculum.mjs && node scripts/verify-learning-ui.mjs"
   },
   "keywords": [
     "polish-history",
