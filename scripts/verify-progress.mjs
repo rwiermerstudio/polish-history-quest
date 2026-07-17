@@ -16,5 +16,10 @@ if (modern.legacyCompleted.includes('commonwealth')) throw new Error('modern com
 
 const partial = normalizeProgress({ completed: { commonwealth: true }, answeredQuestions: { commonwealth: { 0: { choice: 0, correct: true } } } }, chapters, legacyMap, defaults);
 if (partial.completed.commonwealth) throw new Error('partial answers must not produce chapter completion');
+const commonwealth = chapters.find(chapter => chapter.id === 'commonwealth');
+if (partial.answeredQuestions.commonwealth[0].choice !== commonwealth.quiz[0].answer) throw new Error('stored correct choices must be normalized after deterministic option reordering');
+
+const wrong = normalizeProgress({ answeredQuestions: { commonwealth: { 0: { choice: 2, correct: false } } } }, chapters, legacyMap, defaults);
+if (wrong.answeredQuestions.commonwealth?.[0]) throw new Error('persisted wrong answers must be removed so reload restores retry access');
 
 console.log('progress migration verification passed');

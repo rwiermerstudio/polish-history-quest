@@ -1,8 +1,16 @@
 export function normalizeProgress(stored, chapters, legacyProgressMap, defaults) {
   const safeStored = stored && typeof stored === 'object' ? stored : {};
   const currentIds = new Set(chapters.map(chapter => chapter.id));
+  const chapterById = new Map(chapters.map(chapter => [chapter.id, chapter]));
   const answeredQuestions = Object.fromEntries(
-    Object.entries(safeStored.answeredQuestions || {}).filter(([id, answers]) => currentIds.has(id) && answers && typeof answers === 'object'),
+    Object.entries(safeStored.answeredQuestions || {})
+      .filter(([id, answers]) => currentIds.has(id) && answers && typeof answers === 'object')
+      .map(([id, answers]) => [id, Object.fromEntries(
+        Object.entries(answers)
+          .filter(([index, answer]) => answer?.correct === true && chapterById.get(id).quiz[Number(index)])
+          .map(([index]) => [index, { choice: chapterById.get(id).quiz[Number(index)].answer, correct: true }]),
+      )])
+      .filter(([, answers]) => Object.keys(answers).length > 0),
   );
 
   const completed = Object.fromEntries(
