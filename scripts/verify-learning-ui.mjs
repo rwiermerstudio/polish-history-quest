@@ -13,6 +13,7 @@ const requirements = [
   ['deterministic option shuffling', /function displayedQuestionOptions\s*\(/],
   ['actor rendering', /chapter\.actors/],
   ['cultural section label', /Cultural artifact|Culture and memory/],
+  ['complete game-session reset', /function resetGameSession\s*\([\s\S]*?resetGameSession\(\);[\s\S]*?renderAll\(\);/],
 ];
 let failed = false;
 for (const [label, pattern] of requirements) {
@@ -21,7 +22,7 @@ for (const [label, pattern] of requirements) {
     failed = true;
   }
 }
-for (const selector of ['.chapter-reader', '.chapter-section', '.actor-grid', '.quiz-progress', '.section-nav']) {
+for (const selector of ['.chapter-reader', '.chapter-section', '.actor-grid', '.quiz-progress', '.section-nav', ':focus-visible', 'prefers-reduced-motion']) {
   if (!css.includes(selector)) {
     console.error(`Missing CSS selector ${selector}`);
     failed = true;
