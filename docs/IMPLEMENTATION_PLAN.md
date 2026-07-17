@@ -23,13 +23,14 @@ Learners should be able to:
 
 ## Core mechanics implemented
 
-- **Path of eras**: six chapters, each with a concise introductory text and key idea.
-- **Interactive timeline**: major events from 966 to 2004, filterable by era.
-- **Mini quizzes**: multiple-choice checks after each chapter.
-- **Timeline ordering game**: order historical events correctly.
+- **Expanded curriculum path**: 13 chronological chapters from early state formation to contemporary democratic Poland, with 53 substantial contextual sections.
+- **Contextual learning**: each chapter includes causation, important actors, international setting, society/economy, and cultural artifacts or memory debates.
+- **Multi-question quizzes**: four nuanced questions per chapter, explanatory feedback, retry support, and completion only after all answers are correct.
+- **Interactive timeline**: 46 major events from 966 to 2022, filterable by chapter.
+- **Timeline ordering game**: order eight historical turning points correctly.
 - **Partition puzzle**: choose the three partitioning powers and learn the geopolitical pattern.
-- **Memory cards**: match concepts to meanings.
-- **Progress persistence**: completed chapters, score, achievements and streak state are saved in browser `localStorage`.
+- **Memory cards**: match 18 concepts to meanings.
+- **Progress persistence**: completed chapters, individual answers, score, achievements and streak state are saved in browser `localStorage`.
 - **Reset/export**: learners can reset progress or copy a progress summary.
 
 ## Design direction

@@ -1,10 +1,13 @@
 import { readFileSync, existsSync } from 'node:fs';
 const checks = [
   ['index.html', '<script type="module" src="/src/main.js"></script>'],
+  ['index.html', 'rel="icon"'],
   ['src/main.js', 'localStorage'],
-  ['src/main.js', 'Polish-Lithuanian Commonwealth'],
+  ['src/main.js', 'answeredQuestions'],
   ['src/main.js', 'Solidarity'],
   ['src/main.js', 'Partition puzzle'],
+  ['src/curriculum.js', 'Polish-Lithuanian Commonwealth'],
+  ['src/curriculum.js', 'Warsaw Ghetto Uprising'],
   ['src/styles.css', '--crimson'],
   ['docs/IMPLEMENTATION_PLAN.md', 'Learning outcomes'],
 ];
@@ -14,8 +17,8 @@ for (const [file, phrase] of checks) {
   const txt = readFileSync(file, 'utf8');
   if (!txt.includes(phrase)) { console.error(`Missing phrase in ${file}: ${phrase}`); ok = false; }
 }
-const js = readFileSync('src/main.js','utf8');
-const eras = (js.match(/id:'/g) || []).length;
-if (eras < 6) { console.error(`Expected at least 6 era records, got ${eras}`); ok = false; }
+const curriculum = readFileSync('src/curriculum.js','utf8');
+const chapterRecords = (curriculum.match(/id: '/g) || []).length;
+if (chapterRecords < 13) { console.error(`Expected at least 13 chapter records, got ${chapterRecords}`); ok = false; }
 if (!ok) process.exit(1);
 console.log('content verification passed');
