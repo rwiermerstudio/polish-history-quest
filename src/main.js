@@ -53,6 +53,15 @@ function shuffle(values) {
   }
   return copy;
 }
+function resetGameSession() {
+  activeGame = 'chronicle';
+  chronicleRoundIndex = 0;
+  chronicleOrder = shuffle(chronicleRounds[0].events.map(event => event.id));
+  chronicleHints = new Set(); chronicleAttempts = 0; chronicleResult = null;
+  councilTurn = 0; councilMeters = { authority: 50, treasury: 50, cohesion: 50, liberty: 50 };
+  councilHistory = []; councilChoice = null;
+  archiveCaseIndex = 0; selectedEvidence = new Set(); archiveInterpretation = null; archiveResult = null;
+}
 function pct() { return Math.round((Object.keys(progress.completed).length / chapters.length) * 100); }
 function award(id) { progress.achievements[id] = true; }
 function addScore(points) { progress.score += points; progress.streak += 1; if (progress.streak >= 3) award('streak'); saveProgress(); }
@@ -85,6 +94,7 @@ function bind() {
     if (confirm('Reset all locally stored learning progress?')) {
       progress = structuredClone(defaultProgress);
       localStorage.removeItem(STORAGE_KEY);
+      resetGameSession();
       renderAll();
     }
   });
