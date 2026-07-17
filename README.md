@@ -15,7 +15,7 @@ A static, browser-based interactive learning game for adults who are generally e
 
 - **13 chapters** with 53 contextual sections and important-actor profiles.
 - **52 nuanced questions** with explanatory feedback; four correct answers complete a chapter.
-- **46-event filterable timeline** plus ordering, partition and memory games.
+- **46-event filterable timeline** plus three chapter-linked games: date-hidden chronology reconstruction, a five-turn Commonwealth strategy campaign, and evidence-based archive casefiles.
 - **Persistent local progress** including answers, completion, score and achievements.
 - See [`docs/CURRICULUM.md`](docs/CURRICULUM.md) for scope and editorial principles.
 

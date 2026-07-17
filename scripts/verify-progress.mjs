@@ -22,4 +22,10 @@ if (partial.answeredQuestions.commonwealth[0].choice !== commonwealth.quiz[0].an
 const wrong = normalizeProgress({ answeredQuestions: { commonwealth: { 0: { choice: 2, correct: false } } } }, chapters, legacyMap, defaults);
 if (wrong.answeredQuestions.commonwealth?.[0]) throw new Error('persisted wrong answers must be removed so reload restores retry access');
 
+const games = normalizeProgress({ chronicleWins: { 'realm-to-commonwealth': true, invalid: 'yes' }, councilWin: true, archiveWins: { 'partition-dossier': true, bad: false } }, chapters, legacyMap, defaults);
+if (!games.chronicleWins['realm-to-commonwealth'] || games.chronicleWins.invalid) throw new Error('chronicle wins must persist as true flags only');
+if (!games.councilWin || !games.archiveWins['partition-dossier'] || games.archiveWins.bad) throw new Error('strategy and archive wins must persist safely');
+const malformedGames = normalizeProgress({ chronicleWins: null, councilWin: 'yes', archiveWins: [] }, chapters, legacyMap, defaults);
+if (Object.keys(malformedGames.chronicleWins).length || malformedGames.councilWin || Object.keys(malformedGames.archiveWins).length) throw new Error('malformed game progress must normalize safely');
+
 console.log('progress migration verification passed');

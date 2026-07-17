@@ -1,5 +1,7 @@
 import './styles.css';
-import { chapters, timelineEvents, memoryPairs } from './curriculum.js';
+import { chapters, timelineEvents } from './curriculum.js';
+import { archiveCases, chronicleRounds, councilScenarios } from './games.js';
+import { applyCouncilChoice, evaluateArchiveCase, evaluateChronicle, moveCard } from './game-engine.js';
 import { normalizeProgress } from './progress.js';
 
 const STORAGE_KEY = 'polish-history-quest-progress-v1';
@@ -10,6 +12,7 @@ const legacyProgressMap = {
 const defaultProgress = {
   completed: {}, score: 0, attempts: 0, streak: 0, achievements: {},
   answeredQuestions: {}, legacyCompleted: [], orderedWin: false, partitionWin: false, memoryWin: false,
+  chronicleWins: {}, councilWin: false, archiveWins: {},
 };
 
 let progress = loadProgress();
@@ -18,10 +21,20 @@ let currentChapterId = null;
 let chapterSectionIndex = 0;
 let chapterQuestionIndex = 0;
 let transientAnswer = null;
-let orderItems = shuffle([966, 1410, 1569, 1795, 1918, 1939, 1980, 1989]);
-let selectedPowers = new Set();
-let memoryState = buildMemory();
-let flipped = [];
+let activeGame = 'chronicle';
+let chronicleRoundIndex = 0;
+let chronicleOrder = shuffle(chronicleRounds[0].events.map(event => event.id));
+let chronicleHints = new Set();
+let chronicleAttempts = 0;
+let chronicleResult = null;
+let councilTurn = 0;
+let councilMeters = { authority: 50, treasury: 50, cohesion: 50, liberty: 50 };
+let councilHistory = [];
+let councilChoice = null;
+let archiveCaseIndex = 0;
+let selectedEvidence = new Set();
+let archiveInterpretation = null;
+let archiveResult = null;
 
 function loadProgress() {
   try {
@@ -32,7 +45,14 @@ function loadProgress() {
   }
 }
 function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); renderProgress(); }
-function shuffle(values) { return [...values].sort(() => Math.random() - 0.5); }
+function shuffle(values) {
+  const copy = [...values];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const target = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[target]] = [copy[target], copy[index]];
+  }
+  return copy;
+}
 function pct() { return Math.round((Object.keys(progress.completed).length / chapters.length) * 100); }
 function award(id) { progress.achievements[id] = true; }
 function addScore(points) { progress.score += points; progress.streak += 1; if (progress.streak >= 3) award('streak'); saveProgress(); }
@@ -47,7 +67,7 @@ function app() {
       <section id="progress" class="section"><div class="section-title"><div><div class="kicker">Your journey</div><h2>Progress that stays in your browser</h2></div><strong id="score"></strong></div><div class="progress-shell"><div id="progressFill" class="progress-fill"></div></div><p class="lead" id="progressText"></p><div class="achievement-list" id="achievements"></div></section>
       <section id="eras" class="section alt"><div class="inner"><div class="section-title"><div><div class="kicker">Guided curriculum</div><h2>Thirteen chapters, c. 500 to the present</h2><p class="lead">Open a chapter, read its contextual sections, meet major actors, and complete four nuanced questions.</p></div></div><div class="grid eras" id="eraGrid"></div></div></section>
       <section id="timeline" class="section"><div class="section-title"><div><div class="kicker">Visual sequence</div><h2>Timeline of turning points</h2></div><select id="eraFilter" aria-label="Filter timeline by chapter"><option value="all">All chapters</option>${chapters.map(chapter => `<option value="${chapter.id}">${chapter.title}</option>`).join('')}</select></div><div class="timeline" id="timelineList"></div></section>
-      <section id="games" class="section alt"><div class="inner"><div class="section-title"><div><div class="kicker">Retrieval practice</div><h2>Make the chronology and concepts stick</h2></div></div><div class="game-layout"><div class="card"><h3>Timeline ordering</h3><p>Move these events into chronological order.</p><div class="drag-list" id="orderGame"></div><button class="btn btn-primary" id="checkOrder">Check order</button><div class="feedback" id="orderFeedback" aria-live="polite"></div></div><div class="card"><h3>Partition puzzle</h3><p>Select the three powers that partitioned the Commonwealth.</p><div class="partition-grid" id="partitionGame"></div><button class="btn btn-primary" id="checkPartition">Check powers</button><div class="feedback" id="partitionFeedback" aria-live="polite"></div></div></div><div class="card" style="margin-top:1rem"><h3>Memory match: ideas and meanings</h3><p>Match each historical concept with its meaning.</p><div class="memory-grid" id="memoryGame"></div><div class="feedback" id="memoryFeedback" aria-live="polite"></div></div></div></section>
+      <section id="games" class="section alt"><div class="inner"><div class="section-title"><div><div class="kicker">Playable history lab</div><h2>Decide, investigate and reconstruct</h2><p class="lead">Three replayable games test chronology without visible dates, strategic trade-offs, and evidence-based interpretation across the curriculum.</p></div></div><div class="game-hub"><div class="game-tabs" role="tablist" aria-label="History games"><button class="game-tab active" data-game-tab="chronicle" role="tab">⌛ Chronicle Forge</button><button class="game-tab" data-game-tab="council" role="tab">⚖ Commonwealth Council</button><button class="game-tab" data-game-tab="archive" role="tab">⌕ Archive Casefiles</button></div><div id="gameStage"></div></div></div></section>
       <footer class="footer">A broad historical survey, not an accredited school course. Static app; progress remains in this browser.</footer>
       <div class="chapter-modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-panel chapter-reader"><div class="modal-head"><div><span class="badge" id="modalYears"></span><h2 id="modalTitle"></h2><p class="chapter-summary" id="modalSummary"></p></div><button class="close" id="modalClose" aria-label="Close chapter">×</button></div><div id="chapterBody"></div></div></div>
     </div>`;
@@ -73,11 +93,10 @@ function bind() {
     await navigator.clipboard?.writeText(summary);
     alert(summary);
   });
-  document.getElementById('checkOrder').addEventListener('click', checkOrder);
-  document.getElementById('checkPartition').addEventListener('click', checkPartition);
+  document.querySelectorAll('[data-game-tab]').forEach(button => button.addEventListener('click', () => { activeGame = button.dataset.gameTab; renderGameHub(); }));
 }
 
-function renderAll() { renderProgress(); renderEras(); renderTimeline(); renderOrder(); renderPartition(); renderMemory(); }
+function renderAll() { renderProgress(); renderEras(); renderTimeline(); renderGameHub(); }
 
 function renderProgress() {
   const percent = pct();
@@ -85,9 +104,9 @@ function renderProgress() {
   const score = document.getElementById('score'); if (score) score.textContent = `Score ${progress.score} · Streak ${progress.streak}`;
   const text = document.getElementById('progressText'); if (text) text.textContent = `${Object.keys(progress.completed).length} of ${chapters.length} chapters completed (${percent}%). A chapter completes after all of its questions are answered correctly.`;
   const achievements = [
-    ['founder', 'Early Poland'], ['commonwealth', 'Commonwealth thinker'], ['partition', 'Partition solver'],
-    ['war-memory', 'Memory with care'], ['solidarity', 'Solidarity scholar'], ['chronologist', 'Chronologist'],
-    ['memory', 'Memory master'], ['streak', 'Learning streak'], ['legacy-learner', 'Original curriculum learner'], ['graduate', 'Curriculum complete'],
+    ['founder', 'Early Poland'], ['commonwealth', 'Commonwealth thinker'],
+    ['war-memory', 'Memory with care'], ['solidarity', 'Solidarity scholar'], ['chronicle-forger', 'Chronicle forger'],
+    ['council-strategist', 'Council strategist'], ['archive-detective', 'Archive detective'], ['streak', 'Learning streak'], ['legacy-learner', 'Original curriculum learner'], ['graduate', 'Curriculum complete'],
   ];
   const list = document.getElementById('achievements');
   if (list) list.innerHTML = achievements.map(([id, label]) => `<span class="achievement ${progress.achievements[id] ? 'unlocked' : ''}">${progress.achievements[id] ? '★' : '☆'} ${label}</span>`).join('');
@@ -212,58 +231,145 @@ function awardForChapter(id) {
   if (id === 'protest-solidarity') award('solidarity');
 }
 
-function renderOrder() {
-  const names = {
-    966: '966 — Baptism of Mieszko I', 1410: '1410 — Battle of Grunwald', 1569: '1569 — Union of Lublin',
-    1795: '1795 — Third Partition', 1918: '1918 — Independence restored', 1939: '1939 — Dual invasion',
-    1980: '1980 — Solidarity founded', 1989: '1989 — Round Table transition',
-  };
-  document.getElementById('orderGame').innerHTML = orderItems.map((year, index) => `<div class="order-item"><span>${names[year]}</span><span class="order-controls"><button data-dir="up" data-i="${index}" aria-label="Move ${year} up">↑</button><button data-dir="down" data-i="${index}" aria-label="Move ${year} down">↓</button></span></div>`).join('');
-  document.querySelectorAll('.order-controls button').forEach(button => button.addEventListener('click', () => {
-    const index = Number(button.dataset.i); const target = button.dataset.dir === 'up' ? index - 1 : index + 1;
-    if (target < 0 || target >= orderItems.length) return;
-    [orderItems[index], orderItems[target]] = [orderItems[target], orderItems[index]]; renderOrder();
+function chapterTitle(id) { return chapters.find(chapter => chapter.id === id)?.title || id; }
+function effectLabel(value) { return value > 0 ? `▲ ${value}` : value < 0 ? `▼ ${Math.abs(value)}` : '—'; }
+
+function renderGameHub() {
+  document.querySelectorAll('[data-game-tab]').forEach(button => {
+    const active = button.dataset.gameTab === activeGame;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', String(active));
+  });
+  if (activeGame === 'chronicle') renderChronicle();
+  if (activeGame === 'council') renderCouncil();
+  if (activeGame === 'archive') renderArchive();
+}
+
+function renderChronicle() {
+  const round = chronicleRounds[chronicleRoundIndex];
+  const byId = new Map(round.events.map(event => [event.id, event]));
+  const won = Boolean(progress.chronicleWins[round.id]);
+  document.getElementById('gameStage').innerHTML = `
+    <article class="game-board chronicle-board">
+      <div class="game-masthead"><div><span class="game-eyebrow">Game 1 · Round ${chronicleRoundIndex + 1}/${chronicleRounds.length}</span><h3>Chronicle Forge</h3><p>${round.briefing}</p></div><div class="game-score"><strong>${won ? 'Mastered' : `${Math.max(0, 300 - chronicleHints.size * 30 - chronicleAttempts * 25)} pts`}</strong><span>${chronicleHints.size} clues used</span></div></div>
+      <div class="game-chapter-links">${round.chapterIds.map(id => `<button data-open-game-chapter="${id}">${chapterTitle(id)}</button>`).join('')}</div>
+      <div class="chronicle-rail" aria-label="Arrange events from earliest to latest">${chronicleOrder.map((id, index) => {
+        const event = byId.get(id); const hint = chronicleHints.has(id);
+        return `<article class="chronicle-card ${chronicleResult?.perfect ? 'solved' : ''}"><div class="chronicle-position">${index + 1}</div><div><span class="game-eyebrow">${hint ? event.clue : 'Date sealed · reason from context'}</span><h4>${event.title}</h4>${chronicleResult?.perfect ? `<time>${event.year}</time>` : ''}</div><div class="chronicle-controls"><button data-chronicle-move="up" data-index="${index}" aria-label="Move ${event.title} earlier">↑</button><button data-chronicle-move="down" data-index="${index}" aria-label="Move ${event.title} later">↓</button><button data-chronicle-hint="${id}" ${hint ? 'disabled' : ''} aria-label="Reveal a clue for ${event.title}">?</button></div></article>`;
+      }).join('')}</div>
+      <div class="game-actions"><button class="btn btn-secondary" id="chronicleShuffle">Reshuffle</button><button class="btn btn-primary" id="chronicleCheck">Seal the chronicle</button>${chronicleResult?.perfect ? `<button class="btn btn-secondary" id="chronicleNext">${chronicleRoundIndex === chronicleRounds.length - 1 ? 'Replay first round' : 'Next chronicle'} →</button>` : ''}</div>
+      <div class="game-result ${chronicleResult?.perfect ? 'success' : ''}" id="chronicleFeedback" aria-live="polite">${chronicleResult ? (chronicleResult.perfect ? `<strong>Chronicle restored.</strong> Every date is now revealed. You earned ${chronicleResult.points} points.` : `<strong>Not sealed yet.</strong> ${chronicleResult.correctSlots}/5 events occupy the right slot and ${chronicleResult.adjacentPairs}/4 neighbouring pairs are correct.`) : '<strong>No years are shown.</strong> Use causation, institutions and relative sequence. Clues cost points.'}</div>
+    </article>`;
+  document.querySelectorAll('[data-chronicle-move]').forEach(button => button.addEventListener('click', () => {
+    const from = Number(button.dataset.index); const to = from + (button.dataset.chronicleMove === 'up' ? -1 : 1);
+    chronicleOrder = moveCard(chronicleOrder, from, to); chronicleResult = null; renderChronicle();
   }));
-}
-function checkOrder() {
-  const correct = orderItems.every((value, index, values) => index === 0 || values[index - 1] < value);
-  document.getElementById('orderFeedback').textContent = correct ? 'Correct—the long chronology is in place.' : 'Some events remain out of order. Use the dates and try again.';
-  if (correct && !progress.orderedWin) { progress.orderedWin = true; award('chronologist'); addScore(150); } else if (!correct) miss();
-}
-
-function renderPartition() {
-  const powers = ['Russia', 'Prussia', 'Austria', 'France', 'Sweden', 'Ottoman Empire'];
-  document.getElementById('partitionGame').innerHTML = powers.map(power => `<button class="choice ${selectedPowers.has(power) ? 'selected' : ''}" data-power="${power}">${power}</button>`).join('');
-  document.querySelectorAll('#partitionGame .choice').forEach(button => button.addEventListener('click', () => { const power = button.dataset.power; selectedPowers.has(power) ? selectedPowers.delete(power) : selectedPowers.add(power); renderPartition(); }));
-}
-function checkPartition() {
-  const correctPowers = ['Russia', 'Prussia', 'Austria'];
-  const correct = correctPowers.every(power => selectedPowers.has(power)) && selectedPowers.size === 3;
-  document.getElementById('partitionFeedback').textContent = correct ? 'Correct. Internal weakness mattered, but these three empires used military power to partition the Commonwealth.' : 'Not quite. Select exactly three neighbouring empires of the late eighteenth century.';
-  if (correct && !progress.partitionWin) { progress.partitionWin = true; award('partition'); addScore(150); } else if (!correct) miss();
+  document.querySelectorAll('[data-chronicle-hint]').forEach(button => button.addEventListener('click', () => { chronicleHints.add(button.dataset.chronicleHint); renderChronicle(); }));
+  document.getElementById('chronicleShuffle').addEventListener('click', () => { chronicleOrder = shuffle(chronicleOrder); chronicleResult = null; renderChronicle(); });
+  document.getElementById('chronicleCheck').addEventListener('click', checkChronicle);
+  document.getElementById('chronicleNext')?.addEventListener('click', nextChronicle);
+  bindGameChapterLinks();
 }
 
-function buildMemory() { return shuffle(memoryPairs.flatMap(([term, definition], id) => [{ id, type: 'term', text: term }, { id, type: 'definition', text: definition }])).map((card, key) => ({ ...card, key, flipped: false, matched: false })); }
-function renderMemory() {
-  document.getElementById('memoryGame').innerHTML = memoryState.map(card => `<button class="memory-card ${card.flipped ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" data-key="${card.key}">${card.flipped || card.matched ? card.text : '?'}</button>`).join('');
-  document.querySelectorAll('.memory-card').forEach(button => button.addEventListener('click', () => flipCard(Number(button.dataset.key))));
+function checkChronicle() {
+  const round = chronicleRounds[chronicleRoundIndex];
+  const correctOrder = [...round.events].sort((a, b) => a.year - b.year).map(event => event.id);
+  const result = evaluateChronicle(chronicleOrder, correctOrder);
+  chronicleAttempts += 1;
+  const points = Math.max(100, 300 - chronicleHints.size * 30 - (chronicleAttempts - 1) * 25);
+  chronicleResult = { ...result, points };
+  if (result.perfect && !progress.chronicleWins[round.id]) {
+    progress.chronicleWins[round.id] = true;
+    if (Object.keys(progress.chronicleWins).length === chronicleRounds.length) award('chronicle-forger');
+    addScore(points);
+  } else if (!result.perfect) miss();
+  renderChronicle();
 }
-function flipCard(key) {
-  const card = memoryState.find(item => item.key === key);
-  if (!card || card.matched || card.flipped || flipped.length === 2) return;
-  card.flipped = true; flipped.push(card); renderMemory();
-  if (flipped.length === 2) setTimeout(() => {
-    const [first, second] = flipped;
-    if (first.id === second.id && first.type !== second.type) {
-      first.matched = second.matched = true;
-      document.getElementById('memoryFeedback').textContent = 'Match found.';
-      if (memoryState.every(item => item.matched) && !progress.memoryWin) { progress.memoryWin = true; award('memory'); addScore(200); document.getElementById('memoryFeedback').textContent = 'All matched—memory master!'; }
-    } else {
-      first.flipped = second.flipped = false; document.getElementById('memoryFeedback').textContent = 'No match—try another pair.'; miss();
-    }
-    flipped = []; renderMemory();
-  }, 650);
+
+function nextChronicle() {
+  chronicleRoundIndex = (chronicleRoundIndex + 1) % chronicleRounds.length;
+  chronicleOrder = shuffle(chronicleRounds[chronicleRoundIndex].events.map(event => event.id));
+  chronicleHints = new Set(); chronicleAttempts = 0; chronicleResult = null; renderChronicle();
 }
+
+function renderCouncil() {
+  const complete = councilTurn >= councilScenarios.length;
+  const minimum = Math.min(...Object.values(councilMeters));
+  const average = Math.round(Object.values(councilMeters).reduce((sum, value) => sum + value, 0) / 4);
+  const survived = complete && minimum >= 20 && average >= 48;
+  const scenario = councilScenarios[Math.min(councilTurn, councilScenarios.length - 1)];
+  document.getElementById('gameStage').innerHTML = `
+    <article class="game-board council-board">
+      <div class="game-masthead"><div><span class="game-eyebrow">Game 2 · Five-turn strategy campaign</span><h3>Commonwealth Council</h3><p>Balance state capacity, revenue, political cohesion and constitutional liberty. Every policy solves one problem while risking another.</p></div><div class="game-score"><strong>Turn ${Math.min(councilTurn + 1, councilScenarios.length)}/${councilScenarios.length}</strong><span>${councilHistory.length} decisions recorded</span></div></div>
+      <div class="council-dashboard">${Object.entries(councilMeters).map(([meter, value]) => `<div class="council-meter"><div><span>${meter}</span><strong>${value}</strong></div><div class="meter-track"><span style="width:${value}%"></span></div></div>`).join('')}</div>
+      ${complete ? `<div class="council-finale ${survived ? 'success' : 'failure'}"><span class="game-eyebrow">Campaign complete</span><h4>${survived ? 'A difficult constitutional balance survives' : 'The settlement fractures under accumulated pressure'}</h4><p>${survived ? 'You preserved every meter above crisis level while keeping the whole system viable. This is a counterfactual strategy exercise, not a claim that one policy could have prevented the partitions.' : 'One or more foundations fell below a sustainable level. Review the decision ledger and try a different coalition of policies.'}</p><button class="btn btn-primary" id="councilRestart">Replay campaign</button></div>` : `
+        <div class="council-scenario"><div class="scenario-stamp"><span>${scenario.era}</span><b>${councilTurn + 1}</b></div><div><span class="game-eyebrow">Linked chapter</span><button class="chapter-link" data-open-game-chapter="${scenario.chapterId}">${chapterTitle(scenario.chapterId)} ↗</button><h4>${scenario.title}</h4><p>${scenario.context}</p><strong>${scenario.prompt}</strong></div></div>
+        <div class="council-options">${scenario.options.map((option, index) => `<button class="council-option ${councilChoice === index ? 'selected' : ''}" data-council-choice="${index}" ${councilChoice !== null ? 'disabled' : ''}><span class="option-number">0${index + 1}</span><strong>${option.label}</strong><span class="effect-preview">${councilChoice === index ? Object.entries(option.effects).map(([meter, value]) => `<i class="${value < 0 ? 'risk' : 'gain'}">${meter} ${effectLabel(value)}</i>`).join('') : '<i>Effects sealed until commitment</i>'}</span></button>`).join('')}</div>
+        ${councilChoice !== null ? `<div class="game-result"><strong>Dispatch from the chamber</strong><p>${scenario.options[councilChoice].consequence}</p><button class="btn btn-primary" id="councilNext">Continue to the next crisis →</button></div>` : '<div class="game-result">Choose a policy from the historical context. Meter effects and consequences are revealed only after commitment.</div>'}`}
+      ${councilHistory.length ? `<details class="decision-ledger"><summary>Decision ledger · ${councilHistory.length} entries</summary>${councilHistory.map(item => `<div><b>${item.title}</b><span>${item.choice}</span></div>`).join('')}</details>` : ''}
+    </article>`;
+  document.querySelectorAll('[data-council-choice]').forEach(button => button.addEventListener('click', () => chooseCouncil(Number(button.dataset.councilChoice))));
+  document.getElementById('councilNext')?.addEventListener('click', () => { councilTurn += 1; councilChoice = null; if (councilTurn === councilScenarios.length) finishCouncil(); renderCouncil(); });
+  document.getElementById('councilRestart')?.addEventListener('click', resetCouncil);
+  bindGameChapterLinks();
+}
+
+function chooseCouncil(index) {
+  const scenario = councilScenarios[councilTurn]; const option = scenario.options[index];
+  councilChoice = index; councilMeters = applyCouncilChoice(councilMeters, option);
+  councilHistory.push({ title: scenario.title, choice: option.label }); renderCouncil();
+}
+
+function finishCouncil() {
+  const minimum = Math.min(...Object.values(councilMeters));
+  const average = Object.values(councilMeters).reduce((sum, value) => sum + value, 0) / 4;
+  if (minimum >= 20 && average >= 48 && !progress.councilWin) { progress.councilWin = true; award('council-strategist'); addScore(Math.round(average * 5)); }
+  else if (minimum < 20 || average < 48) miss();
+}
+
+function resetCouncil() {
+  councilTurn = 0; councilMeters = { authority: 50, treasury: 50, cohesion: 50, liberty: 50 };
+  councilHistory = []; councilChoice = null; renderCouncil();
+}
+
+function renderArchive() {
+  const casefile = archiveCases[archiveCaseIndex];
+  const won = Boolean(progress.archiveWins[casefile.id]);
+  document.getElementById('gameStage').innerHTML = `
+    <article class="game-board archive-board">
+      <div class="game-masthead"><div><span class="game-eyebrow">Game 3 · Dossier ${archiveCaseIndex + 1}/${archiveCases.length}</span><h3>Archive Casefiles</h3><p>${casefile.brief}</p></div><div class="game-score"><strong>${won ? 'Solved' : `${selectedEvidence.size}/3 sources`}</strong><span>Evidence before verdict</span></div></div>
+      <div class="casefile-head"><div class="casefile-folder"><span>ARCHIWUM</span><b>${String(archiveCaseIndex + 1).padStart(2, '0')}</b></div><div><h4>${casefile.title}</h4><div class="game-chapter-links">${casefile.chapterIds.map(id => `<button data-open-game-chapter="${id}">${chapterTitle(id)}</button>`).join('')}</div></div></div>
+      <div class="archive-workspace"><section><span class="game-eyebrow">Evidence table · select exactly three</span><div class="archive-evidence">${casefile.evidence.map(item => `<button class="evidence-card ${selectedEvidence.has(item.id) ? 'selected' : ''} ${archiveResult ? (casefile.correctEvidence.includes(item.id) ? 'relevant' : selectedEvidence.has(item.id) ? 'false-lead' : '') : ''}" data-evidence="${item.id}" ${archiveResult ? 'disabled' : ''}><span>${item.source}</span><strong>${item.label}</strong><p>${item.text}</p></button>`).join('')}</div></section><aside class="interpretation-panel"><span class="game-eyebrow">Competing interpretations</span>${casefile.interpretations.map((option, index) => `<button class="interpretation ${archiveInterpretation === index ? 'selected' : ''} ${archiveResult ? (option.correct ? 'relevant' : archiveInterpretation === index ? 'false-lead' : '') : ''}" data-interpretation="${index}" ${archiveResult ? 'disabled' : ''}><b>${String.fromCharCode(65 + index)}</b><span>${option.text}</span></button>`).join('')}<button class="btn btn-primary" id="archiveSubmit" ${selectedEvidence.size !== 3 || archiveInterpretation === null || archiveResult ? 'disabled' : ''}>Submit evidence brief</button></aside></div>
+      <div class="game-result ${archiveResult?.passed ? 'success' : ''}" aria-live="polite">${archiveResult ? (archiveResult.passed ? '<strong>Case solved.</strong> Your evidence is relevant and your interpretation preserves causal and ethical precision.' : `<strong>Brief returned for revision.</strong> ${archiveResult.evidenceScore}/3 sources were relevant; ${archiveResult.falseLeads} false lead${archiveResult.falseLeads === 1 ? '' : 's'} entered the brief.`) : '<strong>Archivist’s rule:</strong> relevance is not the same as interest. Build the evidence set that directly tests the question.'}${archiveResult ? `<div class="game-actions"><button class="btn btn-secondary" id="archiveRetry">Reopen file</button>${archiveResult.passed ? `<button class="btn btn-primary" id="archiveNext">${archiveCaseIndex === archiveCases.length - 1 ? 'Return to first dossier' : 'Next dossier'} →</button>` : ''}</div>` : ''}</div>
+    </article>`;
+  document.querySelectorAll('[data-evidence]').forEach(button => button.addEventListener('click', () => toggleEvidence(button.dataset.evidence)));
+  document.querySelectorAll('[data-interpretation]').forEach(button => button.addEventListener('click', () => { archiveInterpretation = Number(button.dataset.interpretation); renderArchive(); }));
+  document.getElementById('archiveSubmit')?.addEventListener('click', submitArchive);
+  document.getElementById('archiveRetry')?.addEventListener('click', resetArchiveCase);
+  document.getElementById('archiveNext')?.addEventListener('click', nextArchiveCase);
+  bindGameChapterLinks();
+}
+
+function toggleEvidence(id) {
+  if (selectedEvidence.has(id)) selectedEvidence.delete(id);
+  else if (selectedEvidence.size < 3) selectedEvidence.add(id);
+  renderArchive();
+}
+
+function submitArchive() {
+  const casefile = archiveCases[archiveCaseIndex];
+  archiveResult = evaluateArchiveCase([...selectedEvidence], casefile.correctEvidence, casefile.interpretations[archiveInterpretation].correct);
+  if (archiveResult.passed && !progress.archiveWins[casefile.id]) {
+    progress.archiveWins[casefile.id] = true;
+    if (Object.keys(progress.archiveWins).length === archiveCases.length) award('archive-detective');
+    addScore(250);
+  } else if (!archiveResult.passed) miss();
+  renderArchive();
+}
+
+function resetArchiveCase() { selectedEvidence = new Set(); archiveInterpretation = null; archiveResult = null; renderArchive(); }
+function nextArchiveCase() { archiveCaseIndex = (archiveCaseIndex + 1) % archiveCases.length; resetArchiveCase(); }
+function bindGameChapterLinks() { document.querySelectorAll('[data-open-game-chapter]').forEach(button => button.addEventListener('click', () => openChapter(button.dataset.openGameChapter))); }
 
 function mapSvg() {
   return `<svg class="map-svg" viewBox="0 0 720 360" role="img" aria-label="Abstract map-like visualization of Poland's changing borders"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#c1121f"/><stop offset="1" stop-color="#d6a545"/></linearGradient></defs><rect width="720" height="360" rx="24" fill="#f7f1e8"/><path d="M175 105 C230 35 326 58 363 92 C411 136 491 103 540 160 C590 218 548 297 462 304 C383 310 353 270 281 287 C206 304 138 259 132 195 C128 158 151 135 175 105Z" fill="white" stroke="#14213d" stroke-width="5"/><path d="M210 145 C270 105 318 124 360 155 C399 184 457 174 498 213" fill="none" stroke="url(#g)" stroke-width="16" stroke-linecap="round" opacity=".9"/><circle cx="300" cy="160" r="14" fill="#c1121f"/><circle cx="425" cy="210" r="14" fill="#d6a545"/><text x="42" y="58" font-size="22" font-weight="800" fill="#14213d">Borders shift. People adapt.</text><text x="42" y="88" font-size="14" fill="#6f675d">A map-inspired learning surface, not a territorial claim.</text></svg>`;
