@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  index.html: |
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Polish History Quest: an interactive browser game for adults learning the big arcs of Polish history." />
+        <title>Polish History Quest</title>
+        <script type="module" crossorigin src="/assets/index-CTN7layT.js"></script>
+        <link rel="stylesheet" crossorigin href="/assets/index--MPWUwns.css">
+      </head>
+      <body>
+        <div id="app"></div>
+      </body>
+    </html>
+kind: ConfigMap
+metadata:
+  name: polish-history-site
+  namespace: polish-history-quest
