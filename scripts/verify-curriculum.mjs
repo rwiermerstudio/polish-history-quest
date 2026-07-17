@@ -95,6 +95,9 @@ for (const phrase of [
   'assuming every person acted identically', 'It ended censorship', 'rejected workplace issues entirely',
   'represented only senior party officials', 'Solidarity had ceased to exist entirely', 'Nothing important changed',
   'Soviet Union annexed western Poland', 'ended every economic inequality', 'Only medieval examples are legitimate',
+  'constitution ordered the country to disappear', 'Language and religion immediately disappeared',
+  'Citizenship was limited to military officers', 'post-war films as the only evidence',
+  'exile government requested communist rule', 'benefited every citizen equally from the first day',
 ]) {
   assert(!combined.includes(phrase), `exported quiz still contains implausible distractor: ${phrase}`);
 }
