@@ -26,6 +26,14 @@ export function normalizeProgress(stored, chapters, legacyProgressMap, defaults)
     .filter(id => currentIds.has(id) && !completed[id]);
   const achievements = { ...(safeStored.achievements || {}) };
   if (legacyCompleted.length) achievements['legacy-learner'] = true;
+  const trueFlags = value => Object.fromEntries(
+    Object.entries(value && typeof value === 'object' ? value : {}).filter(([, won]) => won === true),
+  );
+  const gameProgress = {
+    chronicleWins: trueFlags(safeStored.chronicleWins),
+    councilWin: safeStored.councilWin === true,
+    archiveWins: trueFlags(safeStored.archiveWins),
+  };
 
-  return { ...defaults, ...safeStored, completed, achievements, answeredQuestions, legacyCompleted };
+  return { ...defaults, ...safeStored, ...gameProgress, completed, achievements, answeredQuestions, legacyCompleted };
 }
