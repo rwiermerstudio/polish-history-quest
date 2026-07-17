@@ -1,7 +1,7 @@
 import './styles.css';
 import { chapters, timelineEvents } from './curriculum.js';
 import { archiveCases, chronicleRounds, councilScenarios } from './games.js';
-import { applyCouncilChoice, evaluateArchiveCase, evaluateChronicle, moveCard } from './game-engine.js';
+import { applyCouncilChoice, createArchiveDisplay, evaluateArchiveCase, evaluateChronicle, moveCard } from './game-engine.js';
 import { normalizeProgress } from './progress.js';
 
 const STORAGE_KEY = 'polish-history-quest-progress-v1';
@@ -35,6 +35,9 @@ let archiveCaseIndex = 0;
 let selectedEvidence = new Set();
 let archiveInterpretation = null;
 let archiveResult = null;
+const initialArchiveDisplay = createArchiveDisplay(archiveCases[0], 0);
+let archiveEvidenceOrder = initialArchiveDisplay.evidence;
+let archiveInterpretationOrder = initialArchiveDisplay.interpretations;
 
 function loadProgress() {
   try {
@@ -61,6 +64,8 @@ function resetGameSession() {
   councilTurn = 0; councilMeters = { authority: 50, treasury: 50, cohesion: 50, liberty: 50 };
   councilHistory = []; councilChoice = null;
   archiveCaseIndex = 0; selectedEvidence = new Set(); archiveInterpretation = null; archiveResult = null;
+  const archiveDisplay = createArchiveDisplay(archiveCases[0], 0);
+  archiveEvidenceOrder = archiveDisplay.evidence; archiveInterpretationOrder = archiveDisplay.interpretations;
 }
 function pct() { return Math.round((Object.keys(progress.completed).length / chapters.length) * 100); }
 function award(id) { progress.achievements[id] = true; }
@@ -349,8 +354,8 @@ function renderArchive() {
     <article class="game-board archive-board">
       <div class="game-masthead"><div><span class="game-eyebrow">Game 3 · Dossier ${archiveCaseIndex + 1}/${archiveCases.length}</span><h3>Archive Casefiles</h3><p>${casefile.brief}</p></div><div class="game-score"><strong>${won ? 'Solved' : `${selectedEvidence.size}/3 sources`}</strong><span>Evidence before verdict</span></div></div>
       <div class="casefile-head"><div class="casefile-folder"><span>ARCHIWUM</span><b>${String(archiveCaseIndex + 1).padStart(2, '0')}</b></div><div><h4>${casefile.title}</h4><div class="game-chapter-links">${casefile.chapterIds.map(id => `<button data-open-game-chapter="${id}">${chapterTitle(id)}</button>`).join('')}</div></div></div>
-      <div class="archive-workspace"><section><span class="game-eyebrow">Evidence table · select exactly three</span><div class="archive-evidence">${casefile.evidence.map(item => `<button class="evidence-card ${selectedEvidence.has(item.id) ? 'selected' : ''} ${archiveResult ? (casefile.correctEvidence.includes(item.id) ? 'relevant' : selectedEvidence.has(item.id) ? 'false-lead' : '') : ''}" data-evidence="${item.id}" ${archiveResult ? 'disabled' : ''}><span>${item.source}</span><strong>${item.label}</strong><p>${item.text}</p></button>`).join('')}</div></section><aside class="interpretation-panel"><span class="game-eyebrow">Competing interpretations</span>${casefile.interpretations.map((option, index) => `<button class="interpretation ${archiveInterpretation === index ? 'selected' : ''} ${archiveResult ? (option.correct ? 'relevant' : archiveInterpretation === index ? 'false-lead' : '') : ''}" data-interpretation="${index}" ${archiveResult ? 'disabled' : ''}><b>${String.fromCharCode(65 + index)}</b><span>${option.text}</span></button>`).join('')}<button class="btn btn-primary" id="archiveSubmit" ${selectedEvidence.size !== 3 || archiveInterpretation === null || archiveResult ? 'disabled' : ''}>Submit evidence brief</button></aside></div>
-      <div class="game-result ${archiveResult?.passed ? 'success' : ''}" aria-live="polite">${archiveResult ? (archiveResult.passed ? '<strong>Case solved.</strong> Your evidence is relevant and your interpretation preserves causal and ethical precision.' : `<strong>Brief returned for revision.</strong> ${archiveResult.evidenceScore}/3 sources were relevant; ${archiveResult.falseLeads} false lead${archiveResult.falseLeads === 1 ? '' : 's'} entered the brief.`) : '<strong>Archivist’s rule:</strong> relevance is not the same as interest. Build the evidence set that directly tests the question.'}${archiveResult ? `<div class="game-actions"><button class="btn btn-secondary" id="archiveRetry">Reopen file</button>${archiveResult.passed ? `<button class="btn btn-primary" id="archiveNext">${archiveCaseIndex === archiveCases.length - 1 ? 'Return to first dossier' : 'Next dossier'} →</button>` : ''}</div>` : ''}</div>
+      <div class="archive-workspace"><section><span class="game-eyebrow">Evidence table · select exactly three</span><div class="archive-evidence">${archiveEvidenceOrder.map(id => { const item = casefile.evidence.find(source => source.id === id); const relevant = casefile.correctEvidence.includes(item.id); return `<button class="evidence-card ${selectedEvidence.has(item.id) ? 'selected' : ''} ${archiveResult ? (relevant ? 'relevant' : selectedEvidence.has(item.id) ? 'false-lead' : '') : ''}" data-evidence="${item.id}" ${archiveResult ? 'disabled' : ''}><span>${item.source}</span><strong>${item.label}</strong><p>${item.text}</p>${archiveResult ? `<em class="evidence-status">${relevant ? 'Relevant source' : selectedEvidence.has(item.id) ? 'False lead' : 'Not selected'}</em>` : ''}</button>`; }).join('')}</div></section><aside class="interpretation-panel"><span class="game-eyebrow">Competing interpretations</span>${archiveInterpretationOrder.map((sourceIndex, displayIndex) => { const option = casefile.interpretations[sourceIndex]; return `<button class="interpretation ${archiveInterpretation === sourceIndex ? 'selected' : ''} ${archiveResult ? (option.correct ? 'relevant' : archiveInterpretation === sourceIndex ? 'false-lead' : '') : ''}" data-interpretation="${sourceIndex}" ${archiveResult ? 'disabled' : ''}><b>${String.fromCharCode(65 + displayIndex)}</b><span>${option.text}${archiveResult ? `<em class="interpretation-status">${option.correct ? 'Defensible interpretation' : archiveInterpretation === sourceIndex ? 'Selected interpretation not supported' : 'Alternative not supported'}</em>` : ''}</span></button>`; }).join('')}<button class="btn btn-primary" id="archiveSubmit" ${selectedEvidence.size !== 3 || archiveInterpretation === null || archiveResult ? 'disabled' : ''}>Submit evidence brief</button></aside></div>
+      <div class="game-result ${archiveResult?.passed ? 'success' : ''}" aria-live="polite">${archiveResult ? (archiveResult.passed ? '<strong>Case solved.</strong> Your evidence is relevant and your interpretation preserves causal and ethical precision.' : `<strong>Brief returned for revision.</strong> ${archiveResult.evidenceScore}/3 sources were relevant; ${archiveResult.falseLeads} false lead${archiveResult.falseLeads === 1 ? '' : 's'} entered the brief. <strong>Interpretation:</strong> ${archiveResult.interpretationCorrect ? 'your selected explanation is defensible, but the evidence set needs revision.' : 'your selected explanation is not adequately supported; choose the interpretation that accounts for the evidence without overgeneralizing.'}`) : '<strong>Archivist’s rule:</strong> relevance is not the same as interest. Build the evidence set that directly tests the question.'}${archiveResult ? `<div class="game-actions"><button class="btn btn-secondary" id="archiveRetry">Reopen file</button>${archiveResult.passed ? `<button class="btn btn-primary" id="archiveNext">${archiveCaseIndex === archiveCases.length - 1 ? 'Return to first dossier' : 'Next dossier'} →</button>` : ''}</div>` : ''}</div>
     </article>`;
   document.querySelectorAll('[data-evidence]').forEach(button => button.addEventListener('click', () => toggleEvidence(button.dataset.evidence)));
   document.querySelectorAll('[data-interpretation]').forEach(button => button.addEventListener('click', () => { archiveInterpretation = Number(button.dataset.interpretation); renderArchive(); }));
@@ -378,7 +383,14 @@ function submitArchive() {
 }
 
 function resetArchiveCase() { selectedEvidence = new Set(); archiveInterpretation = null; archiveResult = null; renderArchive(); }
-function nextArchiveCase() { archiveCaseIndex = (archiveCaseIndex + 1) % archiveCases.length; resetArchiveCase(); }
+function prepareArchiveCase() {
+  const casefile = archiveCases[archiveCaseIndex];
+  selectedEvidence = new Set(); archiveInterpretation = null; archiveResult = null;
+  const archiveDisplay = createArchiveDisplay(casefile, archiveCaseIndex);
+  archiveEvidenceOrder = archiveDisplay.evidence; archiveInterpretationOrder = archiveDisplay.interpretations;
+  renderArchive();
+}
+function nextArchiveCase() { archiveCaseIndex = (archiveCaseIndex + 1) % archiveCases.length; prepareArchiveCase(); }
 function bindGameChapterLinks() { document.querySelectorAll('[data-open-game-chapter]').forEach(button => button.addEventListener('click', () => openChapter(button.dataset.openGameChapter))); }
 
 function mapSvg() {
