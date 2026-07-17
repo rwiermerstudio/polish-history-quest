@@ -6,7 +6,7 @@
   "description": "A browser-based interactive learning game for adults learning Polish history.",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "vite build && node scripts/inline-dist.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node scripts/verify-content.mjs"
   },

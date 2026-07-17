@@ -21,7 +21,7 @@ npm run build
 
 ## Kubernetes deployment
 
-The deployment manifests live in `k8s/`. After `npm run build`, generate the ConfigMap from `dist/` and apply the manifests:
+The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite `dist/` plus a single-file `dist-k8s/index.html` bundle for ConfigMap-based Kubernetes serving. After building, generate the ConfigMap and apply the manifests:
 
 ```bash
 ./scripts/render-k8s-configmap.sh
