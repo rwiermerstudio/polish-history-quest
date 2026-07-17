@@ -23,12 +23,34 @@ export function applyCouncilChoice(state, option) {
   ]));
 }
 
+export function createArchiveDisplay(casefile, caseIndex, random = Math.random) {
+  const shuffled = values => {
+    const copy = [...values];
+    for (let index = copy.length - 1; index > 0; index -= 1) {
+      const target = Math.floor(random() * (index + 1));
+      [copy[index], copy[target]] = [copy[target], copy[index]];
+    }
+    return copy;
+  };
+  const evidence = shuffled(casefile.evidence.map(item => item.id));
+  if (evidence.slice(0, 3).every(id => casefile.correctEvidence.includes(id))) {
+    const falseLeadIndex = evidence.findIndex((id, index) => index >= 3 && !casefile.correctEvidence.includes(id));
+    [evidence[2], evidence[falseLeadIndex]] = [evidence[falseLeadIndex], evidence[2]];
+  }
+  const correctIndex = casefile.interpretations.findIndex(option => option.correct);
+  const alternatives = shuffled(casefile.interpretations.map((_, index) => index).filter(index => index !== correctIndex));
+  const interpretations = [...alternatives];
+  interpretations.splice([1, 2, 0][caseIndex % 3], 0, correctIndex);
+  return { evidence, interpretations };
+}
+
 export function evaluateArchiveCase(selectedEvidence, correctEvidence, interpretationCorrect) {
   const evidenceScore = selectedEvidence.filter(id => correctEvidence.includes(id)).length;
   const falseLeads = selectedEvidence.length - evidenceScore;
   return {
     evidenceScore,
     falseLeads,
+    interpretationCorrect: Boolean(interpretationCorrect),
     passed: evidenceScore === correctEvidence.length && falseLeads === 0 && interpretationCorrect,
   };
 }

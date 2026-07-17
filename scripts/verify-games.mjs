@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { archiveCases, chronicleRounds, councilScenarios } from '../src/games.js';
-import { applyCouncilChoice, evaluateArchiveCase, evaluateChronicle, moveCard } from '../src/game-engine.js';
+import { applyCouncilChoice, createArchiveDisplay, evaluateArchiveCase, evaluateChronicle, moveCard } from '../src/game-engine.js';
 
 const assert = (condition, message) => { if (!condition) throw new Error(message); };
 
@@ -27,6 +27,13 @@ for (const casefile of archiveCases) {
   assert(casefile.interpretations.length >= 3, `${casefile.id}: expected competing interpretations`);
   assert(casefile.interpretations.some(option => option.correct), `${casefile.id}: missing defensible interpretation`);
 }
+archiveCases.forEach((casefile, caseIndex) => {
+  const display = createArchiveDisplay(casefile, caseIndex, () => 0.5);
+  assert(new Set(display.evidence).size === casefile.evidence.length, `${casefile.id}: evidence display must contain every source once`);
+  assert(!display.evidence.slice(0, 3).every(id => casefile.correctEvidence.includes(id)), `${casefile.id}: first three cards must not reveal the solution`);
+  const correctIndex = casefile.interpretations.findIndex(option => option.correct);
+  assert(display.interpretations.indexOf(correctIndex) === [1, 2, 0][caseIndex % 3], `${casefile.id}: defensible interpretation position must vary by dossier`);
+});
 
 assert(JSON.stringify(moveCard(['a', 'b', 'c'], 2, 0)) === JSON.stringify(['c', 'a', 'b']), 'moveCard should reorder without mutation');
 assert(evaluateChronicle(['a', 'b', 'c'], ['a', 'b', 'c']).perfect, 'chronicle perfect order not recognized');
@@ -45,17 +52,19 @@ const exploreCouncil = (turn, meters) => {
 exploreCouncil(0, { authority: 50, treasury: 50, cohesion: 50, liberty: 50 });
 assert(councilWins > 0 && councilLosses > councilWins, 'council campaign must be winnable but strategically challenging');
 const archive = evaluateArchiveCase(['a', 'b', 'x'], ['a', 'b', 'c'], true);
-assert(archive.evidenceScore === 2 && archive.passed === false, 'archive scoring must require evidence and interpretation');
+assert(archive.evidenceScore === 2 && archive.interpretationCorrect && archive.passed === false, 'archive scoring must report evidence and interpretation separately');
+const wrongInterpretation = evaluateArchiveCase(['a', 'b', 'c'], ['a', 'b', 'c'], false);
+assert(wrongInterpretation.evidenceScore === 3 && !wrongInterpretation.interpretationCorrect && !wrongInterpretation.passed, 'archive must reject and explain an unsupported interpretation');
 
 const main = readFileSync('src/main.js', 'utf8');
 const css = readFileSync('src/styles.css', 'utf8');
-for (const marker of ['renderGameHub', 'renderChronicle', 'renderCouncil', 'renderArchive', 'data-game-tab', 'chronicleHint']) {
+for (const marker of ['renderGameHub', 'renderChronicle', 'renderCouncil', 'renderArchive', 'data-game-tab', 'chronicleHint', 'archiveEvidenceOrder', 'archiveInterpretationOrder', 'Selected interpretation not supported']) {
   assert(main.includes(marker), `main UI missing ${marker}`);
 }
 for (const removed of ['Timeline ordering', 'Partition puzzle', 'Memory match: ideas and meanings', 'checkOrder', 'checkPartition']) {
   assert(!main.includes(removed), `legacy game remains: ${removed}`);
 }
-for (const selector of ['.game-hub', '.game-tabs', '.chronicle-card', '.council-meter', '.archive-evidence', '.game-result']) {
+for (const selector of ['.game-hub', '.game-tabs', '.chronicle-card', '.council-meter', '.archive-evidence', '.evidence-status', '.interpretation-status', '.game-result']) {
   assert(css.includes(selector), `game CSS missing ${selector}`);
 }
 
