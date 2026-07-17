@@ -17,6 +17,7 @@ let currentEra = 'all';
 let currentChapterId = null;
 let chapterSectionIndex = 0;
 let chapterQuestionIndex = 0;
+let transientAnswer = null;
 let orderItems = shuffle([966, 1410, 1569, 1795, 1918, 1939, 1980, 1989]);
 let selectedPowers = new Set();
 let memoryState = buildMemory();
@@ -143,16 +144,18 @@ function renderChapterSections(chapter) {
 }
 
 function displayedQuestionOptions(item) {
-  const hash = [...item.prompt].reduce((total, char) => (total + char.charCodeAt(0)) % item.options.length, 0);
-  const indexed = item.options.map((text, originalIndex) => ({ text, originalIndex }));
-  return indexed.slice(hash).concat(indexed.slice(0, hash));
+  return item.options.map((text, originalIndex) => ({ text, originalIndex }));
 }
 
 function renderChapterQuiz(chapter) {
   const answers = progress.answeredQuestions[chapter.id] || {};
   const item = chapter.quiz[chapterQuestionIndex];
   const optionDisplay = displayedQuestionOptions(item);
-  const selected = answers[chapterQuestionIndex];
+  const selected = answers[chapterQuestionIndex] || (
+    transientAnswer?.chapterId === chapter.id && transientAnswer.questionIndex === chapterQuestionIndex
+      ? transientAnswer
+      : null
+  );
   const answeredCount = Object.keys(answers).length;
   const correctCount = Object.values(answers).filter(answer => answer.correct).length;
   const complete = correctCount === chapter.quiz.length;
@@ -175,16 +178,17 @@ function answerChapterQuestion(choice) {
   const item = chapter.quiz[questionIndex];
   const correct = choice === item.answer;
   progress.answeredQuestions[chapter.id] ||= {};
-  progress.answeredQuestions[chapter.id][questionIndex] = { choice, correct };
   if (correct) {
+    transientAnswer = null;
+    progress.answeredQuestions[chapter.id][questionIndex] = { choice, correct: true };
     addScore(40);
   } else {
+    transientAnswer = { chapterId: chapter.id, questionIndex, choice, correct: false };
     miss();
-    // Keep the explanation visible now; allow retry after navigating or reopening.
+    // Keep the explanation visible briefly without persisting a reload-blocking wrong answer.
     setTimeout(() => {
-      if (progress.answeredQuestions[chapter.id]?.[questionIndex]?.correct === false) {
-        delete progress.answeredQuestions[chapter.id][questionIndex];
-        saveProgress();
+      if (transientAnswer?.chapterId === chapter.id && transientAnswer.questionIndex === questionIndex) {
+        transientAnswer = null;
         if (currentChapterId === chapter.id && chapterQuestionIndex === questionIndex) renderChapterWorkspace();
       }
     }, 2500);

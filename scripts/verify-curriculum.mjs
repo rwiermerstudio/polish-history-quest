@@ -13,6 +13,7 @@ let sectionCount = 0;
 let questionCount = 0;
 let actorCount = 0;
 let curriculumWordCount = 0;
+const answerPositions = [0, 0, 0, 0];
 const requiredSectionKinds = new Set(['context', 'events', 'actors', 'international', 'society', 'culture']);
 for (const chapter of chapters) {
   assert(chapter.id && !chapterIds.has(chapter.id), `duplicate or missing chapter id: ${chapter.id}`);
@@ -41,6 +42,8 @@ for (const chapter of chapters) {
     assert(question.prompt && question.prompt.length >= 35, `${chapter.id} Q${qIndex + 1}: prompt too short`);
     assert(Array.isArray(question.options) && question.options.length === 4, `${chapter.id} Q${qIndex + 1}: expected 4 options`);
     assert(Number.isInteger(question.answer) && question.answer >= 0 && question.answer < 4, `${chapter.id} Q${qIndex + 1}: invalid answer`);
+    answerPositions[question.answer] += 1;
+    assert(new Set(question.options).size === 4, `${chapter.id} Q${qIndex + 1}: duplicate options`);
     assert(question.explanation && question.explanation.length >= 90, `${chapter.id} Q${qIndex + 1}: explanation too short`);
     curriculumWordCount += [question.prompt, ...question.options, question.explanation].join(' ').trim().split(/\s+/).length;
   });
@@ -49,6 +52,7 @@ assert(sectionCount >= 40, `expected at least 40 sections, got ${sectionCount}`)
 assert(actorCount >= 36, `expected at least 36 actor profiles, got ${actorCount}`);
 assert(questionCount >= 48, `expected at least 48 questions, got ${questionCount}`);
 assert(curriculumWordCount >= 7500, `expected at least 7,500 curriculum words, got ${curriculumWordCount}`);
+assert(answerPositions.every(count => count >= 8), `correct answer positions are too skewed: ${answerPositions.join(', ')}`);
 assert(Array.isArray(timelineEvents) && timelineEvents.length >= 35, `expected at least 35 timeline events, got ${timelineEvents.length}`);
 assert(timelineEvents.some(event => event.year === 1943 && /Ghetto Uprising/.test(event.title)), 'missing 1943 Warsaw Ghetto Uprising');
 assert(timelineEvents.some(event => event.year === 1944 && /^Warsaw Uprising$/.test(event.title)), 'missing distinct 1944 Warsaw Uprising');
@@ -56,8 +60,12 @@ assert(timelineEvents.some(event => event.year >= 1989), 'timeline must cover de
 assert(Array.isArray(memoryPairs) && memoryPairs.length >= 12, 'expected at least 12 memory pairs');
 
 const combined = JSON.stringify(chapters);
-for (const topic of ['Mieszko', 'Jagiellonian', 'serfdom', 'Partitions', 'Holocaust', 'Solidarity', 'European Union', 'Ukraine']) {
+for (const topic of ['Mieszko', 'Jagiellonian', 'serfdom', 'Partitions', 'Holocaust', 'Solidarity', 'European Union', 'Ukraine', 'Żeligowski', 'Volhynia', 'Eastern Galicia', 'Jedwabne', 'Kielce', 'Operation Vistula', 'Belarusian schooling']) {
   assert(combined.includes(topic), `curriculum missing required topic: ${topic}`);
+}
+
+for (const phrase of ['converted to Buddhism', 'Ottoman grand vizier', 'colonize South America', 'joined the European Union', 'built by Napoleon as a naval base', 'twentieth-century communist forgeries']) {
+  assert(!combined.includes(phrase), `exported quiz still contains implausible distractor: ${phrase}`);
 }
 
 console.log(`curriculum verification passed: ${chapters.length} chapters, ${sectionCount} sections, ${actorCount} actor profiles, ${questionCount} questions, ${timelineEvents.length} timeline events, ${curriculumWordCount} curriculum words`);
