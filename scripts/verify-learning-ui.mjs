@@ -7,8 +7,10 @@ const requirements = [
   ['chapter section renderer', /function renderChapterSections\s*\(/],
   ['multi-question quiz renderer', /function renderChapterQuiz\s*\(/],
   ['chapter completion guard', /answeredQuestions/],
+  ['legacy progress migration', /legacyProgressMap/],
   ['section navigation', /chapterSectionIndex/],
   ['question navigation', /chapterQuestionIndex/],
+  ['deterministic option shuffling', /function displayedQuestionOptions\s*\(/],
   ['actor rendering', /chapter\.actors/],
   ['cultural section label', /Cultural artifact|Culture and memory/],
 ];

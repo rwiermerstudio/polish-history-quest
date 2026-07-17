@@ -81,11 +81,41 @@ h2 { margin:.2rem 0; font-size: clamp(1.85rem, 4vw, 3.2rem); line-height:1; lett
 .memory-card.flipped { background:#fff7ed; border-color:var(--gold); }
 .chapter-modal { position:fixed; inset:0; display:none; place-items:center; background:rgba(20,33,61,.58); padding:1rem; z-index:100; }
 .chapter-modal.open { display:grid; }
-.modal-panel { max-width:860px; max-height:88vh; overflow:auto; background:var(--paper); border-radius:28px; padding:1.3rem; box-shadow:0 30px 90px rgba(0,0,0,.25); border:1px solid var(--line); }
+.modal-panel { max-width:1060px; width:min(1060px, 96vw); max-height:92vh; overflow:auto; background:var(--paper); border-radius:28px; padding:1.3rem; box-shadow:0 30px 90px rgba(0,0,0,.25); border:1px solid var(--line); }
+.chapter-reader { scroll-behavior:smooth; }
+.chapter-summary { color:var(--muted); font-size:1.05rem; line-height:1.6; max-width:76ch; }
+.chapter-layout { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:1rem; align-items:start; margin-top:1rem; }
+.chapter-sidebar { display:grid; gap:.8rem; position:sticky; top:0; }
+.chapter-section { border:1px solid var(--line); border-radius:20px; background:#fff; overflow:hidden; box-shadow:var(--shadow); }
+.section-tabs { display:flex; gap:.35rem; padding:.6rem; overflow-x:auto; border-bottom:1px solid var(--line); background:var(--paper-warm); }
+.section-tab { flex:0 0 auto; border:1px solid transparent; background:transparent; color:var(--muted); border-radius:10px; padding:.5rem .65rem; font-weight:750; cursor:pointer; }
+.section-tab.active { background:white; color:var(--crimson-dark); border-color:var(--line); box-shadow:var(--shadow); }
+.section-reading { padding:1.2rem; min-height:300px; }
+.section-reading h3 { font-size:1.55rem; letter-spacing:-.03em; margin:.5rem 0; }
+.section-reading p { font-family:Georgia, 'Times New Roman', serif; font-size:1.08rem; line-height:1.78; color:#39332d; }
+.section-nav { display:flex; gap:.7rem; justify-content:space-between; align-items:center; padding:.8rem 1rem; border-top:1px solid var(--line); }
+.section-nav span { color:var(--muted); font-weight:750; font-size:.88rem; }
+.actor-grid { display:grid; gap:.65rem; }
+.actor { padding:.7rem; border-radius:14px; background:var(--paper-warm); border:1px solid var(--line); }
+.actor h4 { margin:0 0 .35rem; font-size:.95rem; }
+.actor p { margin:0; font-size:.86rem; line-height:1.48; }
+.chapter-quiz { margin-top:1rem; padding:1.2rem; }
+.quiz-head { display:flex; justify-content:space-between; align-items:start; gap:1rem; }
+.quiz-head h3 { margin:.35rem 0; font-size:1.55rem; }
+.quiz-progress { display:flex; flex-direction:column; align-items:end; color:var(--muted); }
+.quiz-progress strong { color:var(--green); }
+.question-dots { display:flex; flex-wrap:wrap; gap:.45rem; margin:1rem 0; }
+.question-dot { width:38px; height:38px; border-radius:999px; border:1px solid var(--line); background:white; font-weight:850; cursor:pointer; }
+.question-dot.active { outline:3px solid rgba(193,18,31,.18); border-color:var(--crimson); }
+.question-dot.correct { background:#ecfdf3; color:#14532d; border-color:var(--green); }
+.question-dot.wrong { background:#fff0f1; color:var(--crimson-dark); }
+.completion-banner { margin-top:1rem; padding:.85rem 1rem; border-radius:14px; background:#ecfdf3; color:#14532d; border:1px solid #86efac; font-weight:850; }
+.quiz-note { color:var(--muted); font-size:.9rem; }
+.chapter-open { color:var(--crimson); font-size:.9rem; }
 .modal-head { display:flex; justify-content:space-between; gap:1rem; align-items:start; }
 .close { border:0; border-radius:999px; width:40px; height:40px; cursor:pointer; font-weight:900; }
 .achievement-list { display:flex; gap:.6rem; flex-wrap:wrap; }
 .achievement { border:1px solid var(--line); border-radius:999px; padding:.45rem .7rem; background:white; color:var(--muted); font-weight:800; }
 .achievement.unlocked { color:#3f2400; background:#fff7d6; border-color:#e5c66a; }
 .footer { padding:2rem 1rem; color:var(--muted); text-align:center; }
-@media (max-width: 860px) { .hero, .game-layout { grid-template-columns:1fr; } .nav { align-items:flex-start; flex-direction:column; } h1 { letter-spacing:-.055em; } }
+@media (max-width: 860px) { .hero, .game-layout, .chapter-layout { grid-template-columns:1fr; } .chapter-sidebar { position:static; } .section-reading { min-height:0; } .section-nav { flex-wrap:wrap; } .quiz-head { flex-direction:column; } .quiz-progress { align-items:start; } .nav { align-items:flex-start; flex-direction:column; } h1 { letter-spacing:-.055em; } }
