@@ -1,5 +1,6 @@
 import './styles.css';
 import { chapters, timelineEvents, memoryPairs } from './curriculum.js';
+import { normalizeProgress } from './progress.js';
 
 const STORAGE_KEY = 'polish-history-quest-progress-v1';
 const legacyProgressMap = {
@@ -24,16 +25,7 @@ let flipped = [];
 function loadProgress() {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-    const currentIds = new Set(chapters.map(chapter => chapter.id));
-    const completed = Object.fromEntries(Object.entries(stored.completed || {}).filter(([id, value]) => currentIds.has(id) && value));
-    const answeredQuestions = Object.fromEntries(Object.entries(stored.answeredQuestions || {}).filter(([id]) => currentIds.has(id)));
-    const legacyCompleted = [...new Set([
-      ...(stored.legacyCompleted || []),
-      ...Object.entries(stored.completed || {}).filter(([id, value]) => value && legacyProgressMap[id]).map(([id]) => legacyProgressMap[id]),
-    ])];
-    const achievements = { ...(stored.achievements || {}) };
-    if (legacyCompleted.length) achievements['legacy-learner'] = true;
-    return { ...defaultProgress, ...stored, completed, achievements, answeredQuestions, legacyCompleted };
+    return normalizeProgress(stored, chapters, legacyProgressMap, defaultProgress);
   } catch {
     return structuredClone(defaultProgress);
   }
