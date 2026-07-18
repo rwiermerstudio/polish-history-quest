@@ -23,6 +23,13 @@ A static, browser-based interactive learning game for adults who are generally e
 
 Media are loaded on demand from Wikimedia Commons so the static application and Kubernetes ConfigMap remain small. Chapter text, quizzes and games remain available if remote media are blocked, but images/audio/video and their external source pages require network access.
 
+## Live site
+
+- **GitHub Pages:** <https://rwiermerstudio.github.io/polish-history-quest/>
+- **Local k3s ingress:** <http://polish-history.k3s.local/>
+
+Pushes to `main` are tested, built and deployed to GitHub Pages by [`.github/workflows/pages.yml`](.github/workflows/pages.yml). The Vite build uses relative asset paths so it remains portable beneath the repository subpath.
+
 ## Local development
 
 ```bash
