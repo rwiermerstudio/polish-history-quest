@@ -48,7 +48,7 @@ The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite
 ```bash
 ./scripts/render-k8s-configmap.sh
 kubectl apply -f k8s/namespace.yaml
-kubectl apply -f k8s/generated/site-configmap.yaml
+kubectl apply --server-side -f k8s/generated/site-configmap.yaml
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/ingress.yaml
@@ -56,6 +56,7 @@ kubectl -n polish-history-quest rollout status deploy/polish-history-quest --tim
 ```
 
 The local k3s deployment uses Traefik host `polish-history.k3s.local`.
+Server-side apply avoids Kubernetes' 256 KiB client-side last-applied annotation limit for the generated static-site ConfigMap.
 
 ## Content note
 
