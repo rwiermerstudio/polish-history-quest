@@ -13,11 +13,15 @@ A static, browser-based interactive learning game for adults who are generally e
 
 ## Curriculum and mechanics
 
-- **13 chapters** with 53 contextual sections and important-actor profiles.
+- **13 chapters** with 66 contextual sections, including a new “Making sense of the period” synthesis in every chapter.
+- **26 contextual media records**—public-domain/open-licence images, maps, audio and video—with captions, alt text or audiovisual text alternatives, provenance and licence links.
 - **52 nuanced questions** with explanatory feedback; four correct answers complete a chapter.
+- **Explicit quiz-to-text links** showing learners where each answer is taught, backed by exact coverage checks.
 - **46-event filterable timeline** plus three chapter-linked games: date-hidden chronology reconstruction, a five-turn Commonwealth strategy campaign, and evidence-based archive casefiles.
 - **Persistent local progress** including answers, completion, score and achievements.
 - See [`docs/CURRICULUM.md`](docs/CURRICULUM.md) for scope and editorial principles.
+
+Media are loaded on demand from Wikimedia Commons so the static application and Kubernetes ConfigMap remain small. Chapter text, quizzes and games remain available if remote media are blocked, but images/audio/video and their external source pages require network access.
 
 ## Local development
 
@@ -25,6 +29,7 @@ A static, browser-based interactive learning game for adults who are generally e
 npm install
 npm run dev
 npm test
+npm run check:media
 npm run build
 ```
 

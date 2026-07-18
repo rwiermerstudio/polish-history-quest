@@ -18,6 +18,7 @@ const defaultProgress = {
 let progress = loadProgress();
 let currentEra = 'all';
 let currentChapterId = null;
+let lastModalTrigger = null;
 let chapterSectionIndex = 0;
 let chapterQuestionIndex = 0;
 let transientAnswer = null;
@@ -79,11 +80,11 @@ function app() {
       <header class="header"><nav class="nav"><div class="brand"><span class="eagle">♜</span><span>Polish History Quest</span></div><div class="navlinks"><a href="#eras">Curriculum</a><a href="#timeline">Timeline</a><a href="#games">Games</a><a href="#progress">Progress</a><button class="small-btn" id="exportBtn">Copy progress</button><button class="small-btn" id="resetBtn">Reset</button></div></nav></header>
       <section class="hero"><div><span class="badge">Expanded history curriculum</span><h1>Understand Poland through people, choices and changing borders.</h1><p class="lead">Thirteen substantial chapters place Polish history inside European and global history—from early state formation and the Commonwealth to occupation, Solidarity, democracy and today’s security debates.</p><div class="cta-row"><button class="btn btn-primary" data-scroll="eras">Begin the curriculum</button><button class="btn btn-secondary" data-scroll="games">Practise with games</button></div></div><div class="hero-card map-card">${mapSvg()}<div class="float-stat"><div class="stat"><b>${timelineEvents.length}</b><span>timeline events</span></div><div class="stat"><b>${chapters.length}</b><span>learning chapters</span></div><div class="stat"><b>${chapters.reduce((sum, chapter) => sum + chapter.quiz.length, 0)}</b><span>quiz questions</span></div></div></div></section>
       <section id="progress" class="section"><div class="section-title"><div><div class="kicker">Your journey</div><h2>Progress that stays in your browser</h2></div><strong id="score"></strong></div><div class="progress-shell"><div id="progressFill" class="progress-fill"></div></div><p class="lead" id="progressText"></p><div class="achievement-list" id="achievements"></div></section>
-      <section id="eras" class="section alt"><div class="inner"><div class="section-title"><div><div class="kicker">Guided curriculum</div><h2>Thirteen chapters, c. 500 to the present</h2><p class="lead">Open a chapter, read its contextual sections, meet major actors, and complete four nuanced questions.</p></div></div><div class="grid eras" id="eraGrid"></div></div></section>
+      <section id="eras" class="section alt"><div class="inner"><div class="section-title"><div><div class="kicker">Guided curriculum</div><h2>Thirteen chapters, c. 500 to the present</h2><p class="lead">Open a chapter, read layered explanations, investigate public-domain and open-licence media, meet major actors, and complete four nuanced questions.</p></div></div><div class="grid eras" id="eraGrid"></div></div></section>
       <section id="timeline" class="section"><div class="section-title"><div><div class="kicker">Visual sequence</div><h2>Timeline of turning points</h2></div><select id="eraFilter" aria-label="Filter timeline by chapter"><option value="all">All chapters</option>${chapters.map(chapter => `<option value="${chapter.id}">${chapter.title}</option>`).join('')}</select></div><div class="timeline" id="timelineList"></div></section>
       <section id="games" class="section alt"><div class="inner"><div class="section-title"><div><div class="kicker">Playable history lab</div><h2>Decide, investigate and reconstruct</h2><p class="lead">Three replayable games test chronology without visible dates, strategic trade-offs, and evidence-based interpretation across the curriculum.</p></div></div><div class="game-hub"><div class="game-tabs" role="tablist" aria-label="History games"><button class="game-tab active" data-game-tab="chronicle" role="tab">⌛ Chronicle Forge</button><button class="game-tab" data-game-tab="council" role="tab">⚖ Commonwealth Council</button><button class="game-tab" data-game-tab="archive" role="tab">⌕ Archive Casefiles</button></div><div id="gameStage"></div></div></div></section>
       <footer class="footer">A broad historical survey, not an accredited school course. Static app; progress remains in this browser.</footer>
-      <div class="chapter-modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-panel chapter-reader"><div class="modal-head"><div><span class="badge" id="modalYears"></span><h2 id="modalTitle"></h2><p class="chapter-summary" id="modalSummary"></p></div><button class="close" id="modalClose" aria-label="Close chapter">×</button></div><div id="chapterBody"></div></div></div>
+      <div class="chapter-modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle"><div class="modal-panel chapter-reader"><div class="modal-head"><div><span class="badge" id="modalYears"></span><h2 id="modalTitle"></h2><p class="chapter-summary" id="modalSummary"></p></div><button class="close" id="modalClose" aria-label="Close chapter">×</button></div><div id="chapterBody"></div></div></div>
     </div>`;
   bind();
   renderAll();
@@ -94,7 +95,7 @@ function bind() {
   document.getElementById('eraFilter').addEventListener('change', event => { currentEra = event.target.value; renderTimeline(); });
   document.getElementById('modalClose').addEventListener('click', closeModal);
   document.getElementById('modal').addEventListener('click', event => { if (event.target.id === 'modal') closeModal(); });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', handleDocumentKeydown);
   document.getElementById('resetBtn').addEventListener('click', () => {
     if (confirm('Reset all locally stored learning progress?')) {
       progress = structuredClone(defaultProgress);
@@ -130,11 +131,11 @@ function renderProgress() {
 function renderEras() {
   document.getElementById('eraGrid').innerHTML = chapters.map((chapter, index) => {
     const answered = Object.keys(progress.answeredQuestions[chapter.id] || {}).length;
-    return `<article class="card era-card ${progress.completed[chapter.id] ? 'done' : ''}" data-era="${chapter.id}" tabindex="0" role="button" aria-label="Open chapter ${index + 1}: ${chapter.title}"><div class="era-meta"><span class="pill">Chapter ${index + 1}</span><span class="pill">${chapter.years}</span><span class="pill">${answered}/${chapter.quiz.length} questions</span></div><h3>${chapter.title}</h3><p>${chapter.summary}</p><strong class="chapter-open">Read chapter →</strong></article>`;
+    return `<article class="card era-card ${progress.completed[chapter.id] ? 'done' : ''}" data-era="${chapter.id}" tabindex="0" role="button" aria-label="Open chapter ${index + 1}: ${chapter.title}"><div class="era-meta"><span class="pill">Chapter ${index + 1}</span><span class="pill">${chapter.years}</span><span class="pill">${chapter.sections.length} sections</span><span class="pill">${chapter.media.length} media</span><span class="pill">${answered}/${chapter.quiz.length} questions</span></div><h3>${chapter.title}</h3><p>${chapter.summary}</p><strong class="chapter-open">Read chapter →</strong></article>`;
   }).join('');
   document.querySelectorAll('.era-card').forEach(card => {
-    card.addEventListener('click', () => openChapter(card.dataset.era));
-    card.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openChapter(card.dataset.era); } });
+    card.addEventListener('click', () => openChapter(card.dataset.era, card));
+    card.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openChapter(card.dataset.era, card); } });
   });
 }
 
@@ -143,7 +144,35 @@ function renderTimeline() {
   document.getElementById('timelineList').innerHTML = list.map(event => `<div class="event"><span class="event-dot"></span><div class="card"><time>${event.year}</time><h3>${event.title}</h3><p>${event.text}</p></div></div>`).join('');
 }
 
-function openChapter(id) {
+function setModalBackgroundInert(inert) {
+  document.querySelectorAll('.app > :not(#modal)').forEach(element => { element.inert = inert; });
+}
+
+function handleDocumentKeydown(event) {
+  const modal = document.getElementById('modal');
+  if (!modal?.classList.contains('open')) return;
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    closeModal();
+    return;
+  }
+  if (event.key !== 'Tab') return;
+  const focusable = [...modal.querySelectorAll('button:not([disabled]), a[href], summary, audio[controls], video[controls], [tabindex]:not([tabindex="-1"])')]
+    .filter(element => !element.hidden && element.getClientRects().length > 0);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable.at(-1);
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function openChapter(id, trigger = document.activeElement) {
+  lastModalTrigger = trigger instanceof HTMLElement ? trigger : null;
   currentChapterId = id;
   chapterSectionIndex = 0;
   chapterQuestionIndex = 0;
@@ -152,16 +181,28 @@ function openChapter(id) {
   document.getElementById('modalTitle').textContent = chapter.title;
   document.getElementById('modalSummary').textContent = chapter.summary;
   renderChapterWorkspace();
-  document.getElementById('modal').classList.add('open');
+  const modal = document.getElementById('modal');
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden', 'false');
+  setModalBackgroundInert(true);
+  document.body.classList.add('modal-open');
   document.getElementById('modalClose').focus();
 }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function closeModal() {
+  const modal = document.getElementById('modal');
+  if (!modal.classList.contains('open')) return;
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden', 'true');
+  setModalBackgroundInert(false);
+  document.body.classList.remove('modal-open');
+  lastModalTrigger?.focus();
+}
 
 function renderChapterWorkspace() {
   const chapter = currentChapter();
   document.getElementById('chapterBody').innerHTML = `
     <div class="chapter-layout">
-      <main>${renderChapterSections(chapter)}</main>
+      <main>${renderChapterSections(chapter)}${renderChapterMedia(chapter)}</main>
       <aside class="chapter-sidebar"><div class="card"><div class="kicker">Central idea</div><p>${chapter.key}</p></div><div class="card"><div class="kicker">Important actors</div><div class="actor-grid">${chapter.actors.map(actor => `<article class="actor"><h4>${actor.name}</h4><p>${actor.role}</p></article>`).join('')}</div></div></aside>
     </div>
     ${renderChapterQuiz(chapter)}`;
@@ -169,12 +210,23 @@ function renderChapterWorkspace() {
 }
 
 function sectionLabel(kind) {
-  return ({ context: 'Context', events: 'Events and causation', actors: 'Important actors', international: 'International context', society: 'Society and economy', culture: 'Culture and memory · Cultural artifact' })[kind] || kind;
+  return ({ context: 'Context', events: 'Events and causation', actors: 'Important actors', international: 'International context', society: 'Society and economy', culture: 'Culture and memory · Cultural artifact', interpretation: 'Making sense of the period' })[kind] || kind;
 }
 
 function renderChapterSections(chapter) {
   const current = chapter.sections[chapterSectionIndex];
-  return `<section class="chapter-section"><div class="section-tabs" aria-label="Chapter sections">${chapter.sections.map((item, index) => `<button class="section-tab ${index === chapterSectionIndex ? 'active' : ''}" data-section="${index}" aria-current="${index === chapterSectionIndex ? 'step' : 'false'}">${index + 1}. ${sectionLabel(item.kind)}</button>`).join('')}</div><div class="section-reading"><div class="kicker">${sectionLabel(current.kind)}</div><h3>${current.title}</h3><p>${current.body}</p></div><div class="section-nav"><button class="btn btn-secondary" id="sectionPrev" ${chapterSectionIndex === 0 ? 'disabled' : ''}>← Previous context</button><span>${chapterSectionIndex + 1} / ${chapter.sections.length}</span><button class="btn btn-primary" id="sectionNext" ${chapterSectionIndex === chapter.sections.length - 1 ? 'disabled' : ''}>Next context →</button></div></section>`;
+  return `<section class="chapter-section"><div class="section-tabs" aria-label="Chapter sections">${chapter.sections.map((item, index) => `<button class="section-tab ${index === chapterSectionIndex ? 'active' : ''}" data-section="${index}" aria-current="${index === chapterSectionIndex ? 'step' : 'false'}">${index + 1}. ${sectionLabel(item.kind)}</button>`).join('')}</div><div class="section-reading"><div class="kicker">${sectionLabel(current.kind)}</div><h3>${current.title}</h3>${current.body.split(/\n\n+/).map(paragraph => `<p>${paragraph}</p>`).join('')}</div><div class="section-nav"><button class="btn btn-secondary" id="sectionPrev" ${chapterSectionIndex === 0 ? 'disabled' : ''}>← Previous context</button><span>${chapterSectionIndex + 1} / ${chapter.sections.length}</span><button class="btn btn-primary" id="sectionNext" ${chapterSectionIndex === chapter.sections.length - 1 ? 'disabled' : ''}>Next context →</button></div></section>`;
+}
+
+function renderChapterMedia(chapter) {
+  const renderAsset = item => {
+    const credit = `<p class="media-credit"><a href="${item.source}" target="_blank" rel="noopener noreferrer">Open source and licence record</a><span>${item.license}${item.attribution ? ` · ${item.attribution}` : ''}</span></p>`;
+    const textAlternative = item.textAlternative ? `<details class="media-transcript"><summary>Read the text alternative</summary><p>${item.textAlternative}</p></details>` : '';
+    if (item.type === 'audio') return `<article class="media-card media-audio"><div class="media-type">${item.mediaLabel || 'Listen · audio interpretation'}</div><h4>${item.title}</h4><p>${item.caption}</p><audio controls preload="none" src="${item.src}" aria-label="Listen to ${item.title}">Your browser cannot play this audio. Use the source link below.</audio>${textAlternative}${credit}</article>`;
+    if (item.type === 'video') return `<article class="media-card media-video"><div class="media-type">${item.mediaLabel || 'Watch · contextual film'}</div><h4>${item.title}</h4><p>${item.caption}</p><video controls preload="metadata" ${item.poster ? `poster="${item.poster}"` : ''} aria-label="Watch ${item.title}"><source src="${item.src}" type="video/webm">Your browser cannot play this video. Use the source link below.</video>${textAlternative}${credit}</article>`;
+    return `<figure class="media-card media-visual"><div class="media-type">${item.type === 'map' ? 'Explore the map' : 'Look closely'}</div><img loading="lazy" decoding="async" src="${item.src}" alt="${item.alt}"><figcaption><h4>${item.title}</h4><p>${item.caption}</p>${credit}</figcaption></figure>`;
+  };
+  return `<section class="chapter-media" aria-labelledby="chapterMediaTitle"><div class="media-heading"><div><div class="kicker">See, hear and investigate</div><h3 id="chapterMediaTitle">Multimedia context</h3></div><p>Open the source record for full provenance and reuse information.</p></div><div class="media-grid">${chapter.media.map(renderAsset).join('')}</div></section>`;
 }
 
 function displayedQuestionOptions(item) {
@@ -193,7 +245,7 @@ function renderChapterQuiz(chapter) {
   const answeredCount = Object.keys(answers).length;
   const correctCount = Object.values(answers).filter(answer => answer.correct).length;
   const complete = correctCount === chapter.quiz.length;
-  return `<section class="chapter-quiz card"><div class="quiz-head"><div><div class="kicker">Chapter quiz</div><h3>Reason with the history</h3></div><div class="quiz-progress"><strong>${correctCount}/${chapter.quiz.length} correct</strong><span>${answeredCount} attempted</span></div></div><div class="question-dots">${chapter.quiz.map((_, index) => `<button class="question-dot ${index === chapterQuestionIndex ? 'active' : ''} ${answers[index]?.correct ? 'correct' : answers[index] ? 'wrong' : ''}" data-question="${index}" aria-label="Question ${index + 1}">${index + 1}</button>`).join('')}</div><h4>${chapterQuestionIndex + 1}. ${item.prompt}</h4><div class="quiz-options">${optionDisplay.map(({ text, originalIndex }) => `<button class="option ${selected ? (originalIndex === item.answer ? 'correct' : selected.choice === originalIndex ? 'wrong' : '') : ''}" data-answer="${originalIndex}" ${selected ? 'disabled' : ''}>${text}</button>`).join('')}</div><div class="feedback" id="quizFeedback" aria-live="polite">${selected ? `<strong>${selected.correct ? 'Correct.' : 'Not quite.'}</strong> ${item.explanation}` : 'Choose the most defensible answer; several options may sound superficially plausible.'}</div><div class="section-nav"><button class="btn btn-secondary" id="questionPrev" ${chapterQuestionIndex === 0 ? 'disabled' : ''}>← Previous question</button><span>Question ${chapterQuestionIndex + 1} / ${chapter.quiz.length}</span><button class="btn btn-primary" id="questionNext" ${chapterQuestionIndex === chapter.quiz.length - 1 ? 'disabled' : ''}>Next question →</button></div>${complete ? '<div class="completion-banner">★ Chapter complete. You have answered every question correctly.</div>' : '<p class="quiz-note">A chapter completes only after all four questions are correct. Incorrect questions can be retried.</p>'}</section>`;
+  return `<section class="chapter-quiz card"><div class="quiz-head"><div><div class="kicker">Chapter quiz</div><h3>Reason with the history</h3></div><div class="quiz-progress"><strong>${correctCount}/${chapter.quiz.length} correct</strong><span>${answeredCount} attempted</span></div></div><div class="question-dots">${chapter.quiz.map((_, index) => `<button class="question-dot ${index === chapterQuestionIndex ? 'active' : ''} ${answers[index]?.correct ? 'correct' : answers[index] ? 'wrong' : ''}" data-question="${index}" aria-label="Question ${index + 1}">${index + 1}</button>`).join('')}</div><h4>${chapterQuestionIndex + 1}. ${item.prompt}</h4><p class="quiz-coverage">📚 Covered in: <strong>${item.coverage.section}</strong></p><div class="quiz-options">${optionDisplay.map(({ text, originalIndex }) => `<button class="option ${selected ? (originalIndex === item.answer ? 'correct' : selected.choice === originalIndex ? 'wrong' : '') : ''}" data-answer="${originalIndex}" ${selected ? 'disabled' : ''}>${text}</button>`).join('')}</div><div class="feedback" id="quizFeedback" aria-live="polite">${selected ? `<strong>${selected.correct ? 'Correct.' : 'Not quite.'}</strong> ${item.explanation}` : 'Choose the most defensible answer; several options may sound superficially plausible.'}</div><div class="section-nav"><button class="btn btn-secondary" id="questionPrev" ${chapterQuestionIndex === 0 ? 'disabled' : ''}>← Previous question</button><span>Question ${chapterQuestionIndex + 1} / ${chapter.quiz.length}</span><button class="btn btn-primary" id="questionNext" ${chapterQuestionIndex === chapter.quiz.length - 1 ? 'disabled' : ''}>Next question →</button></div>${complete ? '<div class="completion-banner">★ Chapter complete. You have answered every question correctly.</div>' : '<p class="quiz-note">A chapter completes only after all four questions are correct. Incorrect questions can be retried.</p>'}</section>`;
 }
 
 function bindChapterControls() {

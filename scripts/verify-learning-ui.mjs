@@ -12,9 +12,29 @@ const requirements = [
   ['question navigation', /chapterQuestionIndex/],
   ['deterministic option shuffling', /function displayedQuestionOptions\s*\(/],
   ['actor rendering', /chapter\.actors/],
+  ['chapter media renderer', /function renderChapterMedia\s*\(/],
+  ['lazy image loading', /loading="lazy"/],
+  ['native audio controls', /<audio[^>]+controls/],
+  ['native video controls', /<video[^>]+controls/],
+  ['audio deferred loading', /<audio[^>]+preload="none"/],
+  ['video metadata-only loading', /<video[^>]+preload="metadata"/],
+  ['audiovisual text alternative', /media-transcript[\s\S]*?textAlternative/],
+  ['media source and licence', /item\.source[\s\S]*?item\.license/],
+  ['quiz coverage reference', /item\.coverage/],
+  ['modal focus trap', /function handleDocumentKeydown[\s\S]*?event\.key !== 'Tab'[\s\S]*?last\.focus\(\)/],
+  ['modal background inert', /setModalBackgroundInert\(true\)/],
+  ['modal focus restoration', /lastModalTrigger\?\.focus\(\)/],
   ['cultural section label', /Cultural artifact|Culture and memory/],
   ['complete game-session reset', /function resetGameSession\s*\([\s\S]*?resetGameSession\(\);[\s\S]*?renderAll\(\);/],
 ];
+if (/autoplay/i.test(main)) {
+  console.error('Chapter media must never autoplay');
+  process.exit(1);
+}
+if (/primary-source sound/i.test(main)) {
+  console.error('Audio must be labelled by its actual evidentiary status, not globally as a primary source');
+  process.exit(1);
+}
 let failed = false;
 for (const [label, pattern] of requirements) {
   if (!pattern.test(main)) {
@@ -22,7 +42,7 @@ for (const [label, pattern] of requirements) {
     failed = true;
   }
 }
-for (const selector of ['.chapter-reader', '.chapter-section', '.actor-grid', '.quiz-progress', '.section-nav', ':focus-visible', 'prefers-reduced-motion']) {
+for (const selector of ['.chapter-reader', '.chapter-section', '.chapter-media', '.media-card', '.actor-grid', '.quiz-progress', '.quiz-coverage', '.section-nav', ':focus-visible', 'prefers-reduced-motion']) {
   if (!css.includes(selector)) {
     console.error(`Missing CSS selector ${selector}`);
     failed = true;

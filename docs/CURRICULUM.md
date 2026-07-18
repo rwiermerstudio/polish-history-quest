@@ -2,7 +2,7 @@
 
 ## Scope and audience
 
-Polish History Quest offers a broad English-language survey for educated adults who have little specific knowledge of Poland. Its **13 chapters, 53 contextual sections, 52 questions and 46 timeline events** aim for a scope comparable to a secondary-school overview, but the app is not an accredited Polish school course and cannot reproduce the depth of classroom teaching, primary-source work or assigned reading.
+Polish History Quest offers a broad English-language survey for educated adults who have little specific knowledge of Poland. Its **13 chapters, 66 contextual sections, 52 questions, 46 timeline events and 26 contextual media records** aim for a scope comparable to a secondary-school overview, but the app is not an accredited Polish school course and cannot reproduce the depth of classroom teaching, primary-source work or assigned reading.
 
 ## Chapter sequence
 
@@ -29,11 +29,12 @@ Polish History Quest offers a broad English-language survey for educated adults 
 - **Established fact versus interpretation:** contested judgments—such as the causes of the partitions, the wisdom of uprisings, martial law’s “lesser evil” defence and transition costs—are framed as arguments requiring evidence.
 - **Care with wartime language:** the app clearly distinguishes the 1943 Warsaw Ghetto Uprising from the 1944 Warsaw Uprising and describes extermination centres as Nazi German institutions in occupied Poland.
 - **Culture as evidence:** literature, music, visual art, architecture, film, posters, museums and public rituals are treated as sources that shape memory, not decorative trivia.
+- **Media with provenance:** images, maps, audio and video carry a contextual caption, descriptive alternative text, a source-page link, licence and attribution. Audio and video include substantial expandable text alternatives. Later reconstructions, institutional films and perpetrator-produced records are labelled as interpreted evidence rather than neutral illustration.
 
 ## Assessment approach
 
-Each chapter has four questions. Distractors are designed to be superficially plausible rather than absurd. Feedback explains why the best answer is defensible and where simplification would mislead. A chapter completes only when all four questions are answered correctly. Learners can revisit sections and retry incorrect questions.
+Each chapter has four questions. Distractors are designed to be superficially plausible rather than absurd. Feedback explains why the best answer is defensible and where simplification would mislead. Every question displays the section where its assessed content is taught, and automated checks confirm that the named evidence is actually present in that reading. A chapter completes only when all four questions are answered correctly. Learners can revisit sections and retry incorrect questions.
 
 ## Limits and future development
 
-The curriculum currently prioritizes a coherent political and social chronology. Future editions should add primary-source excerpts, historical maps with explicit dates, regional case studies, women’s and environmental history, optional Polish terminology, citations to accessible scholarship, audio pronunciation and a teacher mode. Content should receive review by historians or Polish history educators before being represented as classroom-ready.
+The curriculum currently prioritizes a coherent political and social chronology. Future editions should add longer primary-source excerpts, more regional case studies, women’s and environmental history, optional Polish terminology, citations to accessible scholarship, audio pronunciation and a teacher mode. Content should receive review by historians or Polish history educators before being represented as classroom-ready.
