@@ -35,9 +35,9 @@ assert(count(/commons\.wikimedia\.org\/wiki\/File:/g) >= 8, 'figure source recor
 assert(count(/class="source-citation"/g) >= 6, 'every primary-source excerpt needs a precise citation');
 
 for (const [pattern, source] of [
-  [/Misacam regem,[\s\S]*duabus vicibus superavit/, 'Widukind'],
-  [/Misicam et Lambertus[\s\S]*Victor Wolf von Glanvell/, 'Dagome iudex'],
-  [/Laurentian recension, entry 6489 \(981\)[\s\S]*psrl_tom01/, 'Primary Chronicle'],
+  [/Misacam regem,[\s\S]*Sclavi qui dicuntur Licicaviki,[\s\S]*duabus vicibus superavit/, 'Widukind'],
+  [/Misicam et Labertus[\s\S]*Glanvell’s printed main text/, 'Dagome iudex'],
+  [/Laurentian recension, entry 6489 \(981\)[\s\S]*col\. 81[\s\S]*psrl_tom01/, 'Primary Chronicle'],
   [/Quae regio, quamvis multum sit nemorosa[\s\S]*page\/425/, 'Gallus prologue'],
 ]) assert(pattern.test(html), `${source} excerpt must retain its audited witness and citation`);
 
