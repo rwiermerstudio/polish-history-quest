@@ -1,0 +1,112 @@
+:root {
+  --ink: #172033;
+  --muted: #5e6775;
+  --paper: #fffdf8;
+  --paper-warm: #f4ead9;
+  --line: #d8c8ad;
+  --red: #9d1f2f;
+  --red-dark: #711622;
+  --gold: #a66a17;
+  --blue: #244c68;
+  color: var(--ink);
+  background: #e8e0d2;
+  font-family: Georgia, "Times New Roman", serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+a { color: var(--red-dark); text-underline-offset: .18em; }
+a:hover { color: var(--blue); }
+a:focus-visible, summary:focus-visible { outline: 3px solid #d99b22; outline-offset: 3px; }
+.skip-link { position: fixed; z-index: 10; top: .5rem; left: .5rem; transform: translateY(-180%); padding: .65rem .9rem; background: #fff; border: 2px solid var(--red); border-radius: .35rem; font-family: system-ui, sans-serif; font-weight: 800; }
+.skip-link:focus { transform: none; }
+.reader-bar { position: sticky; z-index: 5; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .65rem max(1rem, calc((100vw - 980px) / 2)); color: #fff; background: rgba(23,32,51,.97); box-shadow: 0 2px 16px rgba(0,0,0,.18); font: 750 .86rem/1.3 system-ui, sans-serif; }
+.reader-bar a { color: #fff; }
+.reader-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.companion { width: min(980px, calc(100% - 2rem)); margin: 2rem auto 4rem; background: var(--paper); box-shadow: 0 20px 60px rgba(29,25,20,.18); }
+.cover { min-height: 800px; display: grid; align-content: end; padding: 8rem 8% 5rem; color: #fff; background: linear-gradient(180deg, rgba(15,25,39,.12), rgba(15,25,39,.94)), url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Gniezno%20Cathedral%20detail%2002.jpg?width=1600") center/cover; }
+.eyebrow { margin: 0 0 .9rem; font: 850 .78rem/1.2 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+.cover h1 { max-width: 800px; margin: 0; font-size: clamp(2.8rem, 7vw, 5.7rem); line-height: .94; letter-spacing: -.045em; }
+.cover .subtitle { max-width: 720px; margin: 1.2rem 0 0; font-size: clamp(1.15rem, 2.5vw, 1.55rem); line-height: 1.45; }
+.cover-meta { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; margin-top: 2rem; font: 700 .85rem/1.4 system-ui, sans-serif; }
+.companion-section { padding: 4rem 8%; border-top: 1px solid var(--line); }
+.section-number { color: var(--red); font: 900 .76rem/1 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+h2 { max-width: 760px; margin: .55rem 0 1.4rem; font-size: clamp(2rem, 4.5vw, 3.3rem); line-height: 1.04; letter-spacing: -.035em; }
+h3 { margin: 1.8rem 0 .55rem; font-size: 1.35rem; line-height: 1.2; }
+p, li { font-size: 1.06rem; line-height: 1.72; }
+p { margin: 0 0 1rem; }
+.lede { max-width: 780px; color: #343d4e; font-size: 1.23rem; line-height: 1.58; }
+.dropcap::first-letter { float: left; margin: .08em .11em 0 0; color: var(--red); font-size: 4.5em; font-weight: 800; line-height: .72; }
+.two-column { columns: 2 18rem; column-gap: 2.2rem; }
+.two-column > * { break-inside: avoid; }
+.toc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem 1.5rem; padding: 0; list-style: none; }
+.toc a { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-bottom: 1px dotted var(--line); font: 750 .9rem/1.35 system-ui, sans-serif; text-decoration: none; }
+.timeline-table { width: 100%; margin: 1.5rem 0; border-collapse: collapse; }
+.timeline-table th, .timeline-table td { padding: .7rem .8rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.timeline-table th { width: 18%; color: var(--red-dark); font: 850 .82rem/1.3 system-ui, sans-serif; }
+figure { margin: 2rem 0; break-inside: avoid; border: 1px solid var(--line); background: #fff; }
+figure img { display: block; width: 100%; max-height: 540px; object-fit: contain; background: #eee8dc; }
+figure.portrait img { max-height: 620px; }
+figcaption { padding: 1rem 1.15rem 1.15rem; }
+figcaption strong { display: block; margin-bottom: .4rem; font-size: 1.08rem; }
+figcaption p { margin: 0; color: #3e4756; font-size: .9rem; line-height: 1.52; }
+.figure-meta { margin-top: .65rem !important; padding-top: .6rem; border-top: 1px solid var(--line); color: var(--muted) !important; font: .72rem/1.45 system-ui, sans-serif !important; }
+.figure-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; margin: 2rem 0; }
+.figure-grid figure { margin: 0; }
+.source-excerpt { margin: 2rem 0; padding: 1.4rem 1.5rem; border-left: 5px solid var(--gold); background: var(--paper-warm); break-inside: avoid; }
+.source-excerpt p { margin-bottom: .65rem; }
+.source-label { color: var(--red-dark); font: 900 .72rem/1.2 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.source-original { font-style: italic; }
+.source-translation { padding-top: .75rem; border-top: 1px solid rgba(112,89,50,.25); font-weight: 650; }
+.source-citation { color: var(--muted); font: .75rem/1.5 system-ui, sans-serif; }
+.interpretation { margin: 2rem 0; padding: 1.35rem 1.5rem; border: 1px solid #9db2c2; border-radius: .35rem; background: #edf3f6; break-inside: avoid; }
+.interpretation h3 { margin-top: 0; color: var(--blue); }
+.interpretation ul { margin-bottom: 0; }
+.caution { padding: 1rem 1.2rem; border-left: 5px solid var(--red); background: #fbecee; }
+.question-box { margin: 1.7rem 0; padding: 1rem 1.2rem; border: 1px dashed var(--gold); break-inside: avoid; }
+.question-box strong { display: block; margin-bottom: .35rem; color: #704817; font-family: system-ui, sans-serif; }
+.glossary { display: grid; grid-template-columns: minmax(8rem, .35fr) 1fr; gap: 0; }
+.glossary dt, .glossary dd { margin: 0; padding: .75rem; border-bottom: 1px solid var(--line); }
+.glossary dt { font-weight: 800; }
+.bibliography { padding-left: 1.25rem; }
+.bibliography-entry { margin: 0 0 .75rem; padding-left: .3rem; font-size: .92rem; line-height: 1.5; }
+.notes { color: #364052; }
+.page-note { margin-top: 2rem; color: var(--muted); font: .76rem/1.5 system-ui, sans-serif; }
+.back-to-top { display: inline-block; margin-top: 1.5rem; font: 800 .78rem/1 system-ui, sans-serif; }
+@media (max-width: 700px) {
+  .reader-bar { align-items: flex-start; flex-direction: column; }
+  .companion { width: 100%; margin: 0; box-shadow: none; }
+  .cover { min-height: 78vh; padding: 6rem 1.25rem 3rem; }
+  .companion-section { padding: 3rem 1.25rem; }
+  .toc, .figure-grid { grid-template-columns: 1fr; }
+  .two-column { columns: 1; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@page { size: A4; margin: 15mm 16mm 17mm; }
+@media print {
+  :root { background: #fff; }
+  .reader-bar, .skip-link, .back-to-top { display: none !important; }
+  .companion { width: auto; margin: 0; box-shadow: none; }
+  .cover { min-height: 0; height: 267mm; padding: 25mm 12mm 18mm; break-after: page; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .companion-section { padding: 0; border: 0; columns: 2 80mm; column-gap: 8mm; }
+  .companion-section > h2, .companion-section > h3, .companion-section > .section-number { break-after: avoid; page-break-after: avoid; }
+  .companion-section > h2 + p, .companion-section > h3 + p { break-before: avoid; page-break-before: avoid; }
+  #strongholds, #chronology, #gniezno, #sources { break-before: page; }
+  .dropcap::first-letter { float: none; margin: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height: inherit; }
+  .companion-section > .section-number, .companion-section > h2, .companion-section > .lede, .timeline-table { column-span: all; }
+  h2 { font-size: 22pt; }
+  h3 { font-size: 12pt; }
+  p, li { font-size: 8.4pt; line-height: 1.36; }
+  .lede { font-size: 10pt; }
+  .two-column { column-gap: 9mm; }
+  figure { margin: 5mm 0; }
+  figure img { max-height: 55mm; }
+  figcaption { padding: 3mm; }
+  .source-excerpt, .interpretation { margin: 5mm 0; padding: 4mm; }
+  a { color: inherit; text-decoration: none; }
+  a[href^="http"]::after { content: ""; }
+  .toc a { font-size: 8.5pt; }
+  .bibliography-entry { font-size: 8pt; }
+}

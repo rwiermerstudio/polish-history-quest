@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 
 const dist = 'dist';
@@ -16,4 +16,7 @@ html = html.replace(/<script type="module" crossorigin src="([^"]+)"><\/script>/
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 writeFileSync(join(out, 'index.html'), html);
+for (const file of ['chapter-1-companion.html', 'chapter-1-companion.css']) {
+  copyFileSync(join(dist, file), join(out, file));
+}
 console.log(`wrote ${join(out, 'index.html')} (${html.length} bytes)`);

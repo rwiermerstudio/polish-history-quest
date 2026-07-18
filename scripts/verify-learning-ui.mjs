@@ -21,6 +21,7 @@ const requirements = [
   ['audiovisual text alternative', /media-transcript[\s\S]*?textAlternative/],
   ['media source and licence', /item\.source[\s\S]*?item\.license/],
   ['quiz coverage reference', /item\.coverage/],
+  ['optional chapter companion', /chapter\.companion[\s\S]*?companion-link[\s\S]*?target="_blank"[\s\S]*?rel="noopener noreferrer"[\s\S]*?aria-label="Open companion in a new tab"/],
   ['modal focus trap', /function handleDocumentKeydown[\s\S]*?event\.key !== 'Tab'[\s\S]*?last\.focus\(\)/],
   ['modal background inert', /setModalBackgroundInert\(true\)/],
   ['modal focus restoration', /lastModalTrigger\?\.focus\(\)/],

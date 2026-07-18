@@ -7,6 +7,9 @@ assert(Array.isArray(chapters), 'chapters must be an array');
 assert(chapters.length >= 12, `expected at least 12 chapters, got ${chapters.length}`);
 assert(chapters[0].startYear <= 966, 'curriculum must begin no later than 966');
 assert(chapters.at(-1).endYear >= 2004, 'curriculum must reach contemporary democratic Poland');
+const chapterOne = chapters.find(chapter => chapter.id === 'lands-before-poland');
+assert(chapterOne?.companion?.title && chapterOne.companion.description?.length >= 80, 'chapter 1 needs descriptive companion metadata');
+assert(/^\.\/chapter-1-companion\.html$/.test(chapterOne.companion.href), 'chapter 1 companion must use a portable relative HTML path');
 
 const chapterIds = new Set();
 let sectionCount = 0;

@@ -1,5 +1,588 @@
 apiVersion: v1
 data:
+  chapter-1-companion.css: |
+    :root {
+      --ink: #172033;
+      --muted: #5e6775;
+      --paper: #fffdf8;
+      --paper-warm: #f4ead9;
+      --line: #d8c8ad;
+      --red: #9d1f2f;
+      --red-dark: #711622;
+      --gold: #a66a17;
+      --blue: #244c68;
+      color: var(--ink);
+      background: #e8e0d2;
+      font-family: Georgia, "Times New Roman", serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; }
+    a { color: var(--red-dark); text-underline-offset: .18em; }
+    a:hover { color: var(--blue); }
+    a:focus-visible, summary:focus-visible { outline: 3px solid #d99b22; outline-offset: 3px; }
+    .skip-link { position: fixed; z-index: 10; top: .5rem; left: .5rem; transform: translateY(-180%); padding: .65rem .9rem; background: #fff; border: 2px solid var(--red); border-radius: .35rem; font-family: system-ui, sans-serif; font-weight: 800; }
+    .skip-link:focus { transform: none; }
+    .reader-bar { position: sticky; z-index: 5; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .65rem max(1rem, calc((100vw - 980px) / 2)); color: #fff; background: rgba(23,32,51,.97); box-shadow: 0 2px 16px rgba(0,0,0,.18); font: 750 .86rem/1.3 system-ui, sans-serif; }
+    .reader-bar a { color: #fff; }
+    .reader-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .companion { width: min(980px, calc(100% - 2rem)); margin: 2rem auto 4rem; background: var(--paper); box-shadow: 0 20px 60px rgba(29,25,20,.18); }
+    .cover { min-height: 800px; display: grid; align-content: end; padding: 8rem 8% 5rem; color: #fff; background: linear-gradient(180deg, rgba(15,25,39,.12), rgba(15,25,39,.94)), url("https://commons.wikimedia.org/wiki/Special:Redirect/file/Gniezno%20Cathedral%20detail%2002.jpg?width=1600") center/cover; }
+    .eyebrow { margin: 0 0 .9rem; font: 850 .78rem/1.2 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    .cover h1 { max-width: 800px; margin: 0; font-size: clamp(2.8rem, 7vw, 5.7rem); line-height: .94; letter-spacing: -.045em; }
+    .cover .subtitle { max-width: 720px; margin: 1.2rem 0 0; font-size: clamp(1.15rem, 2.5vw, 1.55rem); line-height: 1.45; }
+    .cover-meta { display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; margin-top: 2rem; font: 700 .85rem/1.4 system-ui, sans-serif; }
+    .companion-section { padding: 4rem 8%; border-top: 1px solid var(--line); }
+    .section-number { color: var(--red); font: 900 .76rem/1 system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    h2 { max-width: 760px; margin: .55rem 0 1.4rem; font-size: clamp(2rem, 4.5vw, 3.3rem); line-height: 1.04; letter-spacing: -.035em; }
+    h3 { margin: 1.8rem 0 .55rem; font-size: 1.35rem; line-height: 1.2; }
+    p, li { font-size: 1.06rem; line-height: 1.72; }
+    p { margin: 0 0 1rem; }
+    .lede { max-width: 780px; color: #343d4e; font-size: 1.23rem; line-height: 1.58; }
+    .dropcap::first-letter { float: left; margin: .08em .11em 0 0; color: var(--red); font-size: 4.5em; font-weight: 800; line-height: .72; }
+    .two-column { columns: 2 18rem; column-gap: 2.2rem; }
+    .two-column > * { break-inside: avoid; }
+    .toc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem 1.5rem; padding: 0; list-style: none; }
+    .toc a { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-bottom: 1px dotted var(--line); font: 750 .9rem/1.35 system-ui, sans-serif; text-decoration: none; }
+    .timeline-table { width: 100%; margin: 1.5rem 0; border-collapse: collapse; }
+    .timeline-table th, .timeline-table td { padding: .7rem .8rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .timeline-table th { width: 18%; color: var(--red-dark); font: 850 .82rem/1.3 system-ui, sans-serif; }
+    figure { margin: 2rem 0; break-inside: avoid; border: 1px solid var(--line); background: #fff; }
+    figure img { display: block; width: 100%; max-height: 540px; object-fit: contain; background: #eee8dc; }
+    figure.portrait img { max-height: 620px; }
+    figcaption { padding: 1rem 1.15rem 1.15rem; }
+    figcaption strong { display: block; margin-bottom: .4rem; font-size: 1.08rem; }
+    figcaption p { margin: 0; color: #3e4756; font-size: .9rem; line-height: 1.52; }
+    .figure-meta { margin-top: .65rem !important; padding-top: .6rem; border-top: 1px solid var(--line); color: var(--muted) !important; font: .72rem/1.45 system-ui, sans-serif !important; }
+    .figure-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; margin: 2rem 0; }
+    .figure-grid figure { margin: 0; }
+    .source-excerpt { margin: 2rem 0; padding: 1.4rem 1.5rem; border-left: 5px solid var(--gold); background: var(--paper-warm); break-inside: avoid; }
+    .source-excerpt p { margin-bottom: .65rem; }
+    .source-label { color: var(--red-dark); font: 900 .72rem/1.2 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+    .source-original { font-style: italic; }
+    .source-translation { padding-top: .75rem; border-top: 1px solid rgba(112,89,50,.25); font-weight: 650; }
+    .source-citation { color: var(--muted); font: .75rem/1.5 system-ui, sans-serif; }
+    .interpretation { margin: 2rem 0; padding: 1.35rem 1.5rem; border: 1px solid #9db2c2; border-radius: .35rem; background: #edf3f6; break-inside: avoid; }
+    .interpretation h3 { margin-top: 0; color: var(--blue); }
+    .interpretation ul { margin-bottom: 0; }
+    .caution { padding: 1rem 1.2rem; border-left: 5px solid var(--red); background: #fbecee; }
+    .question-box { margin: 1.7rem 0; padding: 1rem 1.2rem; border: 1px dashed var(--gold); break-inside: avoid; }
+    .question-box strong { display: block; margin-bottom: .35rem; color: #704817; font-family: system-ui, sans-serif; }
+    .glossary { display: grid; grid-template-columns: minmax(8rem, .35fr) 1fr; gap: 0; }
+    .glossary dt, .glossary dd { margin: 0; padding: .75rem; border-bottom: 1px solid var(--line); }
+    .glossary dt { font-weight: 800; }
+    .bibliography { padding-left: 1.25rem; }
+    .bibliography-entry { margin: 0 0 .75rem; padding-left: .3rem; font-size: .92rem; line-height: 1.5; }
+    .notes { color: #364052; }
+    .page-note { margin-top: 2rem; color: var(--muted); font: .76rem/1.5 system-ui, sans-serif; }
+    .back-to-top { display: inline-block; margin-top: 1.5rem; font: 800 .78rem/1 system-ui, sans-serif; }
+    @media (max-width: 700px) {
+      .reader-bar { align-items: flex-start; flex-direction: column; }
+      .companion { width: 100%; margin: 0; box-shadow: none; }
+      .cover { min-height: 78vh; padding: 6rem 1.25rem 3rem; }
+      .companion-section { padding: 3rem 1.25rem; }
+      .toc, .figure-grid { grid-template-columns: 1fr; }
+      .two-column { columns: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @page { size: A4; margin: 15mm 16mm 17mm; }
+    @media print {
+      :root { background: #fff; }
+      .reader-bar, .skip-link, .back-to-top { display: none !important; }
+      .companion { width: auto; margin: 0; box-shadow: none; }
+      .cover { min-height: 0; height: 267mm; padding: 25mm 12mm 18mm; break-after: page; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .companion-section { padding: 0; border: 0; columns: 2 80mm; column-gap: 8mm; }
+      .companion-section > h2, .companion-section > h3, .companion-section > .section-number { break-after: avoid; page-break-after: avoid; }
+      .companion-section > h2 + p, .companion-section > h3 + p { break-before: avoid; page-break-before: avoid; }
+      #strongholds, #chronology, #gniezno, #sources { break-before: page; }
+      .dropcap::first-letter { float: none; margin: 0; color: inherit; font-size: inherit; font-weight: inherit; line-height: inherit; }
+      .companion-section > .section-number, .companion-section > h2, .companion-section > .lede, .timeline-table { column-span: all; }
+      h2 { font-size: 22pt; }
+      h3 { font-size: 12pt; }
+      p, li { font-size: 8.4pt; line-height: 1.36; }
+      .lede { font-size: 10pt; }
+      .two-column { column-gap: 9mm; }
+      figure { margin: 5mm 0; }
+      figure img { max-height: 55mm; }
+      figcaption { padding: 3mm; }
+      .source-excerpt, .interpretation { margin: 5mm 0; padding: 4mm; }
+      a { color: inherit; text-decoration: none; }
+      a[href^="http"]::after { content: ""; }
+      .toc a { font-size: 8.5pt; }
+      .bibliography-entry { font-size: 8pt; }
+    }
+  chapter-1-companion.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="An in-depth, source-led companion to the Polish History Quest chapter on the lands before Poland and the Piast monarchy, c. 500–1138.">
+      <title>Before Poland and the Piast Monarchy — Chapter 1 Companion</title>
+      <link rel="stylesheet" href="./chapter-1-companion.css">
+    </head>
+    <body id="top">
+    <a class="skip-link" href="#content">Skip to the companion text</a>
+    <header class="reader-bar">
+      <a href="./">← Polish History Quest</a>
+      <span>Chapter 1 companion · c. 500–1138</span>
+      <nav class="reader-actions" aria-label="Companion navigation"><a href="#contents">Contents</a><a href="#sources">Sources &amp; reading</a><span>Print: Ctrl/⌘ + P</span></nav>
+    </header>
+    <main class="companion" id="content">
+      <header class="cover">
+        <p class="eyebrow">Polish History Quest · In-depth companion</p>
+        <h1>Before Poland and the Piast monarchy</h1>
+        <p class="subtitle">Land, power, conversion and contested beginnings in the Vistula–Oder world, approximately 500–1138</p>
+        <div class="cover-meta"><span>Source-led survey</span><span>Original excerpts with new English translations</span><span>Print edition · 2026</span></div>
+      </header>
+
+      <section class="companion-section" id="contents">
+        <p class="section-number">Reader guide</p>
+        <h2>How to investigate a beginning</h2>
+        <p class="lede dropcap">There was no single morning on which “Poland” appeared. Between the sixth and twelfth centuries, communities living between the Oder and Vistula rivers changed through migration, farming, exchange, violence, religious practice and political experiment. During the tenth century one dynasty—the Piasts—built an unusually concentrated network of strongholds and dependants in Greater Poland. Its rulers entered the written record, adopted Latin Christianity, fought and negotiated with neighbours, and made their court into the centre of a monarchy. That process created durable institutions. It did not create a modern nation-state, fixed borders or equal citizenship.</p>
+        <p>This companion expands Chapter 1 without replacing it. The short chapter teaches the principal sequence; these pages slow the sequence down. They ask how we know, which words are safe to use, and why historians disagree. Written texts are sparse before the late tenth century and were produced mainly by outsiders or later court clerics. Archaeology supplies settlements, fortifications, graves, pollen, animal bones, tools, imported objects and coins, but an object does not announce the language or identity of its owner. Neither kind of evidence is self-explanatory. Historical reconstruction begins by making their limitations visible.</p>
+        <p>Names are especially treacherous. “Poland” is useful shorthand for a polity that sources increasingly associate with the Piasts and the <em>Polani</em>, yet the people subjected to Piast power did not all share one identity. “Slav” identifies a broad linguistic-cultural field, not one timeless people with a common government. “Pagan” is a Christian classification that compresses varied local rites. “Conversion” can describe a ruler’s baptism, a court’s institutional alignment, or generations of change in village ritual; these happened at different speeds. This text uses modern place names for orientation while reminding the reader that frontiers were usually zones of tribute, fort control and negotiated influence rather than surveyed lines.</p>
+        <nav aria-label="Companion contents">
+          <ol class="toc">
+            <li><a href="#chronology"><span>Chronology and evidence</span><span>01</span></a></li>
+            <li><a href="#land"><span>Landscapes and settlement</span><span>02</span></a></li>
+            <li><a href="#slavs"><span>Slavs, Polanie, identities</span><span>03</span></a></li>
+            <li><a href="#strongholds"><span>Strongholds and expansion</span><span>04</span></a></li>
+            <li><a href="#court"><span>Court economy and coercion</span><span>05</span></a></li>
+            <li><a href="#mieszko"><span>Mieszko enters the record</span><span>06</span></a></li>
+            <li><a href="#baptism"><span>Baptism and its explanations</span><span>07</span></a></li>
+            <li><a href="#dobrawa"><span>Dobrawa, gender, household</span><span>08</span></a></li>
+            <li><a href="#church"><span>Church and conversion below</span><span>09</span></a></li>
+            <li><a href="#dagome"><span><em>Dagome iudex</em> and space</span><span>10</span></a></li>
+            <li><a href="#gniezno"><span>Adalbert and Gniezno</span><span>11</span></a></li>
+            <li><a href="#war"><span>Empire, Bohemia and Rus</span><span>12</span></a></li>
+            <li><a href="#crown"><span>Crown, coin and image</span><span>13</span></a></li>
+            <li><a href="#crisis"><span>The crisis of the 1030s</span><span>14</span></a></li>
+            <li><a href="#restoration"><span>Restoration and Kraków</span><span>15</span></a></li>
+            <li><a href="#stanislaw"><span>King and bishop</span><span>16</span></a></li>
+            <li><a href="#gallus"><span>Gallus and dynastic memory</span><span>17</span></a></li>
+            <li><a href="#society"><span>Society and everyday religion</span><span>18</span></a></li>
+            <li><a href="#workshop"><span>Interpretation workshop</span><span>19</span></a></li>
+            <li><a href="#sources"><span>Sources and further reading</span><span>20</span></a></li>
+          </ol>
+        </nav>
+        <div class="caution"><strong>Translation note.</strong> Unless otherwise stated, the English translations of medieval excerpts are newly prepared for this companion from the cited public-domain text. Spelling and punctuation in medieval editions vary. Square brackets clarify meaning; ellipses mark omissions.</div>
+      </section>
+
+      <section class="companion-section" id="chronology">
+        <p class="section-number">01 · Orientation</p>
+        <h2>A chronology with uneven light</h2>
+        <p class="lede">Dates such as 966, 1000, 1025 and 1138 are useful anchors, not automatic explanations. The first is conventional rather than documented by a surviving baptismal certificate; the last is the year of a ruler’s death and succession settlement, not the instant disappearance of political unity.</p>
+        <table class="timeline-table">
+          <tbody>
+            <tr><th>c. 500–700</th><td>Changing settlement patterns and material cultures across east-central Europe; later labels cannot simply be projected onto these communities.</td></tr>
+            <tr><th>c. 700–900</th><td>Regional strongholds, exchange routes and local elites develop. Moravia, Bohemia, the Carolingian world, Rus and the Baltic shape the wider setting.</td></tr>
+            <tr><th>c. 920–960</th><td>A concentrated Greater Polish stronghold network expands rapidly; some older centres are abandoned or destroyed.</td></tr>
+            <tr><th>c. 963–967</th><td>Mieszko appears in Saxon and Arabic-derived testimony; he fights Wichmann, allies with Bohemia, and receives baptism, conventionally dated 966.</td></tr>
+            <tr><th>972</th><td>Mieszko’s forces defeat Margrave Hodo near a place Thietmar calls Cidini, conventionally associated with Cedynia.</td></tr>
+            <tr><th>c. 991</th><td>The lost act summarized as <em>Dagome iudex</em> places a realm called Schinesghe under Saint Peter’s protection and describes a circuit of uncertain frontier names.</td></tr>
+            <tr><th>997–1000</th><td>Adalbert of Prague is killed on mission; Bolesław obtains his body. Otto III visits his shrine at Gniezno and a metropolitan church structure is established.</td></tr>
+            <tr><th>1002–1018</th><td>Bolesław Chrobry wages repeated wars and negotiates peace with Henry II, then campaigns in Rus.</td></tr>
+            <tr><th>1025–1030s</th><td>Royal coronations are followed by dynastic conflict, foreign intervention and severe political-religious crisis.</td></tr>
+            <tr><th>c. 1040–1079</th><td>Casimir I rebuilds rule around Kraków; Bolesław II renews royal ambition but is expelled after conflict associated with Bishop Stanisław.</td></tr>
+            <tr><th>1102–1138</th><td>Bolesław III defeats rivals, campaigns in Pomerania, patronizes Gallus’s chronicle, and leaves a succession arrangement among his sons.</td></tr>
+          </tbody>
+        </table>
+        <p>Notice the imbalance. Before the 960s, the chronology is mostly archaeological. Then external observers reveal a ruler already able to field troops and bargain across frontiers. After conversion, written names multiply because the court and church entered literate Latin networks. This is not proof that earlier communities lacked memory, law or diplomacy; it shows what kinds of records survived. Oral agreements, wood-and-earth buildings and rites performed without durable inscriptions leave different traces from episcopal foundations and court chronicles.</p>
+        <p>Three clocks therefore run together. The <strong>political clock</strong> follows the concentration and fragmentation of power. The <strong>institutional clock</strong> follows churches, clerics, coinage and offices. The <strong>social clock</strong> follows slower changes in household practice, burial, diet, labour and local attachment. A court may change religion in one generation while rural burial custom changes over several. A ruler may claim a frontier that he visits rarely. The companion returns to these mismatched tempos.</p>
+        <div class="interpretation">
+          <h3>Discussion: when does “Polish history” begin?</h3>
+          <ul>
+            <li><strong>Dynastic answer:</strong> with the archaeologically visible Piast expansion and Mieszko’s documented reign.</li>
+            <li><strong>Institutional answer:</strong> with baptism, bishoprics and a court able to reproduce Christian monarchy.</li>
+            <li><strong>Long-regional answer:</strong> earlier, with communities whose land use, exchange and settlement made later political concentration possible.</li>
+          </ul>
+          <p>No answer is neutral. Starting in 966 privileges court and church; starting with “tribes” risks inventing a straight road to the nation. This text uses a regional prologue and a dynastic centre without treating either as destiny.</p>
+        </div>
+      </section>
+
+      <section class="companion-section" id="land">
+        <p class="section-number">02 · Landscapes</p>
+        <h2>Rivers, forests and inhabited clearings</h2>
+        <p class="lede dropcap">The future Piast heartland was not an empty forest waiting for a state. It was a mosaic of cultivated clearings, wetlands, river valleys, woods and lakes, linked by paths that changed with season and weather. The Warta–Noteć system connected Greater Poland to the Oder and Baltic; the Vistula corridor opened routes toward Lesser Poland, Mazovia and Rus.</p>
+        <p>Most people lived from mixed farming and animal husbandry. Millet, rye, wheat, barley and oats varied in importance by soil and period. Cattle, pigs, sheep, goats and horses supplied traction, meat, hides, fibre and status. Fishing, hunting, beekeeping and forest gathering remained important. Salt moved from production zones; amber, furs, wax and enslaved people entered longer exchange chains. Imported glass beads, weapons, scales, dirhams and ornaments reveal contact, but an imported object does not prove that its owner had travelled or belonged to the object’s place of manufacture.</p>
+        <p>Settlement units could be small and mobile. Timber decays; ploughing erases shallow structures; later building covers earlier layers. Archaeologists reconstruct houses from postholes, hearths and pits, then combine ceramic sequences, radiocarbon dating and dendrochronology. Tree-ring dates transformed the study of Piast origins because major fort construction in Greater Poland could be dated much more tightly than before. The resulting pattern suggested acceleration during the first half and middle of the tenth century rather than a state evolving unchanged from a much earlier “tribal” structure.</p>
+        <figure data-kind="map">
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/00940%20Giecz%20stronghold.png?width=1400" alt="Modern archaeological plan of the Giecz stronghold area, with earthworks and excavated zones marked around the fortified centre.">
+          <figcaption><strong>Giecz as an archaeological landscape</strong><p>This modern site plan is evidence about how researchers map a fortified centre, not a medieval map. Giecz formed part of the Greater Polish concentration associated with early Piast power. The plan should be read beside excavation and dating reports.</p><p class="figure-meta">Map/plan: Marsilar, 2017 · CC BY-SA 4.0 · <a href="https://commons.wikimedia.org/wiki/File:00940_Giecz_stronghold.png">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <p>Environmental history prevents a second error: treating the landscape as a fixed national container. Rivers could connect or obstruct. Forest belts might be resource zones, refuges and negotiated margins rather than hard borders. A stronghold did not automatically command every person within a drawn radius. Authority depended on the ability to collect food, mobilize labour, keep armed followers, secure routes and persuade or frighten local elites. When those relationships failed, monumental earthworks alone could not preserve a realm.</p>
+        <div class="question-box"><strong>Evidence question</strong> If a fortified site was enlarged in the 930s and a nearby older centre burned at about the same time, what can we infer? Coordinated expansion and conflict are plausible; the identity of the attackers, the exact political order and the motives still require additional evidence.</div>
+      </section>
+
+      <section class="companion-section" id="slavs">
+        <p class="section-number">03 · Peoples and names</p>
+        <h2>Slavs, Polanie and the problem of ethnogenesis</h2>
+        <p class="lede">Early medieval labels are not census categories. Authors applied names for their own geographical and political purposes; archaeology classifies objects, not bloodlines. Ethnogenesis—the formation and reformulation of group identities—offers a better model than imagining complete peoples migrating with permanent names and borders.</p>
+        <p>Slavic languages became widespread across much of central and eastern Europe during the early Middle Ages. Historians disagree about how to connect that linguistic expansion to migration, local demographic continuity, elite networks and changing material practice. Older national narratives often sought a primeval homeland and a direct ancestral chain. More recent work emphasizes that identities can become politically salient in contact, conflict and administration. A label used by an outside author may name a ruler’s followers, a tribute district, a military coalition or a broad linguistic population.</p>
+        <p>The name <em>Polani/Polanie</em> is especially difficult. Gallus Anonymus, writing in the early twelfth century, knew a <em>regio Polonorum</em> and fashioned a Piast past. Tenth-century observers more securely name Mieszko and groups under his power than an ancient Polish nation. The traditional claim that a long-established “Polanie tribe” naturally unified its neighbours is therefore debated. Some scholars retain the Polanie as a useful regional people-name; others suspect that the political name expanded with Piast rule or that later terminology was read backward into a poorly documented period.</p>
+        <p>Material cultures cannot settle the argument by themselves. Similar pottery may spread through learning and exchange; different burial rites may coexist within one political field. Language, ritual, political loyalty and descent do not move as one package. Scandinavian-style weapons or chamber graves in a Piast zone indicate contacts and perhaps mobile specialists, merchants or warriors. They do not demonstrate a wholly “Viking state,” just as Slavic speech does not demonstrate one unified Slavic polity.</p>
+        <div class="interpretation">
+          <h3>Competing models: who made the polity?</h3>
+          <ul>
+            <li><strong>Evolutionary-tribal model:</strong> a Polanie community gradually developed institutions and united related neighbouring peoples.</li>
+            <li><strong>Rapid-conquest model:</strong> a militarized Piast centre expanded abruptly, dismantling rival forts and redistributing population and resources.</li>
+            <li><strong>Network model:</strong> rulers grew powerful by controlling routes, silver, gifts, retinues and marriage alliances; force mattered, but durable rule required negotiated cooperation.</li>
+          </ul>
+          <p>These models overlap. Rapid fort construction supports acceleration; evidence of violence supports coercion; continued local settlement and the need to collect surplus support accommodation. The argument concerns proportion, timing and mechanism, not a choice between a peaceful vote and total replacement.</p>
+        </div>
+        <p>Use identity terms at the scale the evidence permits. “Piast realm” identifies a ruling formation. “Greater Poland” is a modern regional convenience. “West Slavic-speaking communities” describes language broadly without claiming one government. “Poles” becomes more appropriate when medieval sources and institutions use the name, but even then it does not mean a modern ethnically uniform citizen nation. Precision is not pedantry here; it protects the people of the past from categories created centuries later.</p>
+      </section>
+
+      <section class="companion-section" id="strongholds">
+        <p class="section-number">04 · State formation</p>
+        <h2>Earth, timber and concentrated power</h2>
+        <p class="lede dropcap">The enormous ramparts at Gniezno, Poznań, Giecz and Ostrów Lednicki materialized authority. Building them required timber in bulk, earthmoving, transport, food and supervision. Their rapid expansion is one of the clearest archaeological signs that rulers could command labour beyond a single household.</p>
+        <p>A stronghold was not merely a defensive castle. It could house a ruler or deputy, a retinue, storage, workshops, cult sites and later churches. It organized tribute and hospitality and staged encounters between elites. Chains of smaller forts connected regional centres. Yet functions differed and changed: some sites were permanent residences; some were refuges, assembly places or frontier posts. We should not paint the same administrative system onto every rampart.</p>
+        <p>Dendrochronology places major construction in the Piast core especially in the tenth century. At the same time, several older regional centres declined or were burned. This combination has encouraged interpretations of conquest from within Greater Poland. A victorious centre may have destroyed competing strongholds, relocated dependants and concentrated craft or ritual activity. The scale of works also implies extraction: communities delivered labour and provisions that were no longer available for their own use.</p>
+        <figure>
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Ostrow%20lednicki.JPG?width=1400" alt="Stone foundations of the early medieval palace and chapel complex on the green island landscape of Ostrów Lednicki.">
+          <figcaption><strong>Ostrów Lednicki: a court made durable in stone</strong><p>The surviving foundations belong to a palatial-sacral complex associated with the early Piast elite. The form links residence, worship and public display. Archaeologists debate the precise use of its basins and whether they relate directly to baptismal practice.</p><p class="figure-meta">Photograph: Wikipek, 2011 · CC0 1.0 · <a href="https://commons.wikimedia.org/wiki/File:Ostrow_lednicki.JPG">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <p>Stone architecture was rare and politically charged. Palatia with attached chapels connected a mobile ruler to selected nodes. They also connected the court to builders, forms and liturgy circulating across Christian Europe. But stone did not replace timber settlement. Most dwellings, service buildings and fortifications remained wooden. The monumental fragment that survives can therefore exaggerate the share of life occupied by court and church.</p>
+        <p>Was this already a “state”? Definitions matter. If a state requires impersonal bureaucracy, fixed territory and monopoly of violence, the early Piast polity falls short. If it means a durable ruling organization capable of large-scale extraction, fort construction, diplomacy, lawgiving and succession, the word is defensible with qualification. “Early state” and “tributary monarchy” describe capacities without pretending that the apparatus resembled a modern ministry.</p>
+        <div class="interpretation"><h3>Discussion: conquest or consolidation?</h3><p>Burned forts and rapidly built centres make coercive expansion hard to ignore. Yet archaeology rarely names the arsonist. A fort can burn accidentally, during local conflict, or during an attack by a third party. The strongest argument comes from the regional pattern—destruction, abandonment, new central works and later political geography—rather than one dramatic layer. Historians should state the inference and its confidence, not convert probability into an eyewitness report.</p></div>
+      </section>
+
+      <section class="companion-section" id="court">
+        <p class="section-number">05 · Resources and force</p>
+        <h2>A court fed by tribute, war and exchange</h2>
+        <p class="lede">The Piast ruler’s power was personal, mobile and expensive. Armed followers required food, equipment, horses, gifts and opportunities. Clerics and builders added new costs. The court converted agricultural surplus, labour, booty and exchange into loyalty, then used loyal force to obtain more resources.</p>
+        <p>Tribute could consist of foodstuffs, hides, honey, wax, livestock, craft products, silver or labour. Later administrative terms should not automatically be projected into Mieszko’s reign, but stronghold stores and service settlements suggest organized provisioning. Rulers travelled among centres partly because moving the consumer court to accumulated supplies could be easier than transporting everything to one capital. Gniezno, Poznań, Giecz and Ostrów Lednicki were nodes in a political landscape, not competing candidates in a modern “first capital” contest that must have only one answer.</p>
+        <p>Silver dirhams from Islamic mints reached the Baltic and east-central Europe through long exchange routes. Hacksilver could be weighed rather than counted as coin. Its distribution helps trace connections but remains difficult to interpret: silver might be trade payment, diplomatic gift, booty or a stored reserve. Western deniers later joined this monetary world. Coinage struck in a ruler’s name communicated status as well as value, and its volume was far below that of a modern currency system.</p>
+        <p>War supplied booty and captives. The trade in enslaved people linked Slavic lands to markets toward the Baltic, Rus, the steppe, central Europe and the Mediterranean. Written observers sometimes list enslaved people among the wealth of rulers; fortified centres and routes could facilitate coercive collection. The evidence does not permit a simple balance sheet for how much Piast growth depended on slave trading. It does require us to reject a sanitized story in which state formation was only administration and diplomacy. Some people experienced expansion as displacement, forced labour, captivity, loss of tribute and separation from family.</p>
+        <p>Elite women and men were also mobile through marriage, fosterage, exile and hostage-taking. Marriage connected Bohemia, Saxony, Rus, Hungary and Scandinavian-linked networks. Craftspeople and clergy carried skills. Warrior equipment with northern features reflects a cosmopolitan military zone around the Baltic; whether particular buried individuals were immigrants, descendants or local adopters must be tested case by case.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">Contemporary external witness · Thietmar</p>
+          <p class="source-original" lang="la">Interea Hodo, venerabilis marchio, Miseconem, inperatori fidelem tributumque usque in Vurta fluvium solventem, exercitu petivit collecto.</p>
+          <p class="source-translation">“Meanwhile Hodo, the venerable margrave, gathered an army and attacked Mieszko, who was loyal to the emperor and paid tribute as far as the River Warta.”</p>
+          <p class="source-citation">Thietmar of Merseburg, <em>Chronicon</em> II.29 (older numbering II.19), public-domain Latin in J.-P. Migne, <em>Patrologia Latina</em> 139, col. 1217; <a href="https://la.wikisource.org/wiki/Chronicon_(Thietmarus_Merseburgensis)">online Latin text</a>. New translation. “As far as the Warta” is geographically and politically debated.</p>
+        </blockquote>
+        <p>Thietmar’s compressed sentence does not tell us why Hodo attacked or exactly what tribute covered. It does show Mieszko inside imperial political language rather than outside a sealed national frontier. A ruler could be an imperial <em>fidelis</em>, pay tribute concerning one zone and still fight a margrave. Medieval hierarchy was layered and negotiated; “independent” versus “subject” can be too blunt.</p>
+      </section>
+
+      <section class="companion-section" id="mieszko">
+        <p class="section-number">06 · Written record</p>
+        <h2>Mieszko appears—already powerful</h2>
+        <p class="lede dropcap">The first relatively secure notices of Mieszko do not describe his childhood, ancestry or accession. They show him in conflict during the 960s. This abrupt entrance is a warning: the written record begins after political concentration, not at its starting point.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">Near-contemporary Saxon account · Widukind</p>
+          <p class="source-original" lang="la">Misacam regem, cuius potestatis erant Slavi qui dicuntur Licicaviki, duabus vicibus superavit fratremque ipsius interfecit, predam magnam ab eo extorsit.</p>
+          <p class="source-translation">“He twice defeated King Mieszko, under whose power were the Slavs called Licicaviki; he killed Mieszko’s brother and extorted great booty from him.”</p>
+          <p class="source-citation">Widukind of Corvey, <em>Res gestae Saxonicae</em> III.66, Paul Hirsch and Hans-Eberhard Lohmann, eds., <em>MGH Scriptores rerum Germanicarum</em> 60 (Hanover, 1935), p. 141; <a href="https://www.dmgh.de/mgh_ss_rer_germ_60/index.htm#page/141/mode/1up">Digital MGH scan</a>. New translation. Manuscripts and editions vary in spelling; the identification of <em>Licicaviki</em> remains disputed.</p>
+        </blockquote>
+        <p>Widukind wrote in Saxony in the later tenth century and was interested in Ottonian affairs. His “king” (<em>rex</em>) is not proof of a coronation; Latin writers could apply rank words flexibly to foreign rulers. The enigmatic <em>Licicaviki</em> has generated many identifications. It is safer to say that the author knew a named group under Mieszko’s power than to force the word into a complete tribal map.</p>
+        <p>The Jewish traveller Ibrāhīm ibn Yaʿqūb, whose observations survive only through later Arabic geographers, described Mieszko’s realm as extensive and rich in food and emphasized a large force maintained by the ruler. The transmission matters: al-Bakrī wrote in eleventh-century al-Andalus using earlier material; wording may combine observation, report and editorial arrangement. Even so, the account widens the perspective beyond Latin clerics. It places the Piast court in commercial-geographical knowledge connecting the Ottonian world, Prague and Islamic lands.</p>
+        <p>Mieszko lost battles as well as winning them. Wichmann’s success and the death of Mieszko’s brother indicate vulnerable frontiers. Soon afterward Mieszko and Bohemian partners defeated Wichmann. The conflict near Cedynia in 972 ended with Hodo’s defeat, according to Thietmar, yet Emperor Otto I summoned Mieszko and Hodo to settle the dispute. These episodes show adaptation: alliance, tribute, military force and imperial mediation were tools used in different combinations.</p>
+        <figure>
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Page%20of%20Thietmars%20Chronicle.jpg?width=1200" alt="A parchment page of Thietmar of Merseburg’s early eleventh-century Latin chronicle, written in dense medieval script.">
+          <figcaption><strong>A near-contemporary voice, but not a neutral one</strong><p>Thietmar’s chronicle was composed between 1012 and 1018 from the viewpoint of a Saxon bishop. He knew border politics and some participants, yet judged peoples and rulers through aristocratic and Christian assumptions. The Dresden manuscript was badly damaged in 1945; this pre-war reproduction preserves its appearance.</p><p class="figure-meta">Manuscript page: Thietmar of Merseburg, 1010–1018 · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Page_of_Thietmars_Chronicle.jpg">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <div class="interpretation"><h3>Discussion: how large was Mieszko’s realm?</h3><p>Maps combine later outcomes, archaeological distributions and terse written clues. Historians broadly accept a Greater Polish core and major expansion under Mieszko, but debate the timing and firmness of control over Pomerania, Silesia, Lesser Poland and Mazovia. A place under tribute, a captured stronghold, a marriage claim and a church jurisdiction are not identical kinds of possession.</p></div>
+      </section>
+
+      <section class="companion-section" id="baptism">
+        <p class="section-number">07 · Conversion at court</p>
+        <h2>The baptism of 966—and the explanations built around it</h2>
+        <p class="lede">No surviving contemporary act names the date, place or officiant of Mieszko’s baptism. Later annalistic entries support the conventional sequence: marriage with the Christian Přemyslid princess Dobrawa in 965, baptism in 966. The event is secure enough as a turning point; its detailed staging is reconstructed.</p>
+        <p>Baptism joined Mieszko to Latin Christianity. It made Christian marriage and ritual kingship available, welcomed clerics who could conduct worship and write, and gave allies a framework for recognizing the ruler. A bishop, Jordan, is documented soon afterward. Church organization helped a dynasty communicate beyond its language and convert conquest into legitimate lordship. These effects make political calculation likely—but “political” does not exclude conviction. Medieval rulers did not necessarily separate faith, family, diplomacy and rule as modern analysis does.</p>
+        <p>A familiar explanation says Mieszko converted to prevent forced conversion by Germans. It is too simple. Mission and conquest could reinforce each other, but no single German state was poised to baptize an otherwise united Poland. Mieszko already negotiated within Ottonian politics. His Bohemian marriage, conflict with the Veleti/Wichmann and regional strategy provide a more concrete setting. Conversion could strengthen alliance with Dobrawa’s dynasty, distinguish the Piast court from pagan opponents, and reduce the legitimacy of attacks framed as Christian mission.</p>
+        <figure class="portrait">
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Mieszko%20I%20of%20Poland%20by%20Jan%20Matejko.jpg?width=1000" alt="Jan Matejko’s nineteenth-century imagined portrait of Mieszko I, shown as a bearded ruler holding a cross and sword.">
+          <figcaption><strong>An imagined Mieszko, not a likeness</strong><p>Jan Matejko created this portrait centuries after Mieszko. Cross, sword, clothing and expression turn conversion and rulership into a national visual programme. The image is evidence for nineteenth-century memory, not tenth-century appearance.</p><p class="figure-meta">Jan Matejko, nineteenth century · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Mieszko_I_of_Poland_by_Jan_Matejko.jpg">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <p>Where did baptism occur? Poznań, Ostrów Lednicki, Gniezno, Prague, Regensburg and other possibilities have been argued. Archaeological basins at palatial chapels have sometimes been called baptismal pools, but function and dating are debated. The desire to identify one national baptismal font can outrun the evidence. A ruler’s baptism may have involved a small court group; subsequent rituals could occur at several centres.</p>
+        <div class="interpretation">
+          <h3>Four explanations that need not exclude one another</h3>
+          <ul>
+            <li><strong>Alliance:</strong> marriage and cooperation with Christian Bohemia helped Mieszko against immediate enemies.</li>
+            <li><strong>Legitimacy:</strong> Christian rulership offered ritual, writing and recognition useful to a rapidly expanding dynasty.</li>
+            <li><strong>Security:</strong> baptism complicated hostile missionary claims and improved access to imperial diplomacy.</li>
+            <li><strong>Belief and household influence:</strong> Dobrawa, clergy and converts at court could shape genuine religious commitment.</li>
+          </ul>
+          <p>The balance cannot be measured from surviving testimony. A responsible explanation describes incentives and possibilities rather than claiming access to Mieszko’s private thoughts.</p>
+        </div>
+      </section>
+
+      <section class="companion-section" id="dobrawa">
+        <p class="section-number">08 · Household politics</p>
+        <h2>Dobrawa, gender and conversion narratives</h2>
+        <p class="lede dropcap">Dynastic women connected courts, moved clergy and objects, negotiated households and bore heirs. Chronicles often reduced that work to a moral story: the Christian wife softens or tricks the pagan husband. Reading against the grain reveals both agency and the stereotypes through which clerical men represented it.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">Christian moral narrative · Thietmar</p>
+          <p class="source-original" lang="la">Hic a Boemia regione nobilem sibi uxorem senioris Bolizlavi duxerat sororem… Dobrawa enim Sclavonice dicebatur, quod Teutonico sermone Bona interpretatur… Laboravit enim pro conversione conjugis sui, ac exaudita est a benignitate Conditoris sui.</p>
+          <p class="source-translation">“He had taken a noble wife from the land of Bohemia, the sister of the elder Boleslav… She was called Dobrawa in the Slavic language, which in the German tongue is interpreted as ‘Good’… She laboured for the conversion of her husband and was heard by the kindness of her Creator.”</p>
+          <p class="source-citation">Thietmar, <em>Chronicon</em> IV.55–56 (older numbering IV.35–36), in Migne, <em>PL</em> 139, cols 1270D–1271B; <a href="https://la.wikisource.org/wiki/Chronicon_(Thietmarus_Merseburgensis)">public-domain Latin text</a>. New translation, shortened. Thietmar then tells a disputed story about Lenten abstinence to explain her persuasive strategy.</p>
+        </blockquote>
+        <p>Thietmar wrote decades after the marriage. He praised Dobrawa through a pun on “good” and made her sexuality and fasting part of a conversion lesson. The tale may preserve knowledge that she mattered; it does not record a private conversation. Dobrawa’s political importance is clearer from the marriage itself. A Přemyslid connection repositioned Mieszko in regional rivalries. Her household could have brought clerics, liturgical practice, books, reliquaries and expectations about Christian marriage.</p>
+        <p>Conversion narratives often place an elite woman at the threshold—Clotild and Clovis in Frankish memory provide a famous parallel. The pattern should make us cautious, not dismissive. Marriage diplomacy gave women real leverage precisely because the household was a political institution. At the same time, women below the court are largely silent in texts. Graves, jewellery, diet and skeletal stress can suggest social difference and mobility, but sexed artefacts do not map automatically onto fixed gender roles.</p>
+        <p>After Dobrawa’s death, Mieszko married Oda, a nun and daughter of a Saxon margrave. Thietmar condemned the irregular marriage but credited Oda with freeing captives and supporting Christianity. Mieszko’s children became pieces in succession and foreign alliance. Świętosława/Sigrid/Gunhild traditions linking a Piast daughter to Scandinavian kings are difficult to reconcile; the uncertainty itself demonstrates how later genealogies can fuse different women.</p>
+        <div class="interpretation"><h3>Discussion: was Dobrawa “responsible” for baptism?</h3><p>A strong answer avoids two extremes. She was not merely decorative: marriage and household mediation were central diplomatic technologies. Nor can one person explain a ruler, retinue and polity changing religious alignment. Treat Dobrawa as a political-religious agent within a convergence of interests, and treat Thietmar’s edifying plot as evidence for how eleventh-century clergy wanted conversion to be remembered.</p></div>
+      </section>
+
+      <section class="companion-section" id="church">
+        <p class="section-number">09 · Christianization</p>
+        <h2>From a baptized ruler to changing communities</h2>
+        <p class="lede">A court can be baptized in a day; a society cannot. Christianization involved buildings, clergy, calendars, marriage norms, burial, food practice, sacred space and teaching. It advanced unevenly and could reverse when the political network supporting it collapsed.</p>
+        <p>Jordan, documented as bishop in the late 960s, probably served Mieszko’s realm with a special missionary status. Poznań is strongly associated with his seat, though details of jurisdiction remain contested. Cathedral building and elite chapels made the new religion visible at key centres. Latin writing entered governance, but the earliest original Piast acts are lost. Clerics carried memory across institutions that outlived individual rulers.</p>
+        <p>At first, access to Christian rites was concentrated around court and strongholds. Priests were few; language posed challenges; parishes were not yet a dense territorial network. Rural communities could add Christian symbols while maintaining older practices. Inhumation gradually displaced cremation, but burial change is not a simple conversion counter. People might adopt a rite through elite pressure, fashion, family strategy or mixed belief. Conversely, a Christian identity need not leave an object marked with a cross.</p>
+        <p>Older sacred places could be condemned, reused or forgotten. Much that is confidently presented as “Slavic mythology” was recorded late by hostile Christian observers in other regions. Comparative reconstruction is valuable but uncertain. We know more about the institutional religion that produced texts than about local rites it displaced. Terms such as “pagan reaction” in the 1030s may describe opposition to church burdens, elite rule and foreign-connected institutions together, not a centrally organized revival with one doctrine.</p>
+        <p>The church altered political geography. The bishopric linked Mieszko to Rome and Latin Europe. Under Bolesław, the archbishopric of Gniezno and subordinate sees at Kraków, Wrocław and Kołobrzeg gave the monarchy a church province not simply controlled from across the imperial frontier. Yet ecclesiastical borders were negotiated and incomplete. Bishop Unger of Poznań appears to have objected to the Gniezno arrangement, according to Thietmar.</p>
+        <p>Christianity also introduced new ways to display mercy and violence. Rulers founded churches, honoured relics and protected clergy, while continuing warfare and coercion. Captives could be freed as pious acts; enemies could be represented as faithless. Mission might be genuinely pastoral and politically expansionist at once. The killing of Adalbert in Prussia and later campaigns in Pomerania show how martyr cult, mission and state strategy could interlock without becoming identical.</p>
+        <div class="question-box"><strong>Continuity question</strong> A cemetery changes from cremation to inhumation over two generations, while food offerings continue in some graves. Does this show incomplete conversion, new status display, family tradition or all three? The artefacts narrow possibilities but cannot reveal one interior belief.</div>
+      </section>
+
+      <section class="companion-section" id="dagome">
+        <p class="section-number">10 · Documents and frontiers</p>
+        <h2><em>Dagome iudex</em>: a lost act inside a confused summary</h2>
+        <p class="lede dropcap">Near the end of Mieszko’s life, he, Oda and two sons issued an act now lost. It survives only as an eleventh-century regest in Cardinal Deusdedit’s canon-law collection, introduced as taken from “another volume” under Pope John XV. The underlying act, conventionally dated c. 991–992, and its intermediary are lost. The summarizer misunderstood the people involved and guessed that they were Sardinians. This is foundational evidence wrapped in transmission error.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">Canon-law regest · c. 991–992 act, later witness</p>
+          <p class="source-original" lang="la">Dagome iudex et Ote senatrix et filii eorum Misicam et Lambertus … leguntur beato Petro contulisse unam civitatem in integro, que vocatur Schinesghe, cum omnibus suis pertinentiis infra hos affines, sicuti incipit a primo latere longum mare, fine Bruzze usque in locum, qui dicitur Russe…</p>
+          <p class="source-translation">“Dagome the <em>iudex</em> and Ote the <em>senatrix</em> and their sons, Misicam and Lambertus … are recorded as having conveyed to Saint Peter one <em>civitas</em> in its entirety, called Schinesghe, with all its dependencies within these bounds: beginning on one side at the long sea, along the frontier of Bruzze as far as the place called Russe…”</p>
+          <p class="source-citation"><em>Dagome iudex</em>, regest in Deusdedit, <em>Collectio canonum</em> III.199, Victor Wolf von Glanvell, ed. (1905), p. 359; <a href="https://archive.org/details/diekanonessammlu01deus/page/358/mode/2up">public-domain edition scan</a>. New translation. The ungrammatical name forms follow this witness rather than silently repairing it. <em>Civitas</em>, <em>iudex</em>, <em>senatrix</em>, Schinesghe and several boundary names are disputed.</p>
+        </blockquote>
+        <p>Most historians identify “Dagome” with Mieszko, perhaps through a corrupted Christian name plus his known name, and “Ote” with Oda. The absence of Bolesław, Dobrawa’s son, may reflect a separate inheritance, his political position, or the legal purpose of the act. It does not by itself prove that Mieszko intended permanent partition. The grant to Saint Peter may have sought papal protection, regularized ecclesiastical relations or supported Oda’s sons. We lack the original formula and context.</p>
+        <figure data-kind="map">
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Poland%20historical%20map%20AD%20960%20-%20992.png?width=1500" alt="Modern colour map reconstructing phases of Mieszko I’s Piast expansion between approximately 960 and 992, with neighbouring powers labelled.">
+          <figcaption><strong>A reconstruction, not the map attached to <em>Dagome iudex</em></strong><p>The document names a circuit; it does not provide a drawn map. This modern image turns uncertain textual place names and later knowledge into crisp regions. Use it to compare hypotheses, not as a surveyed tenth-century border.</p><p class="figure-meta">Poznaniak, modified by Bede, 2007 · CC BY-SA 3.0 · <a href="https://commons.wikimedia.org/wiki/File:Poland_historical_map_AD_960_-_992.png">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <p>Schinesghe is often connected with Gniezno, but proposals involving Szczecin or a name for the polity have been debated. “Long sea,” Prussian frontier, Rus, Kraków, the Oder, Alemure and the Milceni create a clockwise-seeming route only after editorial choices. Kraków’s appearance has been used to date Piast acquisition of Lesser Poland, yet the summary’s syntax and boundary logic are not transparent. A line on a modern map conceals the possibility that authority varied from core to corridor to claimed margin.</p>
+        <div class="interpretation"><h3>Three readings of the act</h3><ul><li><strong>Papal-protection reading:</strong> Mieszko placed his realm under Saint Peter to secure external and ecclesiastical support.</li><li><strong>Succession reading:</strong> Oda and her sons used the act to define or defend their expected inheritance against Bolesław.</li><li><strong>Administrative-memory reading:</strong> the surviving summary primarily reveals what a later canonist extracted; its odd titles and Sardinian guess warn against reconstructing a polished constitutional document.</li></ul><p>The readings can coexist. What cannot survive scrutiny is treating the text as a modern deed with unambiguous coordinates.</p></div>
+      </section>
+
+      <section class="companion-section" id="gniezno">
+        <p class="section-number">11 · Relics and diplomacy</p>
+        <h2>Adalbert, Bolesław and the Congress of Gniezno</h2>
+        <p class="lede dropcap">Mieszko died in 992. Bolesław, his adult son by Dobrawa, expelled Oda and his half-brothers and reunited the main inheritance. His early rule shows the violent uncertainty of dynastic succession. It also shows an exceptional ability to turn a missionary’s death into sacred and diplomatic capital.</p>
+        <p>Adalbert (Wojciech), a Přemyslid-connected bishop of Prague with a difficult relationship to his flock and ruling elite, left his see and pursued monastic and missionary life. In 997 he travelled under Bolesław’s protection toward Prussian lands and was killed. Hagiographers represented his death as martyrdom. Bolesław obtained the body—later tradition says for its weight in gold—and installed it at Gniezno. Relics made a place: a saint’s bodily presence drew pilgrims, liturgy and claims to protection.</p>
+        <p>Emperor Otto III had known Adalbert and revered him. His pilgrimage to Gniezno in 1000 was at once devotional and political. Bolesław received him with extraordinary display. A metropolitan archbishopric was created at Gniezno under Adalbert’s half-brother Radim-Gaudentius, with bishoprics at Kraków, Wrocław and Kołobrzeg; Poznań’s Bishop Unger remained outside or objected. This reduced dependence on the German archbishopric of Magdeburg and gave the Piast realm an ecclesiastical framework capable of surviving changes of ruler.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">A critical contemporary witness · Thietmar</p>
+          <p class="source-original" lang="la">Videns a longe urbem desideratam, nudis pedibus suppliciter advenit… Nec mora, fecit ibi archiepiscopatum, ut spero legitime, sine consensu tamen prefati presulis…</p>
+          <p class="source-translation">“Seeing from afar the city he had longed for, [Otto] approached humbly with bare feet… Without delay he established an archbishopric there—legitimately, as I hope, yet without the consent of the aforesaid bishop…”</p>
+          <p class="source-citation">Thietmar, <em>Chronicon</em> IV.45 (older numbering IV.28), account of the year 1000, Migne, <em>PL</em> 139, cols 1265C–1266B; <a href="https://la.wikisource.org/wiki/Chronicon_(Thietmarus_Merseburgensis)">public-domain Latin text</a>. New translation, shortened. The bishop whose consent concerned Thietmar was Unger of Poznań.</p>
+        </blockquote>
+        <p>Gallus, writing more than a century later, claimed that Otto called Bolesław “brother and partner of the empire” and gave him symbolic honours. Scholars debate whether the meeting amounted to a royal elevation, an imperial programme of federated Christian peoples, or a magnificent but less constitutional exchange. Otto died in 1002; his successor Henry II pursued different priorities and fought Bolesław. Later outcomes make a settled constitutional “Act of Gniezno” unlikely.</p>
+        <figure>
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Gniezno%20Cathedral%20detail%2002.jpg?width=1400" alt="Bronze relief panel from the twelfth-century Gniezno Doors, crowded with figures narrating an episode in Saint Adalbert’s life.">
+          <figcaption><strong>The Gniezno Doors remember Adalbert</strong><p>Cast in the twelfth century, these doors turn the saint’s life into a visual sequence. They are not contemporary pictures of his mission. They show how the restored Piast church later joined sacred biography, episcopal authority and dynastic memory.</p><p class="figure-meta">Unknown medieval makers; photographed/reproduced in 1956 · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Gniezno_Cathedral_detail_02.jpg">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <div class="interpretation"><h3>Discussion: what happened at Gniezno?</h3><ul><li><strong>Imperial-partnership emphasis:</strong> Otto imagined Bolesław as a major Christian ruler within a renovated Roman empire.</li><li><strong>Ecclesiastical emphasis:</strong> the durable result was a metropolitan structure centred on Adalbert’s shrine.</li><li><strong>Ritual-diplomatic emphasis:</strong> gifts and titles expressed personal friendship and negotiated rank without settling sovereignty in a modern legal sense.</li></ul><p>The evidence securely supports pilgrimage, extraordinary honour and church reorganization. Claims about a royal crown or a fixed blueprint for Europe are more contested.</p></div>
+      </section>
+
+      <section class="companion-section" id="war">
+        <p class="section-number">12 · A connected political world</p>
+        <h2>Empire, Bohemia, Rus and the cost of ambition</h2>
+        <p class="lede">Bolesław Chrobry’s reign was not a march toward fixed national borders. It was a series of interventions in a dynastic world where rulers competed for forts, tribute, heirs and recognition. His reach was impressive and unstable.</p>
+        <p>After Otto III’s death, Bolesław occupied Lusatia and Meissen-related territories and intervened in Bohemia. For a brief period he controlled Prague, but brutality and resistance helped end that position. Wars with Henry II continued in phases until the Peace of Bautzen in 1018. The settlement left Bolesław with Lusatia and the Milceni lands, apparently on favourable terms, but decades of campaigning consumed resources and produced devastation on both sides.</p>
+        <p>Thietmar’s hostility toward Bolesław is useful evidence, not a reason to discard him. The bishop called the ruler proud and deceitful, reported military operations in detail, and cared about imperial churches and aristocrats. His moral language reveals Saxon elite anxieties. Gallus later reversed the angle: Bolesław became an ideal conqueror whose abundance and justice exposed the inadequacy of lesser rulers. Neither author is a military communiqué.</p>
+        <p>Rus was connected by marriage and rivalry. In 1018 Bolesław campaigned to restore his son-in-law Sviatopolk in Kyiv, entered the city and carried wealth and captives west. Gallus’s later story that Bolesław struck Kyiv’s Golden Gate with his sword conflicts with the chronicle tradition that attributes the monumental gate to Yaroslav’s later building programme and is generally treated as a retrospective legend; the gate’s precise archaeological dating remains debated. The legend matters as a claim about triumphant kingship, not as a reliable eyewitness scene. The campaign did not turn Rus into a Polish province; Sviatopolk’s position soon collapsed.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">Rus chronicle tradition · entry under 981</p>
+          <p class="source-original" lang="orv">Иде [Володимеръ] к Лѧхомъ и заӕ градъı их̑ . Перемъıшль Червенъ . и инъı градъı . єже суть и до сего дн҃е подъ Русью.</p>
+          <p class="source-translation">“Volodimer went against the Lyakhs and took their strongholds—Peremyshl, Cherven and other strongholds—which remain under Rus to this day.”</p>
+          <p class="source-citation"><em>Povest’ vremennykh let</em>, Laurentian recension, entry 6489 (981), <em>Polnoe sobranie russkikh letopisei</em> I (1926), p. 82; <a href="https://imwerden.de/pdf/psrl_tom01_lavrentjevskaya_letopis_1926.pdf">public-domain edition scan</a>. New translation. Brackets mark the edition’s supplied reading; “Lyakhs” and the geography of the Cherven strongholds are debated.</p>
+        </blockquote>
+        <p>The 981 entry has been used in modern Polish, Ukrainian and Russian territorial arguments. It cannot bear that weight. It reflects an early twelfth-century Rus chronicle’s understanding of an earlier conquest. “Their strongholds” need not describe a modern ethnic state, and the later phrase “to this day” belongs to the compiler’s time. It does establish that the western Rus frontier and communities conventionally linked with the Lyakhs were part of remembered competition well before 1018.</p>
+        <figure data-kind="map">
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Poland%20under%20Boleslaw%20Chrobry.jpg?width=1500" alt="Nineteenth-century historical atlas map depicting territories associated with Bolesław Chrobry’s reign from 992 to 1025.">
+          <figcaption><strong>Bolesław’s realm through a nineteenth-century atlas</strong><p>Gustav Droysen’s 1886 map is itself a historical interpretation. Sharp colours fold short occupations, tributary zones and durable cores into one territorial image. Compare the dates and kinds of control before reading the outline as a border.</p><p class="figure-meta">Gustav Droysen, 1886 · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Poland_under_Boleslaw_Chrobry.jpg">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+      </section>
+
+      <section class="companion-section" id="crown">
+        <p class="section-number">13 · Political representation</p>
+        <h2>Crown, coin and the language of rule</h2>
+        <p class="lede dropcap">Bolesław was crowned king in 1025, near the end of his life, after the deaths of Henry II and Pope Benedict VIII changed the diplomatic setting. His son Mieszko II was also crowned. Royal title raised the dynasty’s rank, but a crown could not eliminate succession conflict or guarantee resources.</p>
+        <p>Coronation placed the ruler within a Christian liturgical model: a king was anointed, charged to defend church and justice, and represented as responsible before God. Whether Otto III had earlier granted a crown or merely honours remains disputed. The 1025 coronation is the safer institutional milestone. It signalled that Piast rulers no longer wished to appear merely as dukes within someone else’s hierarchy.</p>
+        <p>Coins carried similarly compressed messages. Early Piast issues were limited and varied. The famous <em>PRINCES POLONIE</em> denar has often been associated with Bolesław and with an early written form of the country’s name. Numismatists debate issuer, date, image and inscription. A coin type can be both economic instrument and political experiment: its silver travelled hand to hand, while its legend claimed recognizable authority.</p>
+        <figure>
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Denar%20rys%20chrobry1.png?width=1000" alt="Black-and-white reproduction of both sides of the early medieval PRINCES POLONIE silver denar, including a stylized head and cross-like design.">
+          <figcaption><strong><em>PRINCES POLONIE</em>: a tiny and disputed monument</strong><p>This reproduction comes from a 1927 publication. The legend is significant, but attribution to Bolesław and interpretation of the design remain subjects of numismatic debate. Do not enlarge certainty together with the image.</p><p class="figure-meta">Unknown medieval mint; 1927 public-domain reproduction · <a href="https://commons.wikimedia.org/wiki/File:Denar_rys_chrobry1.png">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <p>Representation also travelled through gifts. At Gniezno, imperial and Piast objects, relics and honours circulated. In the early eleventh century, Matilda of Swabia presented Mieszko II with a liturgical book accompanied by a dedication that praised his learning and kingship. The lost manuscript’s dedication image survives through reproduction. It places a Piast ruler inside elite Christian book culture and reminds us that queens, nuns and aristocratic women participated in diplomatic representation.</p>
+        <figure>
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Darstellung%20Mieszkos%20und%20Mathildes%20von%20Schwaben.jpg?width=1200" alt="Medieval dedication image showing Matilda of Swabia presenting a richly bound liturgical book to the enthroned Mieszko II.">
+          <figcaption><strong>Matilda presents a book to Mieszko II</strong><p>The early eleventh-century image associated learning, worship and rulership. It does not prove mass literacy. It shows an elite exchange in which manuscript culture helped define a Christian king.</p><p class="figure-meta">Unknown artist, St Gallen, first quarter of the eleventh century · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Darstellung_Mieszkos_und_Mathildes_von_Schwaben.jpg">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <div class="interpretation"><h3>Discussion: did kingship make the realm sovereign?</h3><p>Coronation asserted rank and sacral legitimacy, but “sovereignty” in its modern exclusive-territorial sense is misleading. A king could exchange oaths, accept mediation, hold disputed lands under negotiated terms and compete with relatives. Royal status mattered enormously as a claim; its practical force depended on followers, church support and succession.</p></div>
+      </section>
+
+      <section class="companion-section" id="crisis">
+        <p class="section-number">14 · Breakdown</p>
+        <h2>The 1030s: foreign invasion, dynastic fracture and revolt</h2>
+        <p class="lede">The monarchy’s rapid expansion proved difficult to reproduce. After Bolesław’s death, Mieszko II faced brothers with foreign support, conflict with the empire and Rus, and pressures inside the realm. By the 1030s political and ecclesiastical structures had fractured severely.</p>
+        <p>Mieszko II initially acted as a crowned ruler and pursued ambitions westward. In 1031 a coordinated attack by Emperor Conrad II and Yaroslav of Rus helped drive him out. His brother Bezprym seized power, sent the crown insignia to the emperor and was soon killed. Mieszko returned under constrained conditions, and after his death in 1034 the sequence becomes exceptionally obscure. Later sources do not allow a clean year-by-year narrative.</p>
+        <p>Traditionally, historians combine a “pagan reaction,” peasant revolt, elite rebellion and Czech invasion. These labels may refer to connected but distinct processes. Church institutions imposed dues and norms associated with the ruling network; stronghold extraction burdened producers; dynastic war weakened enforcement; local elites could reclaim autonomy. Some communities attacked clergy or rejected Christian obligations. Calling all resistance pagan can repeat the viewpoint of clerical sources and hide social conflict.</p>
+        <p>In 1038 or 1039 Duke Břetislav I of Bohemia invaded, devastated key Greater Polish centres and carried the relics of Adalbert from Gniezno to Prague. The raid was both plunder and sacred competition. Poznań, Gniezno and other nodes suffered. People were killed or displaced. Archaeological destruction layers illuminate severity, though not every burned site belongs to one campaign.</p>
+        <p>The crisis demonstrates that early institutions were real precisely because their breakdown had large consequences. A purely personal warband would not leave cathedrals, tribute systems and regional strongholds to contest. Yet those institutions were not self-sustaining. Without a ruler able to negotiate elite support and protect church centres, extraction could become rebellion and symbolic capital could be physically removed.</p>
+        <div class="interpretation"><h3>What caused the collapse?</h3><ul><li><strong>Overextension:</strong> Bolesław’s wars created a realm whose outer acquisitions and military costs exceeded durable capacity.</li><li><strong>Succession:</strong> no uncontested rule governed brothers, half-brothers, widows and external patrons.</li><li><strong>Social-religious resistance:</strong> tribute and church obligations generated opposition, especially when central protection failed.</li><li><strong>External opportunity:</strong> Rus, empire and Bohemia exploited internal division.</li></ul><p>A monocausal “pagan uprising destroyed Poland” story is inadequate. The crisis was a cascade in which dynastic, social, religious and international failures amplified one another.</p></div>
+      </section>
+
+      <section class="companion-section" id="restoration">
+        <p class="section-number">15 · Reconstruction</p>
+        <h2>Casimir the Restorer and a shift toward Kraków</h2>
+        <p class="lede dropcap">Casimir I earned the later title “the Restorer” because rebuilding, not uninterrupted inheritance, defined his rule. A Piast by descent and a Christian ruler by education, he needed external support and domestic partners to reassemble authority after the 1030s.</p>
+        <p>Casimir returned with support from the empire and an alliance with Yaroslav of Rus, sealed by marriage to Maria-Dobroniega. These connections did not make him a puppet; they show that restoration was international. The same neighbours who could help destroy one Piast claimant could support another when balance and kinship changed. Casimir defeated Miecław (Masław), a powerful ruler in Mazovia, with Rus aid and gradually recovered Silesia from Bohemian control while accepting a tributary settlement.</p>
+        <p>Kraków and Lesser Poland gained political weight as the old Greater Polish core lay damaged. It is misleading to imagine a formal capital transfer with a government decree. Courts remained itinerant, but resources, defensibility and church institutions made Kraków a crucial residence. The bishopric survived, and the region connected Hungary, Bohemia and Rus. Restoration therefore changed the spatial balance of Piast rule.</p>
+        <p>Monastic foundations helped rebuild church capacity. The Benedictine abbey at Tyniec is traditionally linked to Casimir, though exact foundation chronology is debated. Monasteries trained clergy, organized estates, preserved books and prayed for patrons. They were religious communities and political-economic institutions. Reconstructed Christianity did not simply return to a pre-crisis state; it expanded through new foundations and denser relationships with aristocratic landholding.</p>
+        <p>Casimir did not take a royal crown. This could reflect diplomatic constraint, lost regalia, papal-imperial conditions or strategic priority. Ducal title did not mean the disappearance of monarchy. He restored the capacity to collect, judge, appoint, campaign and transmit rule. His success reveals a key transformation: Piast legitimacy had become reusable. A dynasty that had nearly lost its material centre could appeal to memory, kinship and Christian office to rebuild it.</p>
+        <div class="interpretation"><h3>Discussion: continuity after catastrophe</h3><p>One interpretation stresses a second foundation—a realm rebuilt on new regional and ecclesiastical bases. Another stresses continuity of dynasty and core institutions. Both capture something. Restoration was possible because Piast and episcopal legitimacy survived; it was necessary because strongholds, population, relics and political relationships had been violently altered.</p></div>
+      </section>
+
+      <section class="companion-section" id="stanislaw">
+        <p class="section-number">16 · Authority and conflict</p>
+        <h2>Bolesław II, Bishop Stanisław and irrecoverable motives</h2>
+        <p class="lede">Casimir’s son Bolesław II the Bold renewed intervention abroad, supported papal reform and was crowned king in 1076. Three years later he lost his throne after the killing of Stanisław, bishop of Kraków. The event became one of medieval Poland’s most powerful political-religious memories, but the evidence closest to it is painfully thin.</p>
+        <p>Bolesław participated in conflicts involving Hungary, Bohemia and Rus and aligned with Pope Gregory VII during the Investiture Contest. Papal support and church reform strengthened his coronation claim. This was not a modern programme of national independence from Germany; it was participation in a Europe-wide struggle over legitimate kingship and episcopal authority.</p>
+        <p>Gallus Anonymus, writing about a generation later under Bolesław III, said that the king should not have punished “one anointed person bodily for the sin of another” and used the language of betrayal for the bishop, while refusing to defend the king’s deed. The wording is deliberately guarded. It tells us that both treason and disproportionate royal violence were part of elite memory. It does not disclose the charge, trial procedure or exact manner of death.</p>
+        <p>Wincenty Kadłubek, writing about a century later, transformed the episode. Stanisław rebuked a tyrant, suffered mutilation and became a martyr; eagles guarded his body. This version shaped canonization in 1253 and later political symbolism. The saint’s divided body could represent a divided realm destined for reunification. The later story is invaluable for twelfth- and thirteenth-century ideas, but details added by it cannot be silently moved back to 1079.</p>
+        <p>Possible contexts include aristocratic rebellion, disputes over royal discipline after campaigns, church reform and conflict about property or jurisdiction. None can be proven as the single cause. Bolesław fled; his brother Władysław Herman ruled without a crown and under strong aristocratic influence. The monarchy survived, but royal ambition was checked.</p>
+        <div class="interpretation"><h3>How should a contested event be narrated?</h3><ul><li>Begin with the nearest source and quote its ambiguity rather than filling the gap.</li><li>Separate later hagiography from contemporary fact without calling it worthless.</li><li>Explain what each version did politically: Gallus balanced warning and dynasty; Kadłubek produced a martyr and model of moral resistance.</li><li>Keep several causal contexts open when no decisive document survives.</li></ul></div>
+      </section>
+
+      <section class="companion-section" id="gallus">
+        <p class="section-number">17 · Writing the dynasty</p>
+        <h2>Bolesław III and Gallus Anonymus’s usable past</h2>
+        <p class="lede dropcap">The anonymous author conventionally called Gallus wrote the <em>Gesta principum Polonorum</em> around 1112–1116. He served a court seeking to justify Bolesław III after civil war, the defeat and blinding of his half-brother Zbigniew, and public penance. The earliest connected narrative of Piast beginnings is therefore also a work of political repair.</p>
+        <p>Gallus gave the dynasty a providential genealogy. The humble Piast hospitably received mysterious guests; the bad ruler Popiel was consumed by mice; Piast descendants rose through virtue. Mieszko’s childhood blindness foreshadowed a realm illuminated by Christianity. These are not independent records from the ninth and tenth centuries. They are literary structures that make Christian Piast rule appear morally destined.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">Court history explaining its own selection · Gallus</p>
+          <p class="source-original" lang="la">Sed istorum gesta, quorum memoriam oblivio vetustatis abolevit, et quos error et ydolatria defoedavit, memorare negligamus, et ad ea recitanda, quae fidelis recordatio meminit, istos succincte nominando transeamus.</p>
+          <p class="source-translation">“But let us refrain from recalling the deeds of those whose memory the oblivion of antiquity erased and whom error and idolatry defiled; naming them briefly, let us pass to recounting those things that faithful memory remembers.”</p>
+          <p class="source-citation">Gallus Anonymus, <em>Gesta principum Polonorum</em> I.3, I. Szlachtowski and R. Köpke, eds., <em>MGH Scriptores</em> 9 (Hanover, 1851), p. 427; <a href="https://www.dmgh.de/mgh_ss_9/index.htm#page/427/mode/1up">Digital MGH scan</a>. New translation.</p>
+        </blockquote>
+        <p>The sentence is a gift to source criticism. Gallus openly distinguishes a pagan antiquity he will compress from “faithful memory” he will narrate. <em>Fidelis</em> can mean trustworthy and faithful in the Christian sense. The chronicler did not pretend to preserve everything. His silence and moral categories helped create the boundary between legend and dynastic history.</p>
+        <blockquote class="source-excerpt">
+          <p class="source-label">A geographical and moral gaze · Gallus</p>
+          <p class="source-original" lang="la">Quae regio, quamvis multum sit nemorosa, auro tamen et argento, pane et carne, pisce et melle satis est copiosa.</p>
+          <p class="source-translation">“This region, although very wooded, is nevertheless amply supplied with gold and silver, bread and meat, fish and honey.”</p>
+          <p class="source-citation">Gallus, <em>Gesta</em>, geographical prologue, I. Szlachtowski and R. Köpke, eds., <em>MGH Scriptores</em> 9 (Hanover, 1851), p. 425; <a href="https://www.dmgh.de/mgh_ss_9/index.htm#page/425/mode/1up">Digital MGH scan</a>. New translation. The surrounding passage describes neighbours through hostile Christian stereotypes and serves praise of Bolesław III’s realm.</p>
+        </blockquote>
+        <figure>
+          <img loading="lazy" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Prima%20Pagina%20Chronicae%20Galli%20Anonymi%20Polona.jpg?width=1200" alt="First page of Gallus Anonymus’s chronicle in the fourteenth-century Zamoyski Codex, written in two columns of Latin script.">
+          <figcaption><strong>Gallus survives in later manuscripts</strong><p>The chronicle was composed in the early twelfth century, but this principal manuscript dates to around 1360. Copying preserved the text while introducing the ordinary possibility of variants. The page is material evidence for reception as well as a window onto Gallus.</p><p class="figure-meta">Gallus Anonymus text; Zamoyski Codex copy, c. 1360 · Public domain · <a href="https://commons.wikimedia.org/wiki/File:Prima_Pagina_Chronicae_Galli_Anonymi_Polona.jpg">Wikimedia Commons source and licence record</a>.</p></figcaption>
+        </figure>
+        <p>Bolesław III’s own reign combined fratricidal conflict, diplomacy and expansion. After struggle with Zbigniew, he became sole ruler; Zbigniew’s blinding and death produced a legitimacy crisis. Bolesław performed penance, while Gallus praised victories and insisted on princely virtues without hiding every fault. Campaigns brought Pomeranian rulers into varying forms of submission, and Bishop Otto of Bamberg later led missions there. Again, conquest and conversion were linked but not identical.</p>
+        <p>Gallus should be neither believed literally nor mined only for propaganda. His knowledge of court geography, ritual, offices and recent campaigns is substantial. His songs, speeches and exemplary episodes reveal what an elite audience could find persuasive. Read alongside Thietmar, annals, charters, coins and archaeology, he helps reconstruct both events and the making of memory.</p>
+      </section>
+
+      <section class="companion-section" id="society">
+        <p class="section-number">18 · Life beyond the ruler</p>
+        <h2>Households, labour, law and religion from below</h2>
+        <p class="lede">Political sources place rulers in the foreground because rulers funded writing. Most inhabitants appear as the labour and resources on which courts acted. An in-depth history must reverse the scale and ask what monarchy changed in fields, workshops, households and local sacred worlds.</p>
+        <p>Free status and unfreedom formed a spectrum rather than two simple classes. Armed retainers and leading families could receive gifts, shares of booty, offices and control over dependants. Peasant households owed dues and labour in forms that varied by region and time. Captives might be sold, resettled or incorporated as dependent workers. “Service settlements” known from later records and place-name studies have been connected to specialized production for strongholds, but the degree to which a planned system already existed under the first rulers is debated.</p>
+        <p>Craft knowledge included ironworking, pottery, woodworking, leatherwork, textile production, antler and bone work, jewellery and construction. Much work assigned by later sources or archaeology to “craftsmen” was performed within households, including by women and children. Textile tools in settlements and graves reveal labour without naming the worker. Elite objects survive disproportionately; an undecorated knife or spindle whorl may tell more about ordinary routine than a ceremonial sword.</p>
+        <p>Diet marked ecology and inequality. Animal assemblages differ between fortified centres and rural sites; elite consumption could emphasize particular cuts or species. Isotopic analysis can identify some differences in diet and mobility, but samples are local and preservation selective. Disease, injury and skeletal stress reveal lives exposed to labour and violence without turning every body into a representative citizen.</p>
+        <p>Law was initially customary, oral and situational. Rulers judged disputes, imposed fines and negotiated with elites; church norms added rules concerning marriage, fasting, sanctuary and clerical privilege. Later chroniclers attribute harsh enforcement of fasting or sexual morality to early rulers, but such stories may project reforming ideals backward. Compliance depended on reach. A command announced at court was not instantly a village practice hundreds of kilometres away.</p>
+        <p>Religious life mixed calendars and material habits. Christian feasts reorganized elite time; saints and relics offered new patrons; crosses appeared on objects; churches created consecrated burial zones. Older protective gestures, seasonal customs and relations with ancestors did not vanish uniformly. Syncretism can be a useful word, provided it does not imply that Christianity and a single coherent pagan system were two liquids poured together. People selected, reinterpreted and contested practices.</p>
+        <p>Regional diversity endured. Pomeranian port communities connected to Baltic exchange differed from inland stronghold zones. Silesia and Lesser Poland carried ties to Bohemia and Moravia; Mazovia had its own political trajectory; frontier zones toward Rus and Prussia were multilingual and mobile. Jewish merchants, including travellers known in Latin sources as Radhanites, participated in long-distance networks, but evidence for settled Jewish communities in the earliest Piast core is limited and should not be exaggerated.</p>
+        <p>By 1138 the realm had bishops, monasteries, a remembered dynasty, a political name and an elite that expected to influence succession. It did not have mass schooling, uniform parish coverage, a single vernacular standard or ethnically homogeneous population. The monarchy’s achievement was not completion. It was the creation of institutions strong enough to be fought over, broken and restored.</p>
+        <div class="interpretation"><h3>Discussion: whose state was it?</h3><p>Calling it “Mieszko’s state” captures concentrated rule but hides the labour of cultivators, builders, warriors, clerics, craftspeople, captives and household managers. Calling it “the Polish people’s state” projects collective ownership backward. “Piast polity” keeps the ruler visible; social history then asks how different people enabled, negotiated or suffered that polity.</p></div>
+      </section>
+
+      <section class="companion-section" id="workshop">
+        <p class="section-number">19 · Historical reasoning workshop</p>
+        <h2>How competing interpretations are built</h2>
+        <p class="lede dropcap">Disagreement is not evidence that “anything goes.” Strong interpretations explain more evidence with fewer unsupported assumptions, state where inference begins, and remain open to revision. This workshop compares claims by tracing the chain from source to conclusion.</p>
+        <h3>Case 1: Was the Piast polity created by conquest?</h3>
+        <p><strong>Evidence:</strong> closely dated fort construction in Greater Poland; destruction or abandonment of some older centres; concentrated labour; later military capacity. <strong>Inference:</strong> a new centre forcibly displaced rivals and redirected resources. <strong>Alternative:</strong> local elites may have joined a successful network while some destruction had unrelated causes. <strong>Judgement:</strong> coercive acceleration is strongly plausible at regional scale; a complete foreign conquest or total population replacement is not demonstrated.</p>
+        <h3>Case 2: Did baptism prevent German conquest?</h3>
+        <p><strong>Evidence:</strong> mission and frontier war could overlap; Mieszko fought Saxon actors and entered imperial relations; marriage connected Bohemia. <strong>Inference:</strong> Christian status reduced a religious pretext and improved diplomatic position. <strong>Alternative:</strong> immediate alliance, internal legitimacy and sincere belief may have mattered as much or more. <strong>Judgement:</strong> security was one benefit, but the popular one-cause story invents a unified German plan and private motive that sources do not supply.</p>
+        <h3>Case 3: Did Gniezno make Bolesław a king?</h3>
+        <p><strong>Evidence:</strong> Otto’s pilgrimage, symbolic gifts, Gallus’s “brother and partner” language, and a new archbishopric; formal coronation occurred in 1025. <strong>Inference:</strong> Otto elevated Bolesław to quasi-royal status. <strong>Alternative:</strong> the acts expressed exceptional friendship and ecclesiastical autonomy without a coronation. <strong>Judgement:</strong> enhanced rank and partnership are clear; the exact legal status is not.</p>
+        <h3>Case 4: Was the 1030s revolt “pagan”?</h3>
+        <p><strong>Evidence:</strong> later clerical reports of reaction against Christianity, destruction of church centres, political collapse and social unrest. <strong>Inference:</strong> communities rejected a shallow conversion. <strong>Alternative:</strong> resistance targeted dues, lords and institutions during dynastic chaos, with religious language describing a broader revolt. <strong>Judgement:</strong> anti-Christian action occurred, but “pagan reaction” should not erase social and political causation.</p>
+        <h3>Case 5: What does a medieval map mean?</h3>
+        <p>No map used in this companion was drawn by Mieszko or Bolesław. Modern maps decide which dates to combine and which kind of control deserves colour. Reconstructing a core stronghold region is easier than drawing a frontier. A responsible map key should distinguish direct core, tributary or temporarily occupied zone, route, neighbouring power and disputed location. When it does not, the caption must.</p>
+        <div class="interpretation"><h3>A practical ladder of confidence</h3><ol><li><strong>Directly attested:</strong> a source says or an excavated context demonstrates something, with provenance.</li><li><strong>Corroborated reconstruction:</strong> independent source types support the same broad conclusion.</li><li><strong>Plausible inference:</strong> evidence fits, but alternatives remain.</li><li><strong>Later memory:</strong> valuable for reception, unsafe as direct event description.</li><li><strong>Speculation:</strong> possible, but currently underdetermined.</li></ol><p>Good historical prose signals movement between these levels. Words such as “probably,” “may,” “later tradition” and “scholars dispute” are analytical instruments, not weakness.</p></div>
+        <h3>Questions for discussion</h3>
+        <ol>
+          <li>Does using “state” clarify Piast capacities or import too much modern administration?</li>
+          <li>How would Chapter 1 change if organized around a captive, a stronghold builder, Dobrawa’s household or Bishop Unger rather than rulers?</li>
+          <li>Which is more durable: a conquered frontier, a bishopric, a royal title, or a story about rightful dynasty?</li>
+          <li>Why did the monarchy survive the 1030s crisis but not prevent division after 1138?</li>
+        </ol>
+        <p>The last question leads to Chapter 2. Bolesław III’s 1138 succession arrangement allocated major regions among sons while reserving senior authority connected with Kraków. It was intended to preserve dynasty and order, not to create independent nation-states. Rival branches, local elites and changing regional economies turned the settlement into prolonged fragmentation. The institutions built before 1138 endured, but no ruler could monopolize them.</p>
+      </section>
+
+      <section class="companion-section" id="sources">
+        <p class="section-number">20 · Documentation</p>
+        <h2>Sources, notes and further literature</h2>
+        <p class="lede">The list below is a route into the evidence, not a claim that every controversy is settled. “Primary source” means a text or object produced within the period or its medieval reception; it does not mean neutral. Modern translations are identified so readers can consult them, but this companion’s displayed translations were made directly from the cited public-domain originals.</p>
+        <h3>Primary sources and editions</h3>
+        <ol class="bibliography">
+          <li class="bibliography-entry"><strong>Widukind of Corvey.</strong> <em>Res gestae Saxonicae</em>, especially III.66–69. Paul Hirsch and Hans-Eberhard Lohmann, eds., MGH Scriptores rerum Germanicarum 60 (Hanover, 1935). <a href="https://www.dmgh.de/mgh_ss_rer_germ_60/index.htm">Digital MGH edition</a>.</li>
+          <li class="bibliography-entry"><strong>Thietmar of Merseburg.</strong> <em>Chronicon</em>. Robert Holtzmann, ed., MGH Scriptores rerum Germanicarum, n.s. 9 (Berlin, 1935); David A. Warner, trans., <em>Ottonian Germany: The Chronicon of Thietmar of Merseburg</em> (Manchester University Press, 2001), ISBN 9780719049262.</li>
+          <li class="bibliography-entry"><strong>Ibrāhīm ibn Yaʿqūb.</strong> Account transmitted by al-Bakrī. Tadeusz Kowalski, <em>Ibrahim ibn Yaqub’s Account of His Travel to Slavic Countries as Transmitted by Al-Bakri: With Contemporary Commentaries</em>, revised and edited by Mustafa Switat (Peter Lang, 2022), DOI <a href="https://doi.org/10.3726/b18590">10.3726/b18590</a>.</li>
+          <li class="bibliography-entry"><strong><em>Dagome iudex.</em></strong> Summary in Cardinal Deusdedit, <em>Collectio canonum</em> III.199. See Przemysław Nowak, “Recent Work on the <em>Dagome iudex</em> in the <em>Collectio canonum</em> of Cardinal Deusdedit,” in Pavel Otmar Krafl, ed., <em>Sacri canones editandi</em> (Brno, 2017), 25–39; and Nowak’s <a href="https://rcin.org.pl/dlibra/show-content/publication/edition/35498">source study and bibliography</a> in <em>Studia Źródłoznawcze</em> 51 (2013).</li>
+          <li class="bibliography-entry"><strong>Gallus Anonymus.</strong> <em>Gesta principum Polonorum</em>. Karol Maleczyński, ed., <em>Monumenta Poloniae Historica</em>, n.s. 2 (Kraków, 1952); Paul W. Knoll and Frank Schaer, trans., <em>The Deeds of the Princes of the Poles</em> (Central European University Press, 2003), ISBN 9789639241404.</li>
+          <li class="bibliography-entry"><strong>Cosmas of Prague.</strong> <em>Chronica Boemorum</em>. Bertold Bretholz, ed., MGH Scriptores rerum Germanicarum, n.s. 2 (Berlin, 1923); Lisa Wolverton, trans., <em>The Chronicle of the Czechs</em> (Catholic University of America Press, 2009), ISBN 9780813215709.</li>
+          <li class="bibliography-entry"><strong><em>Povest’ vremennykh let</em> / Primary Chronicle.</strong> Donald Ostrowski et al., eds., <em>The Povest’ vremennykh let: An Interlinear Collation and Paradosis</em> (Harvard Ukrainian Research Institute, 2003); Samuel H. Cross and Olgerd P. Sherbowitz-Wetzor, trans., <em>The Russian Primary Chronicle</em> (Cambridge, MA, 1953).</li>
+          <li class="bibliography-entry"><strong>Adalbert vitae.</strong> Johannes Canaparius (attributed), <em>Vita prior sancti Adalberti</em>, and Bruno of Querfurt, <em>Vita altera</em>, in Jadwiga Karwasińska, ed., <em>Monumenta Poloniae Historica</em>, n.s. 4 (Warsaw, 1962–1969).</li>
+          <li class="bibliography-entry"><strong>Papal correspondence.</strong> Gregory VII, letter to Bolesław II, <em>Registrum</em> II.73 (1075), in Erich Caspar, ed., MGH <em>Epistolae selectae</em> 2.</li>
+          <li class="bibliography-entry"><strong>Material sources.</strong> Site reports for Poznań, Gniezno, Giecz and Ostrów Lednicki; coin catalogues and archaeometric studies should be preferred over isolated object photographs.</li>
+        </ol>
+        <h3>Accessible overviews</h3>
+        <ol class="bibliography">
+          <li class="bibliography-entry">Nora Berend, Przemysław Urbańczyk and Przemysław Wiszewski, <em>Central Europe in the High Middle Ages: Bohemia, Hungary and Poland, c. 900–c. 1300</em> (Cambridge University Press, 2013), DOI <a href="https://doi.org/10.1017/CBO9780511813795">10.1017/CBO9780511813795</a>.</li>
+          <li class="bibliography-entry">Jerzy Lukowski and Hubert Zawadzki, <em>A Concise History of Poland</em>, 3rd ed. (Cambridge University Press, 2019), opening chapters.</li>
+          <li class="bibliography-entry">Norman Davies, <em>God’s Playground: A History of Poland</em>, vol. 1, revised ed. (Oxford University Press, 2005). Broad and readable; compare its synthesis with newer archaeology.</li>
+          <li class="bibliography-entry">Robert Bartlett, <em>The Making of Europe: Conquest, Colonization and Cultural Change, 950–1350</em> (Princeton University Press, 1993), for comparative Latin-Christian expansion.</li>
+          <li class="bibliography-entry">Richard Fletcher, <em>The Barbarian Conversion: From Paganism to Christianity</em> (Henry Holt, 1997), for comparative conversion processes.</li>
+          <li class="bibliography-entry">Paul M. Barford, <em>The Early Slavs: Culture and Society in Early Medieval Eastern Europe</em> (Cornell University Press, 2001), ISBN 9780801439773.</li>
+        </ol>
+        <h3>State formation, archaeology and economy</h3>
+        <ol class="bibliography">
+          <li class="bibliography-entry">Andrzej Buko, <em>The Archaeology of Early Medieval Poland: Discoveries—Hypotheses—Interpretations</em> (Brill, 2008), ISBN 9789004162303.</li>
+          <li class="bibliography-entry">Zbigniew Dalewski, “The Origins of the Piast Dynasty and Its Polity in Historiographical Perspective,” <em>History Compass</em> 18, no. 12 (2020), DOI <a href="https://doi.org/10.1111/hic3.12638">10.1111/hic3.12638</a>.</li>
+          <li class="bibliography-entry">Zofia Kurnatowska, <em>Początki Polski</em> (Poznań, 2002), a concise archaeological synthesis in Polish.</li>
+          <li class="bibliography-entry">Michał Kara, <em>Najstarsze państwo Piastów—rezultat przełomu czy kontynuacji?</em> (Poznań, 2009), on chronology and the character of state formation.</li>
+          <li class="bibliography-entry">Przemysław Urbańczyk, <em>Mieszko Pierwszy Tajemniczy</em> (Toruń, 2012), a deliberately revisionist study to read alongside critical reviews.</li>
+          <li class="bibliography-entry">Mateusz Bogucki, studies of early Piast coinage and the <em>PRINCES POLONIE</em> type; consult current numismatic catalogues because attributions have changed.</li>
+          <li class="bibliography-entry">Dariusz Adamczyk, <em>Silber und Macht: Fernhandel, Tribute und die piastische Herrschaftsbildung in nordosteuropäischer Perspektive (800–1100)</em> (Harrassowitz, 2014), on silver, exchange and power.</li>
+          <li class="bibliography-entry">Søren M. Sindbæk and Athena Trakadas, eds., <em>The World in the Viking Age</em> (Viking Ship Museum, 2014), for Baltic networks; use comparative chapters rather than equating all northern objects with Vikings.</li>
+          <li class="bibliography-entry">Florin Curta, <em>The Making of the Slavs: History and Archaeology of the Lower Danube Region, c. 500–700</em> (Cambridge University Press, 2001), DOI <a href="https://doi.org/10.1017/CBO9780511496295">10.1017/CBO9780511496295</a>. Influential for ethnogenesis, though focused south of the Piast core.</li>
+        </ol>
+        <h3>Christianization, rulership and memory</h3>
+        <ol class="bibliography">
+          <li class="bibliography-entry">Nora Berend, ed., <em>Christianization and the Rise of Christian Monarchy: Scandinavia, Central Europe and Rus’, c. 900–1200</em> (Cambridge University Press, 2007), DOI <a href="https://doi.org/10.1017/CBO9780511496400">10.1017/CBO9780511496400</a>.</li>
+          <li class="bibliography-entry">Dariusz A. Sikorski, <em>Kościół w Polsce za Mieszka I i Bolesława Chrobrego</em> (Poznań, 2011), a critical Polish-language study of early church organization.</li>
+          <li class="bibliography-entry">Roman Michałowski, <em>Princeps fundator: studium z dziejów kultury politycznej w Polsce X–XIII wieku</em> (Warsaw, 1993), on foundation and political culture.</li>
+          <li class="bibliography-entry">Stanisław Rosik, <em>The Slavic Religion in the Light of 11th- and 12th-Century German Chronicles</em> (Brill, 2020), DOI <a href="https://doi.org/10.1163/9789004331488">10.1163/9789004331488</a>.</li>
+          <li class="bibliography-entry">Piotr Górecki, <em>Economy, Society, and Lordship in Medieval Poland, 1100–1250</em> (Holmes &amp; Meier, 1992), useful for structures visible just after this chapter’s endpoint.</li>
+          <li class="bibliography-entry">Zbigniew Dalewski, <em>Ritual and Politics: Writing the History of a Dynastic Conflict in Medieval Poland</em> (Brill, 2008), DOI <a href="https://doi.org/10.1163/ej.9789004166578.i-218">10.1163/ej.9789004166578.i-218</a>.</li>
+          <li class="bibliography-entry">Jacek Banaszkiewicz, studies of the Piast dynastic tradition and Gallus’s foundation stories, especially <em>Podanie o Piaście i Popielu</em> (Warsaw, 1986).</li>
+          <li class="bibliography-entry">Paweł Żmudzki, <em>Władca i wojownicy: narracje o wodzach, drużynie i wojnach w najdawniejszej historiografii Polski i Rusi</em> (Wrocław, 2009), on narrative models of rulers and warriors.</li>
+          <li class="bibliography-entry">Eduard Mühle, <em>Die Piasten: Polen im Mittelalter</em> (C.H. Beck, 2011), a compact German-language dynastic history.</li>
+          <li class="bibliography-entry">Ildar H. Garipzanov, <em>The Symbolic Language of Authority in the Carolingian World (c. 751–877)</em> (Brill, 2008), for comparative tools; its earlier western focus should not be copied mechanically onto the Piasts.</li>
+        </ol>
+        <h3>How to use the bibliography</h3>
+        <p>Begin with Berend, Urbańczyk and Wiszewski for a comparative political frame and Buko for archaeological method. Read a modern primary-source translation beside the original passage and its editorial notes. Then choose one controversy—fort chronology, baptism, <em>Dagome iudex</em>, Gniezno, the 1030s, or Gallus—and compare at least two specialists. Publication date alone does not determine quality, but older syntheses written before dendrochronological results should not be treated as the last word.</p>
+        <p class="notes"><strong>Media note.</strong> All ten visuals are remotely loaded from Wikimedia Commons and remain subject to the licence stated in each caption. Public-domain status applies to the medieval or historical work and its eligible reproduction as recorded by Commons; CC-licensed modern maps and photographs require attribution. The images teach evidence and memory. None is offered as a photographic likeness of a tenth-century ruler or as an exact medieval boundary survey.</p>
+        <p class="notes"><strong>Editorial note.</strong> This is a broad educational companion, not a substitute for site reports, critical editions or specialist peer review. Polish, German, Czech, Ukrainian and Russian scholarship contains debates not fully represented in English. Terminology and bibliography were last reviewed in July 2026.</p>
+        <dl class="glossary">
+          <dt>gród / stronghold</dt><dd>A fortified centre with changing defensive, residential, storage, ritual and administrative functions.</dd>
+          <dt>retinue</dt><dd>Armed and household followers maintained through food, gifts, office, booty and personal loyalty.</dd>
+          <dt>tributary polity</dt><dd>A ruling formation that draws resources and allegiance from communities without uniform territorial administration.</dd>
+          <dt>ethnogenesis</dt><dd>The historical formation and reformulation of collective identities rather than the survival of timeless peoples.</dd>
+          <dt>hagiography</dt><dd>Writing about saints, designed to teach and promote cult as well as preserve information.</dd>
+          <dt>provenance</dt><dd>The documented origin, transmission and custody that allow a text or object to be evaluated.</dd>
+        </dl>
+        <p class="page-note">Companion to “Before Poland and the Piast monarchy,” Polish History Quest. Return to the main chapter to complete its contextual reading and four-question assessment.</p>
+        <a class="back-to-top" href="#top">↑ Back to the beginning</a>
+      </section>
+    </main>
+    </body>
+    </html>
   index.html: "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\"
     />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"
     />\n    <meta name=\"description\" content=\"Polish History Quest: an interactive
@@ -577,20 +1160,22 @@ data:
     500–1138`,title:`Before Poland and the Piast monarchy`,key:`State formation joined
     local societies to Latin Christian Europe.`,summary:`Slavic settlement, Piast
     expansion, Christianization and the first monarchy created a durable political
-    centre, but not yet a modern nation-state.`,sections:[n(`context`,`Land, settlement
-    and early power`,`The Vistula and Oder basins connected the Baltic coast with
-    Central European trade routes. West Slavic communities farmed, traded amber, salt,
-    furs and enslaved people, and organized around fortified settlements known as
-    grody. Archaeology reveals regional networks rather than a single timeless Polish
-    tribe. During the tenth century the Piast dynasty expanded from Greater Poland,
-    absorbing or subordinating neighbouring communities and building a stronger military-fiscal
-    court.`),n(`events`,`Baptism, crown and political survival`,`Mieszko I accepted
-    Latin Christianity in 966, probably through his marriage to the Bohemian princess
-    Dobrawa. The decision brought clergy, writing, diplomatic recognition and protection
-    against claims that pagan lands could simply be conquered for conversion. Bolesław
-    I Chrobry hosted Emperor Otto III at Gniezno in 1000 and was crowned king in 1025.
-    Rebellions and dynastic crises followed; the monarchy was repeatedly rebuilt,
-    showing both its fragility and its institutional value.`),n(`international`,`Between
+    centre, but not yet a modern nation-state.`,companion:{title:`Read the in-depth
+    companion`,description:`Explore the period in a source-led, printable study with
+    maps, archaeological evidence, translated excerpts and competing historical interpretations.`,href:`./chapter-1-companion.html`},sections:[n(`context`,`Land,
+    settlement and early power`,`The Vistula and Oder basins connected the Baltic
+    coast with Central European trade routes. West Slavic communities farmed, traded
+    amber, salt, furs and enslaved people, and organized around fortified settlements
+    known as grody. Archaeology reveals regional networks rather than a single timeless
+    Polish tribe. During the tenth century the Piast dynasty expanded from Greater
+    Poland, absorbing or subordinating neighbouring communities and building a stronger
+    military-fiscal court.`),n(`events`,`Baptism, crown and political survival`,`Mieszko
+    I accepted Latin Christianity in 966, probably through his marriage to the Bohemian
+    princess Dobrawa. The decision brought clergy, writing, diplomatic recognition
+    and protection against claims that pagan lands could simply be conquered for conversion.
+    Bolesław I Chrobry hosted Emperor Otto III at Gniezno in 1000 and was crowned
+    king in 1025. Rebellions and dynastic crises followed; the monarchy was repeatedly
+    rebuilt, showing both its fragility and its institutional value.`),n(`international`,`Between
     empire, papacy, Bohemia and Rus`,`Early Piast rulers operated in a competitive
     zone between the Holy Roman Empire, Bohemia, Kievan Rus and Baltic peoples. They
     alternated warfare, tribute and marriage diplomacy rather than pursuing permanent
@@ -1797,7 +2382,10 @@ data:
     q(){let e=document.getElementById(`modal`);e.classList.contains(`open`)&&(e.classList.remove(`open`),e.setAttribute(`aria-hidden`,`true`),fe(!1),document.body.classList.remove(`modal-open`),y?.focus())}function
     J(){let e=W();document.getElementById(`chapterBody`).innerHTML=`\n    <div class=\"chapter-layout\">\n
     \     <main>${he(e)}${ge(e)}</main>\n      <aside class=\"chapter-sidebar\"><div
-    class=\"card\"><div class=\"kicker\">Central idea</div><p>${e.key}</p></div><div
+    class=\"card\"><div class=\"kicker\">Central idea</div><p>${e.key}</p></div>${e.companion?`<div
+    class=\"card companion-callout\"><div class=\"kicker\">Go deeper</div><h3>${e.companion.title}</h3><p>${e.companion.description}</p><a
+    class=\"companion-link\" href=\"${e.companion.href}\" target=\"_blank\" rel=\"noopener
+    noreferrer\" aria-label=\"Open companion in a new tab\">Open companion <span aria-hidden=\"true\">↗</span></a></div>`:``}<div
     class=\"card\"><div class=\"kicker\">Important actors</div><div class=\"actor-grid\">${e.actors.map(e=>`<article
     class=\"actor\"><h4>${e.name}</h4><p>${e.role}</p></article>`).join(``)}</div></div></aside>\n
     \   </div>\n    ${ve(e)}`,ye()}function me(e){return{context:`Context`,events:`Events
@@ -2076,7 +2664,8 @@ data:
     var(--line);justify-content:space-between;align-items:center;gap:.7rem;padding:.8rem
     1rem;display:flex}.section-nav span{color:var(--muted);font-size:.88rem;font-weight:750}.actor-grid{gap:.65rem;display:grid}.actor{background:var(--paper-warm);border:1px
     solid var(--line);border-radius:14px;padding:.7rem}.actor h4{margin:0 0 .35rem;font-size:.95rem}.actor
-    p{margin:0;font-size:.86rem;line-height:1.48}.chapter-quiz{margin-top:1rem;padding:1.2rem}.quiz-head{justify-content:space-between;align-items:start;gap:1rem;display:flex}.quiz-head
+    p{margin:0;font-size:.86rem;line-height:1.48}.companion-callout{background:linear-gradient(145deg,#fffdf8,#f5ead8);border-color:#9f5a2559}.companion-callout
+    h3{margin:.35rem 0 .55rem}.companion-link{color:var(--crimson-dark);text-underline-offset:.2em;align-items:center;gap:.45rem;margin-top:.35rem;font-weight:850;display:inline-flex}.companion-link:hover{color:var(--ink)}.chapter-quiz{margin-top:1rem;padding:1.2rem}.quiz-head{justify-content:space-between;align-items:start;gap:1rem;display:flex}.quiz-head
     h3{margin:.35rem 0;font-size:1.55rem}.quiz-progress{color:var(--muted);flex-direction:column;align-items:end;display:flex}.quiz-progress
     strong{color:var(--green)}.question-dots{flex-wrap:wrap;gap:.45rem;margin:1rem
     0;display:flex}.question-dot{border:1px solid var(--line);cursor:pointer;background:#fff;border-radius:999px;width:38px;height:38px;font-weight:850}.question-dot.active{border-color:var(--crimson);outline:3px

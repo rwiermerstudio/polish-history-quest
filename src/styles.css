@@ -149,6 +149,10 @@ h2 { margin:.2rem 0; font-size: clamp(1.85rem, 4vw, 3.2rem); line-height:1; lett
 .actor { padding:.7rem; border-radius:14px; background:var(--paper-warm); border:1px solid var(--line); }
 .actor h4 { margin:0 0 .35rem; font-size:.95rem; }
 .actor p { margin:0; font-size:.86rem; line-height:1.48; }
+.companion-callout { border-color:rgba(159,90,37,.35); background:linear-gradient(145deg,#fffdf8,#f5ead8); }
+.companion-callout h3 { margin:.35rem 0 .55rem; }
+.companion-link { display:inline-flex; align-items:center; gap:.45rem; margin-top:.35rem; color:var(--crimson-dark); font-weight:850; text-underline-offset:.2em; }
+.companion-link:hover { color:var(--ink); }
 .chapter-quiz { margin-top:1rem; padding:1.2rem; }
 .quiz-head { display:flex; justify-content:space-between; align-items:start; gap:1rem; }
 .quiz-head h3 { margin:.35rem 0; font-size:1.55rem; }
