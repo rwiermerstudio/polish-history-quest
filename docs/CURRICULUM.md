@@ -20,6 +20,8 @@ Polish History Quest offers a broad English-language survey for educated adults 
 12. Crisis, dissent and Solidarity (1968–1989)
 13. The Third Republic: democracy, markets and contested belonging (1989–present)
 
+Chapter 1 also links to a separate long-form companion. Its 21 numbered sections deepen the main chapter through archaeological method, social history, translated source excerpts, maps and objects, competing interpretations, and a research bibliography. It opens outside the chapter modal so the core chapter/quiz sequence and progress model remain unchanged. Print CSS produces an approximately 23-page A4 reader.
+
 ## Editorial principles
 
 - **Poland in context:** chapters relate developments to the Holy Roman Empire, Bohemia, Lithuania, Rus, the Baltic, Ottoman and Habsburg worlds, the partitioning empires, both world wars, the Soviet bloc, NATO, the European Union and Russia’s war against Ukraine.
@@ -37,4 +39,4 @@ Each chapter has four questions. Distractors are designed to be superficially pl
 
 ## Limits and future development
 
-The curriculum currently prioritizes a coherent political and social chronology. Future editions should add longer primary-source excerpts, more regional case studies, women’s and environmental history, optional Polish terminology, citations to accessible scholarship, audio pronunciation and a teacher mode. Content should receive review by historians or Polish history educators before being represented as classroom-ready.
+The curriculum currently prioritizes a coherent political and social chronology. Chapter 1 now has a long-form, source-led companion; future editions should extend that model selectively to other chapters and add more regional case studies, women’s and environmental history, optional Polish terminology, audio pronunciation and a teacher mode. Content should receive review by historians or Polish history educators before being represented as classroom-ready.

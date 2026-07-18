@@ -24,6 +24,11 @@ export const chapters = [
     title: 'Before Poland and the Piast monarchy',
     key: 'State formation joined local societies to Latin Christian Europe.',
     summary: 'Slavic settlement, Piast expansion, Christianization and the first monarchy created a durable political centre, but not yet a modern nation-state.',
+    companion: {
+      title: 'Read the in-depth companion',
+      description: 'Explore the period in a source-led, printable study with maps, archaeological evidence, translated excerpts and competing historical interpretations.',
+      href: './chapter-1-companion.html',
+    },
     sections: [
       section('context', 'Land, settlement and early power', 'The Vistula and Oder basins connected the Baltic coast with Central European trade routes. West Slavic communities farmed, traded amber, salt, furs and enslaved people, and organized around fortified settlements known as grody. Archaeology reveals regional networks rather than a single timeless Polish tribe. During the tenth century the Piast dynasty expanded from Greater Poland, absorbing or subordinating neighbouring communities and building a stronger military-fiscal court.'),
       section('events', 'Baptism, crown and political survival', 'Mieszko I accepted Latin Christianity in 966, probably through his marriage to the Bohemian princess Dobrawa. The decision brought clergy, writing, diplomatic recognition and protection against claims that pagan lands could simply be conquered for conversion. Bolesław I Chrobry hosted Emperor Otto III at Gniezno in 1000 and was crowned king in 1025. Rebellions and dynastic crises followed; the monarchy was repeatedly rebuilt, showing both its fragility and its institutional value.'),

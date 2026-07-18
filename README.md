@@ -15,6 +15,7 @@ A static, browser-based interactive learning game for adults who are generally e
 
 - **13 chapters** with 66 contextual sections, including a new “Making sense of the period” synthesis in every chapter.
 - **26 contextual media records**—public-domain/open-licence images, maps, audio and video—with captions, alt text or audiovisual text alternatives, provenance and licence links.
+- **Chapter 1 in-depth companion**—a separately linked, print-ready 10,000-word reader with 21 numbered sections, 10 sourced visuals, eight translated primary-source excerpts, interpretive debates and further literature.
 - **52 nuanced questions** with explanatory feedback; four correct answers complete a chapter.
 - **Explicit quiz-to-text links** showing learners where each answer is taught, backed by exact coverage checks.
 - **46-event filterable timeline** plus three chapter-linked games: date-hidden chronology reconstruction, a five-turn Commonwealth strategy campaign, and evidence-based archive casefiles.
@@ -42,7 +43,7 @@ npm run build
 
 ## Kubernetes deployment
 
-The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite `dist/` plus a single-file `dist-k8s/index.html` bundle for ConfigMap-based Kubernetes serving. After building, generate the ConfigMap and apply the manifests:
+The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite `dist/` plus an inlined `dist-k8s/index.html`; the linked Chapter 1 companion HTML and stylesheet are copied alongside it for ConfigMap-based Kubernetes serving. After building, generate the ConfigMap and apply the manifests:
 
 ```bash
 ./scripts/render-k8s-configmap.sh

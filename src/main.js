@@ -203,7 +203,7 @@ function renderChapterWorkspace() {
   document.getElementById('chapterBody').innerHTML = `
     <div class="chapter-layout">
       <main>${renderChapterSections(chapter)}${renderChapterMedia(chapter)}</main>
-      <aside class="chapter-sidebar"><div class="card"><div class="kicker">Central idea</div><p>${chapter.key}</p></div><div class="card"><div class="kicker">Important actors</div><div class="actor-grid">${chapter.actors.map(actor => `<article class="actor"><h4>${actor.name}</h4><p>${actor.role}</p></article>`).join('')}</div></div></aside>
+      <aside class="chapter-sidebar"><div class="card"><div class="kicker">Central idea</div><p>${chapter.key}</p></div>${chapter.companion ? `<div class="card companion-callout"><div class="kicker">Go deeper</div><h3>${chapter.companion.title}</h3><p>${chapter.companion.description}</p><a class="companion-link" href="${chapter.companion.href}" target="_blank" rel="noopener noreferrer" aria-label="Open companion in a new tab">Open companion <span aria-hidden="true">↗</span></a></div>` : ''}<div class="card"><div class="kicker">Important actors</div><div class="actor-grid">${chapter.actors.map(actor => `<article class="actor"><h4>${actor.name}</h4><p>${actor.role}</p></article>`).join('')}</div></div></aside>
     </div>
     ${renderChapterQuiz(chapter)}`;
   bindChapterControls();
