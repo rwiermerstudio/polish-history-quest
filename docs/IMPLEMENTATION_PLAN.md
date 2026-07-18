@@ -23,7 +23,9 @@ Learners should be able to:
 
 ## Core mechanics implemented
 
-- **Expanded curriculum path**: 13 chronological chapters from early state formation to contemporary democratic Poland, with 53 substantial contextual sections.
+- **Expanded curriculum path**: 13 chronological chapters from early state formation to contemporary democratic Poland, with 66 substantial contextual sections.
+- **Contextual multimedia**: two curated public-domain/open-licence media records per chapter, with lazy loading, native audio/video controls, alt text, captions and source/licence links.
+- **Quiz coverage contract**: every question names a reading section and exact evidence phrase that covers the assessed content.
 - **Contextual learning**: each chapter includes causation, important actors, international setting, society/economy, and cultural artifacts or memory debates.
 - **Multi-question quizzes**: four nuanced questions per chapter, explanatory feedback, retry support, and completion only after all answers are correct.
 - **Interactive timeline**: 46 major events from 966 to 2022, filterable by chapter.

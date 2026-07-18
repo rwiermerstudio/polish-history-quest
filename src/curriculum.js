@@ -1,6 +1,8 @@
 // Editorial curriculum for Polish History Quest.
 // The material is a broad survey, not a substitute for an accredited school course.
 
+import { chapterExtras } from './chapter-extras.js';
+
 const section = (kind, title, body) => ({ kind, title, body });
 
 let questionSequence = 0;
@@ -318,6 +320,14 @@ export const chapters = [
     ],
   },
 ];
+
+for (const chapter of chapters) {
+  const extra = chapterExtras[chapter.id];
+  if (!extra) throw new Error(`Missing chapter enrichment for ${chapter.id}`);
+  chapter.sections.push(extra.deepDive);
+  chapter.media = extra.media;
+  chapter.quiz.forEach((question, index) => { question.coverage = extra.coverage[index]; });
+}
 
 export const timelineEvents = [
   { year: 966, era: 'lands-before-poland', title: 'Baptism of Mieszko I', text: 'The Piast ruler joins Latin Christianity and strengthens diplomatic legitimacy.' },
