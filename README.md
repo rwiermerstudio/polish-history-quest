@@ -48,15 +48,16 @@ The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite
 ```bash
 ./scripts/render-k8s-configmap.sh
 kubectl apply -f k8s/namespace.yaml
-kubectl apply --server-side -f k8s/generated/site-configmap.yaml
+kubectl apply --server-side --force-conflicts -f k8s/generated/site-configmap.yaml
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
 kubectl apply -f k8s/ingress.yaml
+kubectl -n polish-history-quest rollout restart deploy/polish-history-quest
 kubectl -n polish-history-quest rollout status deploy/polish-history-quest --timeout=180s
 ```
 
 The local k3s deployment uses Traefik host `polish-history.k3s.local`.
-Server-side apply avoids Kubernetes' 256 KiB client-side last-applied annotation limit for the generated static-site ConfigMap.
+Server-side apply avoids Kubernetes' 256 KiB client-side last-applied annotation limit for the generated static-site ConfigMap. `--force-conflicts` takes ownership from an older client-side or `replace` deployment. The rollout restart is required because nginx mounts the ConfigMap files through `subPath`, which does not receive live ConfigMap updates.
 
 ## Content note
 
