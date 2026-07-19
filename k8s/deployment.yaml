@@ -52,7 +52,7 @@ spec:
                   name: polish-history-site
               - configMap: { name: polish-history-companion-1 }
               - configMap: { name: polish-history-companion-2 }
-              - configMap: { name: polish-history-companion-3, optional: true }
+              - configMap: { name: polish-history-companion-3 }
               - configMap: { name: polish-history-companion-4, optional: true }
               - configMap: { name: polish-history-companion-5, optional: true }
               - configMap: { name: polish-history-companion-6, optional: true }

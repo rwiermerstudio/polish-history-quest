@@ -80,6 +80,11 @@ export const chapters = [
     title: 'The Jagiellonian union and a Baltic–Black Sea world',
     key: 'Dynastic union created a vast, plural political space.',
     summary: 'The Polish-Lithuanian connection, conflict with the Teutonic Order, Renaissance culture and noble power produced a major European monarchy.',
+    companion: {
+      title: 'Read the in-depth companion',
+      description: 'Follow a union repeatedly negotiated through dynastic bargains, war, privilege, religious plurality, social inequality and the contested settlement at Lublin.',
+      href: './chapter-3-companion.html',
+    },
     sections: [
       section('context', 'Why Poland and Lithuania joined', 'The 1385 agreement at Krewo linked Jadwiga—crowned rex, or king, of Poland—with Jogaila, grand duke of Lithuania, who was baptized as Władysław Jagiełło. Poland gained a powerful partner against the Teutonic Order; Lithuania gained a route to Christian recognition while resisting pressure from the Order and Moscow. The union was not a Polish annexation of a single nation. Lithuania retained institutions and ruled large Orthodox Rus territories populated by ancestors of modern Belarusians and Ukrainians.'),
       section('events', 'Grunwald, privileges and parliamentary politics', 'Polish-Lithuanian forces defeated the Teutonic Order at Grunwald/Tannenberg in 1410, although the subsequent peace did not destroy the Order. Jagiellonian rulers also governed Bohemia and Hungary for a time. At home, kings granted privileges to the szlachta, the legally defined nobility, in exchange for taxation and military cooperation. The Nihil Novi act of 1505 strengthened the principle that major legislation required agreement of the Sejm, creating a broad noble political nation while excluding most inhabitants.'),

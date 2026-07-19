@@ -49,20 +49,28 @@ for (const file of files) {
 const titles = [...titleToFiles.keys()];
 const seen = new Set();
 
-async function fetchWithRetries(url, options = {}, attempts = 3) {
+async function fetchWithRetries(url, options = {}, attempts = 5) {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       const response = await fetch(url, {
         ...options,
-        headers: { 'user-agent': 'PolishHistoryQuest/0.6 companion-media-audit', ...options.headers },
+        headers: { 'user-agent': 'PolishHistoryQuest/0.7 companion-media-audit', ...options.headers },
         signal: AbortSignal.timeout(30000),
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      if (!response.ok) {
+        const error = new Error(`HTTP ${response.status}`);
+        error.status = response.status;
+        error.retryAfter = Number(response.headers.get('retry-after')) || 0;
+        throw error;
+      }
       return response;
     } catch (error) {
       lastError = error;
-      if (attempt < attempts) await new Promise(resolve => setTimeout(resolve, attempt * 1500));
+      if (attempt < attempts) {
+        const throttleDelay = error.status === 429 ? Math.max(error.retryAfter * 1000, attempt * 5000) : attempt * 1500;
+        await new Promise(resolve => setTimeout(resolve, throttleDelay));
+      }
     }
   }
   throw new Error(`failed after ${attempts} attempts: ${lastError?.message || lastError}`);
@@ -113,7 +121,8 @@ for (const image of imageUrls) {
   } catch (error) {
     failures.push(`${image.file}: figure ${image.index} image URL is unavailable (${error.message})`);
   }
-  await new Promise(resolve => setTimeout(resolve, 750));
+  // Commons throttles bursts of Special:Redirect checks more aggressively than API metadata calls.
+  await new Promise(resolve => setTimeout(resolve, 1500));
 }
 
 if (failures.length) {
