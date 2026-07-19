@@ -52,6 +52,11 @@ export const chapters = [
     title: 'Fragmentation, towns and a reunited kingdom',
     key: 'Political division coincided with economic and institutional growth.',
     summary: 'Competing Piast duchies, German-law towns, Mongol invasion and reunification under late Piast kings reshaped medieval Poland.',
+    companion: {
+      title: 'Read the in-depth companion',
+      description: 'Investigate fragmentation, migration, urban law, religious communities, invasion and royal reconstruction through sources, objects and competing interpretations.',
+      href: './chapter-2-companion.html',
+    },
     sections: [
       section('context', 'The seniorate and regional duchies', 'Bolesław III Krzywousty’s 1138 succession arrangement divided rule among his sons while reserving senior authority in Kraków. Instead of preventing conflict, it encouraged rival Piast duchies in Silesia, Mazovia, Greater Poland and elsewhere. Political fragmentation did not mean social collapse. Dukes founded towns, attracted settlers, endowed monasteries and competed for revenue. Regional differences deepened, and some Piast branches became closely tied to Bohemia and the German-speaking world.'),
       section('events', 'Mongol shock, urban growth and reunification', 'Mongol forces defeated a regional army at Legnica in 1241 and devastated parts of southern Poland, though they did not establish permanent rule. During the same centuries, towns received charters based on Magdeburg law, giving burghers defined courts and obligations. German-speaking migration was significant but mixed with local populations and other groups. Władysław Łokietek reunited a core kingdom and was crowned in 1320; Casimir III then strengthened law, castles, administration and Kraków University.'),

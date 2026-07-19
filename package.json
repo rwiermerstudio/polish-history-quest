@@ -1,6 +1,6 @@
 {
   "name": "polish-history-quest",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": false,
   "type": "module",
   "description": "A browser-based interactive learning game for adults learning Polish history.",
@@ -9,7 +9,7 @@
     "build": "vite build && node scripts/verify-built-static.mjs && node scripts/inline-dist.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node scripts/verify-content.mjs && node scripts/verify-curriculum.mjs && node scripts/verify-companion.mjs && node scripts/verify-progress.mjs && node scripts/verify-learning-ui.mjs && node scripts/verify-games.mjs",
-    "check:media": "node scripts/check-media-links.mjs"
+    "check:media": "node scripts/check-media-links.mjs && node scripts/check-companion-media.mjs"
   },
   "keywords": [
     "polish-history",

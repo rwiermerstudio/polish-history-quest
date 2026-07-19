@@ -1,4 +1,5 @@
 import { chapters, timelineEvents, memoryPairs } from '../src/curriculum.js';
+import { existsSync } from 'node:fs';
 
 const fail = (message) => { throw new Error(message); };
 const assert = (condition, message) => { if (!condition) fail(message); };
@@ -7,10 +8,6 @@ assert(Array.isArray(chapters), 'chapters must be an array');
 assert(chapters.length >= 12, `expected at least 12 chapters, got ${chapters.length}`);
 assert(chapters[0].startYear <= 966, 'curriculum must begin no later than 966');
 assert(chapters.at(-1).endYear >= 2004, 'curriculum must reach contemporary democratic Poland');
-const chapterOne = chapters.find(chapter => chapter.id === 'lands-before-poland');
-assert(chapterOne?.companion?.title && chapterOne.companion.description?.length >= 80, 'chapter 1 needs descriptive companion metadata');
-assert(/^\.\/chapter-1-companion\.html$/.test(chapterOne.companion.href), 'chapter 1 companion must use a portable relative HTML path');
-
 const chapterIds = new Set();
 let sectionCount = 0;
 let questionCount = 0;
@@ -25,6 +22,13 @@ for (const chapter of chapters) {
   assert(chapter.id && !chapterIds.has(chapter.id), `duplicate or missing chapter id: ${chapter.id}`);
   chapterIds.add(chapter.id);
   assert(chapter.title && chapter.years && chapter.summary, `${chapter.id}: missing title, years or summary`);
+  if (chapter.companion) {
+    const chapterNumber = chapters.indexOf(chapter) + 1;
+    const expectedHref = `./chapter-${chapterNumber}-companion.html`;
+    assert(chapter.companion.title && chapter.companion.description?.length >= 80, `${chapter.id}: incomplete companion metadata`);
+    assert(chapter.companion.href === expectedHref, `${chapter.id}: companion must use portable path ${expectedHref}`);
+    assert(existsSync(`public/${expectedHref.slice(2)}`), `${chapter.id}: companion file is missing`);
+  }
   curriculumWordCount += [chapter.summary, chapter.key].join(' ').trim().split(/\s+/).length;
   assert(Number.isFinite(chapter.startYear) && Number.isFinite(chapter.endYear), `${chapter.id}: invalid year bounds`);
   assert(chapter.startYear <= chapter.endYear, `${chapter.id}: inverted year bounds`);

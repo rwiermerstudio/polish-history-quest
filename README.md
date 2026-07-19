@@ -22,7 +22,7 @@ A static, browser-based interactive learning game for adults who are generally e
 - **Persistent local progress** including answers, completion, score and achievements.
 - See [`docs/CURRICULUM.md`](docs/CURRICULUM.md) for scope and editorial principles.
 
-Media are loaded on demand from Wikimedia Commons so the static application and Kubernetes ConfigMap remain small. Chapter text, quizzes and games remain available if remote media are blocked, but images/audio/video and their external source pages require network access.
+Media are loaded on demand from Wikimedia Commons so the static repository avoids bundling large image binaries and each generated Kubernetes resource remains manageable. Chapter text, quizzes, games and companion prose remain available if remote media are blocked, but images/audio/video and their external source pages require network access.
 
 ## Live site
 
@@ -43,7 +43,7 @@ npm run build
 
 ## Kubernetes deployment
 
-The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite `dist/` plus an inlined `dist-k8s/index.html`; the linked Chapter 1 companion HTML and stylesheet are copied alongside it for ConfigMap-based Kubernetes serving. After building, generate the ConfigMap and apply the manifests:
+The deployment manifests live in `k8s/`. `npm run build` creates the normal Vite `dist/` plus an inlined `dist-k8s/index.html`; standalone companion readers and their shared stylesheet are copied alongside it. The generator writes one base ConfigMap plus one ConfigMap per companion, and the deployment combines them through a projected volume. This keeps every Kubernetes object below the ConfigMap size limit as the companion library grows. After building, generate the resources and apply the manifests:
 
 ```bash
 ./scripts/render-k8s-configmap.sh
@@ -57,7 +57,15 @@ kubectl -n polish-history-quest rollout status deploy/polish-history-quest --tim
 ```
 
 The local k3s deployment uses Traefik host `polish-history.k3s.local`.
-Server-side apply avoids Kubernetes' 256 KiB client-side last-applied annotation limit for the generated static-site ConfigMap. `--force-conflicts` takes ownership from an older client-side or `replace` deployment. The rollout restart is required because nginx mounts the ConfigMap files through `subPath`, which does not receive live ConfigMap updates.
+
+When upgrading an existing `0.5.x` deployment from the former direct `configMap` volume to the projected multi-ConfigMap volume, Kubernetes cannot change the volume-source union through server-side apply. Replace the Deployment once after applying the generated ConfigMaps:
+
+```bash
+kubectl replace -f k8s/deployment.yaml
+kubectl -n polish-history-quest rollout status deploy/polish-history-quest --timeout=180s
+```
+
+Fresh installations and later companion-only releases can continue to use the normal apply-and-restart sequence above. Server-side apply avoids Kubernetes' 256 KiB client-side last-applied annotation limit for generated static-site resources. `--force-conflicts` lets the generated ConfigMaps take field ownership from older client-side or `replace` operations. Projected ConfigMap volumes update asynchronously through kubelet, so the rollout restart makes publication immediate and deterministic.
 
 ## Content note
 
