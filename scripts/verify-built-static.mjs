@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 
 const html = readFileSync('dist/index.html', 'utf8');
 if (/\b(?:src|href)="\/assets\//.test(html)) {
@@ -7,11 +7,18 @@ if (/\b(?:src|href)="\/assets\//.test(html)) {
 if (!/\b(?:src|href)="\.\/assets\//.test(html)) {
   throw new Error('Vite build does not contain expected relative asset paths');
 }
-for (const path of ['dist/chapter-1-companion.html', 'dist/chapter-1-companion.css']) {
+
+const companions = readdirSync('public')
+  .filter(file => /^chapter-\d+-companion\.html$/.test(file))
+  .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+for (const file of ['history-companion.css', ...companions]) {
+  const path = `dist/${file}`;
   if (!existsSync(path)) throw new Error(`Vite build is missing companion asset: ${path}`);
 }
-const companion = readFileSync('dist/chapter-1-companion.html', 'utf8');
-if (!companion.includes('href="./chapter-1-companion.css"') || !companion.includes('href="./"')) {
-  throw new Error('companion build must keep portable relative links');
+for (const file of companions) {
+  const companion = readFileSync(`dist/${file}`, 'utf8');
+  if (!companion.includes('href="./history-companion.css"') || !companion.includes('href="./"')) {
+    throw new Error(`${file} must keep portable relative links`);
+  }
 }
-console.log('subpath-safe static build and companion verification passed');
+console.log(`subpath-safe static build verification passed: ${companions.length} companions`);

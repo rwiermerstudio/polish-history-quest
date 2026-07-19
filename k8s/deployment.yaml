@@ -46,5 +46,20 @@ spec:
               readOnly: true
       volumes:
         - name: site
-          configMap:
-            name: polish-history-site
+          projected:
+            sources:
+              - configMap:
+                  name: polish-history-site
+              - configMap: { name: polish-history-companion-1 }
+              - configMap: { name: polish-history-companion-2 }
+              - configMap: { name: polish-history-companion-3, optional: true }
+              - configMap: { name: polish-history-companion-4, optional: true }
+              - configMap: { name: polish-history-companion-5, optional: true }
+              - configMap: { name: polish-history-companion-6, optional: true }
+              - configMap: { name: polish-history-companion-7, optional: true }
+              - configMap: { name: polish-history-companion-8, optional: true }
+              - configMap: { name: polish-history-companion-9, optional: true }
+              - configMap: { name: polish-history-companion-10, optional: true }
+              - configMap: { name: polish-history-companion-11, optional: true }
+              - configMap: { name: polish-history-companion-12, optional: true }
+              - configMap: { name: polish-history-companion-13, optional: true }
