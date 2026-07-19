@@ -1,6 +1,6 @@
 {
   "name": "polish-history-quest",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": false,
   "type": "module",
   "description": "A browser-based interactive learning game for adults learning Polish history.",
@@ -21,6 +21,7 @@
   "license": "MIT",
   "devDependencies": {
     "@vitejs/plugin-legacy": "latest",
-    "vite": "latest"
+    "vite": "latest",
+    "yaml": "^2.9.0"
   }
 }
