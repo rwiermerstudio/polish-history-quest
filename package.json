@@ -5,11 +5,14 @@
   "type": "module",
   "description": "A browser-based interactive learning game for adults learning Polish history.",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build && node scripts/verify-built-static.mjs",
-    "preview": "vite preview --host 0.0.0.0",
-    "test": "node scripts/verify-content.mjs && node scripts/verify-curriculum.mjs && node scripts/verify-companion.mjs && node scripts/verify-progress.mjs && node scripts/verify-learning-ui.mjs && node scripts/verify-games.mjs",
-    "check:media": "node scripts/check-media-links.mjs && node scripts/check-companion-media.mjs"
+    "dev": "bunx --bun vite --host 0.0.0.0",
+    "build": "bunx --bun vite build && bun scripts/verify-built-static.mjs",
+    "preview": "bunx --bun vite preview --host 0.0.0.0",
+    "test": "bun scripts/verify-content.mjs && bun scripts/verify-curriculum.mjs && bun scripts/verify-companion.mjs && bun scripts/verify-progress.mjs && bun scripts/verify-learning-ui.mjs && bun scripts/verify-games.mjs",
+    "check:media": "bun scripts/check-media-links.mjs && bun scripts/check-companion-media.mjs"
+  },
+  "engines": {
+    "bun": ">=1.3.14"
   },
   "keywords": [
     "polish-history",
@@ -23,5 +26,8 @@
     "@vitejs/plugin-legacy": "latest",
     "vite": "latest",
     "yaml": "^2.9.0"
-  }
+  },
+  "trustedDependencies": [
+    "core-js"
+  ]
 }

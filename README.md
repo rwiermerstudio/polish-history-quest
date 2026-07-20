@@ -33,11 +33,11 @@ Pushes to `main` are tested, built and deployed to GitHub Pages by [`.github/wor
 ## Local development
 
 ```bash
-npm install
-npm run dev
-npm test
-npm run check:media
-npm run build
+bun install
+bun run dev
+bun run test
+bun run check:media
+bun run build
 ```
 
 ## Content note

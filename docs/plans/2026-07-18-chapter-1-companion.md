@@ -32,7 +32,7 @@ Add initially failing assertions that:
 - Companion HTML has semantic title/nav/main/sections, print CSS, at least 7,500 prose words, at least 8 figures including 2 maps, at least 6 source excerpts with original and translated text, source/licence links, interpretation/discussion sections, bibliography and accessible alt text.
 - `dist/` contains the companion HTML/CSS and the Vite build contains no unresolved `/assets/` path in the primary app.
 
-Run `npm test` and confirm the new assertions fail because the companion does not exist.
+Run `bun run test` and confirm the new assertions fail because the companion does not exist.
 
 ## Task 2: Build/deployment path (GREEN)
 
@@ -82,7 +82,7 @@ Use a restrained print-oriented design, visible focus, responsive figures/tables
 
 ## Task 5: Browser, print and accessibility QA
 
-- Run `npm test`, `npm run check:media`, `npm run build`, `git diff --check` and production dependency audit.
+- Run `bun run test`, `bun run check:media`, `bun run build`, `git diff --check` and production dependency audit.
 - Open the chapter modal and verify the companion callout appears only in Chapter 1.
 - Follow the link at a nested static path; confirm navigation, images, source links, responsive layout, print rules and no console errors.
 - Generate or inspect a print-to-PDF rendering when an available renderer permits; target roughly 18–24 A4 pages and report the actual count. If no renderer is available, verify the explicit print-page structure and state that limitation rather than inventing a count.

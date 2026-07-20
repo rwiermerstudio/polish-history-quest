@@ -19,7 +19,7 @@
 - Quiz completion requires answering all chapter questions; progress is retained in `localStorage`.
 - Timeline contains at least 35 events and distinguishes the Warsaw Ghetto Uprising (1943) from the Warsaw Uprising (1944).
 - The reader remains usable on mobile and desktop, keyboard-accessible, and static.
-- `npm test`, `npm run build`, browser interaction checks, GitHub Actions and the live Kubernetes smoke check all pass.
+- `bun run test`, `bun run build`, browser interaction checks, GitHub Actions and the live GitHub Pages smoke check all pass.
 
 ## Task 1: Add curriculum contract tests (RED)
 
@@ -30,7 +30,7 @@
 1. Add tests that import curriculum data and require chapter/section/question/timeline counts.
 2. Check unique IDs, chronological coverage, answer bounds and feedback on each option.
 3. Check required themes and historical distinctions.
-4. Run `npm test`; confirm failure because `src/curriculum.js` and the new contract do not yet exist.
+4. Run `bun run test`; confirm failure because `src/curriculum.js` and the new contract do not yet exist.
 
 ## Task 2: Create structured curriculum data (GREEN)
 
@@ -69,7 +69,7 @@ Document curriculum scope, historical editorial principles, chapter list, learni
 
 ## Task 5: Verify, review and release
 
-1. Run `npm test` and `npm run build`.
+1. Run `bun run test` and `bun run build`.
 2. Run the app locally and test chapter navigation, multiple quiz answers and persisted progress.
 3. Run a focused secret scan excluding generated dependencies.
 4. Commit changes, push branch and open a PR.

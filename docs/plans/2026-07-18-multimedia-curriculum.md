@@ -36,7 +36,7 @@
 
 ## Release verification
 
-1. Run `npm test`, `npm run check:media`, `npm run build`, dependency audit and whitespace checks.
+1. Run `bun run test`, `bun run check:media`, `bun run build`, dependency audit and whitespace checks.
 2. Exercise all chapter media in a production build; verify image load, audio metadata, video metadata, no horizontal overflow and quiz coverage labels.
 3. Obtain independent historical/content review and repair concrete blockers.
 4. Merge only after feature and main CI pass.

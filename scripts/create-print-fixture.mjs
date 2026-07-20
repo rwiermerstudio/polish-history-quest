@@ -3,7 +3,7 @@ import { basename, dirname, join, resolve } from 'node:path';
 
 const [inputArg, outputArg] = process.argv.slice(2);
 if (!inputArg || !outputArg) {
-  console.error('usage: node scripts/create-print-fixture.mjs public/chapter-N-companion.html /tmp/chapter-N-print.html');
+  console.error('usage: bun scripts/create-print-fixture.mjs public/chapter-N-companion.html /tmp/chapter-N-print.html');
   process.exit(2);
 }
 
