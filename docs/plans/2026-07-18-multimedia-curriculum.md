@@ -32,7 +32,7 @@
 - At least 18 of 26 media items are public domain or CC0; remaining items use explicit open licences and attribution.
 - Wikimedia Commons API check confirms every file exists and the configured licence matches current source metadata.
 - UI checks require lazy images, native audio/video controls, audiovisual text alternatives, provenance links, quiz coverage labels, a focus-contained/restoring modal, responsive media grids, visible focus and reduced-motion support.
-- Build must remain relative-path safe and produce the inlined Kubernetes artifact.
+- Build must remain relative-path safe and produce no host-specific artifacts.
 
 ## Release verification
 
@@ -40,4 +40,4 @@
 2. Exercise all chapter media in a production build; verify image load, audio metadata, video metadata, no horizontal overflow and quiz coverage labels.
 3. Obtain independent historical/content review and repair concrete blockers.
 4. Merge only after feature and main CI pass.
-5. Regenerate and deploy the Kubernetes ConfigMap, then compare the live artifact with the local release and test the live chapter reader.
+5. Verify the GitHub Pages deployment and compare the live artifact with the local release.

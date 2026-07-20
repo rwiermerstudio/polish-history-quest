@@ -1,6 +1,5 @@
 node_modules/
 dist/
-dist-k8s/
 .DS_Store
 .env
 .vite/

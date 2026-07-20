@@ -6,7 +6,7 @@
 
 **Architecture:** Move historical curriculum into a dedicated ES module with structured chapters, sections, actors, cultural artifacts, international context, timeline events and multi-question quizzes. Refactor the modal reader into a chapter learning workspace with navigable sections and cumulative quiz state. Preserve a fully static build and backward-compatible browser progress migration.
 
-**Tech Stack:** Vanilla JavaScript ES modules, Vite, CSS, Node-based content verification, localStorage, nginx ConfigMap deployment on k3s/Traefik.
+**Tech Stack:** Vanilla JavaScript ES modules, Vite, CSS, Node-based content verification, localStorage, GitHub Pages.
 
 ---
 
@@ -74,9 +74,8 @@ Document curriculum scope, historical editorial principles, chapter list, learni
 3. Run a focused secret scan excluding generated dependencies.
 4. Commit changes, push branch and open a PR.
 5. Watch GitHub Actions to success.
-6. Merge the PR, rebuild `dist-k8s`, regenerate the ConfigMap and deploy.
-7. Verify Traefik response and Kubernetes rollout.
-8. Refresh artifact indexes/readmes.
+6. Merge the PR and verify the GitHub Pages deployment.
+7. Refresh artifact indexes/readmes.
 
 ## Risks and mitigations
 
@@ -84,4 +83,3 @@ Document curriculum scope, historical editorial principles, chapter list, learni
 - **Historical controversy:** distinguish established facts from interpretation; avoid nationalist teleology and explain contested memories.
 - **Content accuracy:** use cautious formulations, cross-check dates and preserve international context.
 - **LocalStorage schema changes:** use additive defaults and tolerate old v1 data.
-- **ConfigMap size:** keep the application text-focused; expected bundle remains below Kubernetes ConfigMap limits.

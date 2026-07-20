@@ -4,9 +4,9 @@
 
 **Goal:** Add an approximately twenty-A4-page, source-backed companion to Chapter 1 without changing the website’s main chapter/timeline/game structure.
 
-**Architecture:** Keep the existing chapter modal and navigation intact. Add one optional `companion` metadata object to Chapter 1 and render a compact sidebar link through the existing chapter workspace. Publish a standalone, semantic, print-optimized HTML document at `chapter-1-companion.html`; Vite/GitHub Pages copy it from `public/`, while the inlined Kubernetes build copies the companion HTML/CSS into `dist-k8s/` so the same relative link works on both hosts.
+**Architecture:** Keep the existing chapter modal and navigation intact. Add one optional `companion` metadata object to Chapter 1 and render a compact sidebar link through the existing chapter workspace. Publish a standalone, semantic, print-optimized HTML document at `chapter-1-companion.html`; Vite copies it from `public/` to `dist/` so GitHub Pages can serve it alongside the main application.
 
-**Tech stack:** Plain HTML/CSS, existing Vite build, Node verification scripts, Wikimedia Commons remote open media, GitHub Pages, Kubernetes ConfigMap.
+**Tech stack:** Plain HTML/CSS, existing Vite build, Node verification scripts, Wikimedia Commons remote open media, GitHub Pages.
 
 ---
 
@@ -30,17 +30,17 @@ Add initially failing assertions that:
 - The main renderer exposes the optional companion link.
 - Built `dist/chapter-1-companion.html` and CSS exist.
 - Companion HTML has semantic title/nav/main/sections, print CSS, at least 7,500 prose words, at least 8 figures including 2 maps, at least 6 source excerpts with original and translated text, source/licence links, interpretation/discussion sections, bibliography and accessible alt text.
-- `dist-k8s/` contains the companion HTML/CSS and contains no unresolved `/assets/` path in the primary app.
+- `dist/` contains the companion HTML/CSS and the Vite build contains no unresolved `/assets/` path in the primary app.
 
 Run `npm test` and confirm the new assertions fail because the companion does not exist.
 
 ## Task 2: Build/deployment path (GREEN)
 
-**Modify:** `src/curriculum.js`, `src/main.js`, `src/styles.css`, `scripts/inline-dist.mjs`
+**Modify:** `src/curriculum.js`, `src/main.js`, `src/styles.css`
 
 - Add generic optional companion metadata to Chapter 1.
 - Render one sidebar callout/link only when metadata exists.
-- Copy the built companion HTML/CSS from `dist/` into `dist-k8s/` after the app bundle is inlined.
+- Copy the built companion HTML/CSS from `public/` into `dist/` after the Vite build.
 - Keep the existing modal, section tabs, quiz, games and progress behavior unchanged.
 
 ## Task 3: Author the standalone companion
@@ -86,11 +86,11 @@ Use a restrained print-oriented design, visible focus, responsive figures/tables
 - Open the chapter modal and verify the companion callout appears only in Chapter 1.
 - Follow the link at a nested static path; confirm navigation, images, source links, responsive layout, print rules and no console errors.
 - Generate or inspect a print-to-PDF rendering when an available renderer permits; target roughly 18–24 A4 pages and report the actual count. If no renderer is available, verify the explicit print-page structure and state that limitation rather than inventing a count.
-- Verify both ordinary `dist/` and `dist-k8s/` companion paths.
+- Verify the `dist/` companion path.
 
 ## Task 6: Independent review and release
 
 - Dispatch a fail-closed historical/source/licensing/accessibility review.
 - Repair each confirmed blocker with a regression test and rerun the reviewer against the frozen tree.
-- Commit, push, open a PR, watch branch CI, merge, watch main CI and Pages deployment.
-- Regenerate/apply the Kubernetes ConfigMap, restart the two-replica deployment, and verify both public GitHub Pages and k3s-served links.
+- Commit, push, open a PR, watch branch CI, merge, and watch main CI and Pages deployment.
+- Verify the public GitHub Pages companion link.
