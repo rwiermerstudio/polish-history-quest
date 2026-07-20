@@ -136,6 +136,11 @@ export const chapters = [
     title: 'Wars, political paralysis and the reform struggle',
     key: 'Seventeenth-century devastation and eighteenth-century dependency produced reform—too late to prevent partition.',
     summary: 'Cossack revolt, Swedish invasion, Ottoman wars, magnate politics, Enlightenment reform and neighbouring empires transformed and finally destroyed the Commonwealth.',
+    companion: {
+      title: 'Read the in-depth companion',
+      description: 'Explore the Commonwealth’s crisis, reform, partitions and final disappearance in a source-led, printable study with maps, collated legal texts, translated excerpts and competing interpretations.',
+      href: './chapter-5-companion.html',
+    },
     sections: [
       section('events', 'The uprising, Deluge and demographic disaster', 'Bohdan Khmelnytsky’s 1648 Cossack uprising, supported by Crimean Tatars and fuelled by social, religious and political grievances, shattered Commonwealth authority in Ukraine. It became a civil, social and confessional war involving Cossacks, Ruthenian peasants and clergy, Commonwealth armies and townspeople; Polish nobles and Jewish communities suffered massacres, while reprisals and campaigning harmed wider civilian populations. War with Muscovy followed. The Swedish invasion of 1655–1660, remembered as the Deluge, brought occupation, looting and destruction. Later wars with the Ottoman Empire and internal conflicts compounded demographic and economic loss, although Jan III Sobieski’s victory at Vienna in 1683 became an enduring heroic image.'),
       section('context', 'Liberum veto and the magnate republic', 'The Sejm’s unanimity principle and liberum veto were intended to protect political consent, but repeated disruption made taxation, military reform and administration difficult. Powerful magnate networks used clients and private resources, while foreign powers learned to influence elections and parliamentary sessions. The system did not collapse because Poles were uniquely incapable of government; institutions designed for negotiated consensus faced social inequality, elite obstruction and neighbours developing larger standing armies and centralized fiscal states.'),
