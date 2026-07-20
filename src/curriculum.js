@@ -108,6 +108,11 @@ export const chapters = [
     title: 'The Commonwealth: liberty, diversity and inequality',
     key: 'A federated republic of nobles combined pluralism with deep social hierarchy.',
     summary: 'The Union of Lublin, elected kings, religious diversity, eastward colonization and serfdom defined the Commonwealth’s “golden age” and its contradictions.',
+    companion: {
+      title: 'Read the in-depth companion',
+      description: 'Explore the Commonwealth in a source-led, printable study with maps, collated legal texts, translated excerpts and competing historical interpretations.',
+      href: './chapter-4-companion.html',
+    },
     sections: [
       section('context', 'A republic under an elected king', 'The Union of Lublin in 1569 created the Polish-Lithuanian Commonwealth, with a shared elected monarch and parliament but separate armies, treasuries and offices. The szlachta celebrated “Golden Liberty”: legal equality within their estate, free royal elections and resistance to absolute monarchy. Noble citizens could debate policy across a huge territory. Yet burghers had limited influence, peasants faced expanding labour obligations, and political equality among nobles coexisted with enormous differences in wealth and power.'),
       section('society', 'Faiths, languages, estates and serfdom', 'The Commonwealth included Catholics, Orthodox Christians, Protestants, Jews, Muslims and Armenians, as well as Polish, Lithuanian, Ruthenian, German, Yiddish and Tatar speakers. The Warsaw Confederation of 1573 offered an important guarantee of religious peace among nobles, although toleration was incomplete and later narrowed. Grain exports through Gdańsk enriched landowners and tied the economy to western markets, while folwark estates increased serfdom and labour burdens on peasants.'),
